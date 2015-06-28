@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+	<meta name="robots" content="noindex,nofollow">
+	<meta name="description" content="Link Calculator for Ingress (ver.1.2)">
+	<meta name="author" content="doooon">
+	<link rel="apple-touch-icon" href="apple-touch-icon-precomposed.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+	<!--link rel="apple-touch-icon" href="apple-touch-icon.png"-->
+	<title>Link Calc</title>
+	
+	<script type="text/javascript"
+		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDRaTZlZNQ91E4lKF_75VVsTyH0zjnm0fs">
+	</script>
+
+	<script type="text/javascript" charset="utf-8">
+		function initialize(lat, lng, range) {
+			var myLatlng = new google.maps.LatLng(lat, lng);	//mashikaku-3tsu
+			var mapOptions = {
+				center: myLatlng,
+				zoom: 15
+			};
+			var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+			var marker = new google.maps.Marker({
+				position: myLatlng,
+				map: map,
+				title: 'Here!'
+			});
+
+			var populationOptions = {
+				strokeColor: '#0066FF',
+				strokeOpacity: 0.6,
+				strokeWeight: 2,
+				fillColor: '#0066FF',
+				fillOpacity: 0.10,
+				map: map,
+				center: myLatlng,
+				radius: range	// 半径(m)
+			};
+			// Add the circle for this city to the map.
+			circle = new google.maps.Circle(populationOptions);
+		}
+
+		function AddEventListener(elementID, type, listener) {
+			var element = document.getElementById(elementID);
+		    if( element.addEventListener ) {
+		        element.addEventListener( type, listener, false );
+		    }
+		    else if( element.attachEvent ) {
+		        element.attachEvent( 'on' + type,
+		            function() { listener.apply( element, arguments ); } );
+		    }
+		    else {
+		        // not support.
+		    }
+		}
+
+		function ArraySortNumeric(prev,next){
+			return next - prev;
+		}
+		
+		function resonatorClick(e) {
+			var elem = e.target;
+			if (elem.textContent == 1) { elem.textContent = 8; elem.className = "cResoSlot R8"; }
+			else { elem.textContent --; elem.className = "cResoSlot R" + elem.textContent; }
+			setCookie();
+			funcResult();
+		}
+		
+		function resonatorPress(elemID) {
+			var elem = document.getElementById(elemID);
+			flag_press = 0;
+			elem.textContent = 8; 
+			elem.className = "cResoSlot R8";
+			setCookie();
+			funcResult();
+		}
+		
+		function modSlotClick(e) {
+			var elem = e.target;
+			if (elem.textContent.match(/^\s*$/i)) 	{ elem.textContent = "LA"; 		elem.className = "cModSlot LA"; 	}
+			else if (elem.textContent == "LA") 		{ elem.textContent = "VRLA"; 		elem.className = "cModSlot VRLA"; 	}
+			else if (elem.textContent == "VRLA") 		{ elem.textContent = "SBUL"; 	elem.className = "cModSlot SBUL"; 	}
+			else if (elem.textContent == "SBUL") 	{ elem.textContent = " "; 		elem.className = "cModSlot none"; 	}
+			setCookie();
+			funcResult();
+		}
+		
+		function allReset() {
+			flag_press = 0;
+			document.getElementById('Resonator00').textContent = '8'; 
+			document.getElementById('Resonator00').className = "cResoSlot R8";
+			document.getElementById('Resonator01').textContent = '8'; 
+			document.getElementById('Resonator01').className = "cResoSlot R8";
+			document.getElementById('Resonator02').textContent = '8'; 
+			document.getElementById('Resonator02').className = "cResoSlot R8";
+			document.getElementById('Resonator03').textContent = '8'; 
+			document.getElementById('Resonator03').className = "cResoSlot R8";
+			document.getElementById('Resonator04').textContent = '8'; 
+			document.getElementById('Resonator04').className = "cResoSlot R8";
+			document.getElementById('Resonator05').textContent = '8'; 
+			document.getElementById('Resonator05').className = "cResoSlot R8";
+			document.getElementById('Resonator06').textContent = '8'; 
+			document.getElementById('Resonator06').className = "cResoSlot R8";
+			document.getElementById('Resonator07').textContent = '8'; 
+			document.getElementById('Resonator07').className = "cResoSlot R8";
+			document.getElementById('ModSlot00').textContent = ''; 
+			document.getElementById('ModSlot00').className = "cModSlot none";
+			document.getElementById('ModSlot01').textContent = ''; 
+			document.getElementById('ModSlot01').className = "cModSlot none";
+			document.getElementById('ModSlot02').textContent = ''; 
+			document.getElementById('ModSlot02').className = "cModSlot none";
+			document.getElementById('ModSlot03').textContent = ''; 
+			document.getElementById('ModSlot03').className = "cModSlot none";
+			setCookie();
+			funcResult();
+		}
+
+		function touchHandler(e) {
+			e.preventDefault();
+			switch (e.type) {
+				case "touchstart" :
+					flag_press = 1;
+					timerID = setTimeout('resonatorPress("' + e.target.id + '")', 400);
+					break;
+				case "touchcancel" :
+					clearTimeout(timerID);
+					flag_press = 0;
+					break;
+				case "touchend" :
+					clearTimeout(timerID);
+					if (flag_press == 1) { resonatorClick(e) }
+					flag_press = 0;
+					break;
+			}
+		}
+
+		function mouseHandler(e) {
+			e.preventDefault();
+			switch (e.type) {
+				case "mousedown" :
+					flag_press = 1;
+					timerID = setTimeout('resonatorPress("' + e.target.id + '")', 400);
+					break;
+				case "mouseup" :
+					clearTimeout(timerID);
+					if (flag_press == 1) { resonatorClick(e) }
+					flag_press = 0;
+					break;
+			}
+		}
+
+		function load() {
+			getCookie();
+			
+			if(window.TouchEvent){
+				AddEventListener('Resonator00', "touchstart", touchHandler);
+				AddEventListener('Resonator00', "touchend", touchHandler);
+				AddEventListener('Resonator00', "touchcancel", touchHandler);
+				AddEventListener('Resonator01', "touchstart", touchHandler);
+				AddEventListener('Resonator01', "touchend", touchHandler);
+				AddEventListener('Resonator01', "touchcancel", touchHandler);
+				AddEventListener('Resonator02', "touchstart", touchHandler);
+				AddEventListener('Resonator02', "touchend", touchHandler);
+				AddEventListener('Resonator02', "touchcancel", touchHandler);
+				AddEventListener('Resonator03', "touchstart", touchHandler);
+				AddEventListener('Resonator03', "touchend", touchHandler);
+				AddEventListener('Resonator03', "touchcancel", touchHandler);
+				AddEventListener('Resonator04', "touchstart", touchHandler);
+				AddEventListener('Resonator04', "touchend", touchHandler);
+				AddEventListener('Resonator04', "touchcancel", touchHandler);
+				AddEventListener('Resonator05', "touchstart", touchHandler);
+				AddEventListener('Resonator05', "touchend", touchHandler);
+				AddEventListener('Resonator05', "touchcancel", touchHandler);
+				AddEventListener('Resonator06', "touchstart", touchHandler);
+				AddEventListener('Resonator06', "touchend", touchHandler);
+				AddEventListener('Resonator06', "touchcancel", touchHandler);
+				AddEventListener('Resonator07', "touchstart", touchHandler);
+				AddEventListener('Resonator07', "touchend", touchHandler);
+				AddEventListener('Resonator07', "touchcancel", touchHandler);
+				AddEventListener('ModSlot00', "touchend", modSlotClick);
+				AddEventListener('ModSlot01', "touchend", modSlotClick);
+				AddEventListener('ModSlot02', "touchend", modSlotClick);
+				AddEventListener('ModSlot03', "touchend", modSlotClick);
+				AddEventListener('reset', "touchend", allReset);
+				AddEventListener('result', "touchstart", function(e){e.target.select()});
+			}else{
+				AddEventListener('Resonator00', "mousedown", mouseHandler);
+				AddEventListener('Resonator00', "mouseup", mouseHandler);
+				AddEventListener('Resonator01', "mousedown", mouseHandler);
+				AddEventListener('Resonator01', "mouseup", mouseHandler);
+				AddEventListener('Resonator02', "mousedown", mouseHandler);
+				AddEventListener('Resonator02', "mouseup", mouseHandler);
+				AddEventListener('Resonator03', "mousedown", mouseHandler);
+				AddEventListener('Resonator03', "mouseup", mouseHandler);
+				AddEventListener('Resonator04', "mousedown", mouseHandler);
+				AddEventListener('Resonator04', "mouseup", mouseHandler);
+				AddEventListener('Resonator05', "mousedown", mouseHandler);
+				AddEventListener('Resonator05', "mouseup", mouseHandler);
+				AddEventListener('Resonator06', "mousedown", mouseHandler);
+				AddEventListener('Resonator06', "mouseup", mouseHandler);
+				AddEventListener('Resonator07', "mousedown", mouseHandler);
+				AddEventListener('Resonator07', "mouseup", mouseHandler);
+				AddEventListener('ModSlot00', "click", modSlotClick);
+				AddEventListener('ModSlot01', "click", modSlotClick);
+				AddEventListener('ModSlot02', "click", modSlotClick);
+				AddEventListener('ModSlot03', "click", modSlotClick);
+				AddEventListener('reset', "click", allReset);
+				AddEventListener('result', "click", function(e){e.target.select()});
+			}
+			funcResult();
+		}
+		
+		function setCookie() {
+			var rList = new Array(8);
+			for (var i=0; i<8; i++) {
+				rList[i] = document.getElementById('Resonator0' + i).textContent;
+			}
+			var mList = new Array(4);
+			for (i=0; i<4; i++) {
+				mList[i] = document.getElementById('ModSlot0' + i).textContent;
+			}			
+			var exp = new Date();
+			exp.setTime(exp.getTime()+1000*60*60*24*1);
+			var str = rList.join(',') + '+' + mList.join(',');
+			var escstr = encodeURIComponent(str);
+			document.cookie = "LinkCalc4Ingress=" + escstr + "; expires=" + exp.toGMTString();
+		}
+		
+		function getCookie() {
+		    var cookieList = new Array();
+		    var allcookies = document.cookie;
+		    if( allcookies != '' ) {
+		        var cookies = allcookies.split( '; ' );
+		        for( var i = 0; i < cookies.length; i++ ) {
+		            var cookie = cookies[ i ].split( '=' );
+		            cookieList[cookie[0]] = decodeURIComponent(cookie[1]);
+		        }
+				if (cookieList['LinkCalc4Ingress']) {
+					var rList = new Array(8);
+					rList = cookieList['LinkCalc4Ingress'].split('+')[0].split(',');
+					var mList = new Array(4);
+					mList = cookieList['LinkCalc4Ingress'].split('+')[1].split(',');
+					for (var i in rList) {
+						var elem = document.getElementById("Resonator0" + i );
+						elem.textContent = rList[i];
+						elem.className = "cResoSlot R" + elem.textContent;
+					}
+					for (i in mList) {
+						var elem = document.getElementById("ModSlot0" + i );
+						elem.textContent = mList[i];
+						if (elem.textContent.match(/^\s*$/i)) 	{ elem.className = "cModSlot none"; }
+						else if (elem.textContent == "LA") 		{ elem.className = "cModSlot LA"; 	}
+						else if (elem.textContent == "VRLA") 	{ elem.className = "cModSlot VRLA"; }
+						else if (elem.textContent == "SBUL") 	{ elem.className = "cModSlot SBUL"; }
+					}
+				}
+	    	}
+			funcResult();
+		}
+		
+		function funcResult() {
+			
+			var outLink = 8;
+			document.F1.result.value = "";
+			
+			var resoList = new Array(8);
+			resoList[0] = Number(document.getElementById("Resonator00").textContent);
+			resoList[1] = Number(document.getElementById("Resonator01").textContent);
+			resoList[2] = Number(document.getElementById("Resonator02").textContent);
+			resoList[3] = Number(document.getElementById("Resonator03").textContent);
+			resoList[4] = Number(document.getElementById("Resonator04").textContent);
+			resoList[5] = Number(document.getElementById("Resonator05").textContent);
+			resoList[6] = Number(document.getElementById("Resonator06").textContent);
+			resoList[7] = Number(document.getElementById("Resonator07").textContent);
+			
+			var modList = new Array(4);
+			modList[0] = document.getElementById("ModSlot00").textContent;
+			modList[1] = document.getElementById("ModSlot01").textContent;
+			modList[2] = document.getElementById("ModSlot02").textContent;
+			modList[3] = document.getElementById("ModSlot03").textContent;
+			
+			var modNList = new Array(4);
+
+			var averageLevel = eval(resoList.join("+"))/8;
+			var rawLinkRange_km = 160 * (averageLevel * averageLevel * averageLevel * averageLevel) / 1000;
+			
+			for (var i in modList) {
+				if (modList[i].match(/^VRLA$/i)) { 	// very rare LinkAmp
+					modNList[i] = 7;
+				} else if (modList[i].match(/^SBUL$/i)) { // softbank Ultra Link
+					modNList[i] = 5;
+					outLink += 8;
+				} else if (modList[i].match(/^LA$/i)) { // rare LinkAmp
+					modNList[i] = 2;
+				}
+			}
+			
+			// ソート
+			modNList.sort(ArraySortNumeric);
+			
+			var rate = 0;
+			for (var i in modNList) {
+				if (i == 0) { rate += (modNList[i]*1.00) }
+				else if (i == 1) { rate += (modNList[i]*0.25) }
+				else if (i == 2) { rate += (modNList[i]*0.125) }
+				else if (i == 3) { rate += (modNList[i]*0.125) }
+			}
+			if (rate == 0) { rate = 1 }
+			
+			// Potal Level
+			document.getElementById('potalLevel').textContent = "LINK RANGE " + "(P" + Math.floor(averageLevel) + ")";
+			
+			// result
+			var  amplifiedLinkRange_km = rawLinkRange_km * rate;
+			document.F1.result.value = document.F1.result.value 
+				+ amplifiedLinkRange_km.toFixed(3) + ' km' 
+			
+			// discription
+			document.F1.discription.value = rawLinkRange_km.toFixed(3) + ' km' + ' ×' + rate.toFixed(2) + '\n';
+			document.F1.discription.value = document.F1.discription.value + 'Max Outbound Links = ' + outLink;
+			
+			// Map draw
+			if (navigator.geolocation) {
+				navigator.geolocation.getCurrentPosition(map_successCallback, map_errorCallback);
+				initialize(lat, lng, amplifiedLinkRange_km * 1000);
+			} else {
+				initialize(31.593885, 130.553668, amplifiedLinkRange_km * 1000);
+			}
+		}
+
+		var lat = "";
+		var lng = "";
+		function map_successCallback(position) {
+			lat = position.coords.latitude;
+			lng = position.coords.latitude;
+		}
+
+		function map_errorCallback(error) {
+			var err_msg = "";
+			switch(error.code)
+			{
+			case 1:
+				err_msg = "位置情報の利用が許可されていません";
+				break;
+			case 2:
+				err_msg = "デバイスの位置が判定できません";
+				break;
+			case 3:
+				err_msg = "タイムアウトしました";
+				break;
+			}
+		}
+		
+		var flag_press = 0;
+		var timerID = '';
+		var circle;	// google Map
+		
+		// window scroll cancel
+		document.addEventListener("touchmove", function(elem) { if(window.innerHeight >= document.body.scrollHeight){elem.preventDefault()} }, false);
+		
+		document.addEventListener("DOMContentLoaded", load, false);
+		
+	</script>
+
+	<style type="text/css">
+	<!--
+	html, body {
+	    margin: 0;
+	    padding: 0;
+	    height: 100%;
+	    width: 100%;
+		padding: 0px;
+	    overflow: hidden;
+		text-align: center;
+		user-select: none; 			/* CSS3 */
+		-moz-user-select: none; 	/* Firefox */
+		-webkit-user-select: none; 	/* Safari、Chrome */
+		-ms-user-select: none; 		/* IE10 */	
+	}
+	/*div { border: 1px red dotted; }*/
+	textarea {
+		font-size: medium; 
+		width: 80%; 
+		text-align: center; 
+		margin: 0px;
+		padding: 0px;
+	}
+	textarea#result { 
+		font-size: xx-large; 
+	}
+	textarea#discription { 
+		line-height: 1.2em;
+		border: 0px white solid;
+	}
+	.cSlotDIV {
+		display:table;
+		margin: 0px auto;
+	}
+	.cDIVmargin {	
+		margin: 10px;
+	}
+	.cResoSlot 	{ 
+		font-size: xx-large; 
+		border: 1px black solid; 
+		width: 50px;
+		height: 50px;
+		margin: 10px;
+		display: table-cell;
+		vertical-align: middle;
+		border-radius: 8px;	
+		font-family: sans-serif;
+		box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.2) inset;
+	}
+	.cModSlot 	{ 
+		font-size: large; 
+		border: 1px black solid; 
+		width: 50px;
+		height: 50px;
+		margin: 10px;
+		display: table-cell;
+		vertical-align: middle;
+		border-radius: 8px;	
+		font-family: sans-serif;
+		box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.2) inset;
+	}
+	.title {
+		margin: 10px 0px 3px 0px;
+	}
+		
+	.LA 		{ background-color: #9d8af3; color: #ffffff; }
+	.SBUL 		{ background-color: #FFCC33; }
+	.VRLA 		{ background-color: #ff8af7; }
+	.none 		{ background-color: #ffffff; }
+	.R1 		{ background-color: #FFE600; }
+	.R1touch 	{ background-color: #FFE600; height: 100px; position: relative; top: -50px; }
+	.R2 		{ background-color: #FFAB00; }
+	.R2touch 	{ background-color: #FFAB00; height: 100px; position: relative; top: -50px; }
+	.R3 		{ background-color: #FF6200; color: #ffffff; }
+	.R3touch 	{ background-color: #FF6200; color: #ffffff; height: 100px; position: relative; top: -50px; }
+	.R4 		{ background-color: #F00000; color: #ffffff; }
+	.R4touch 	{ background-color: #F00000; color: #ffffff; height: 100px; position: relative; top: -50px; }
+	.R5 		{ background-color: #F00090; color: #ffffff; }
+	.R5touch 	{ background-color: #F00090; color: #ffffff; height: 100px; position: relative; top: -50px; }
+	.R6 		{ background-color: #CB3DC4; color: #ffffff; }
+	.R6touch 	{ background-color: #CB3DC4; color: #ffffff; height: 100px; position: relative; top: -50px; }
+	.R7 		{ background-color: #892A9A; color: #ffffff; }
+	.R7touch 	{ background-color: #892A9A; color: #ffffff; height: 100px; position: relative; top: -50px; }
+	.R8 		{ background-color: #5E2ABA; color: #ffffff; }
+	.R8touch 	{ background-color: #5E2ABA; color: #ffffff; height: 100px; position: relative; top: -50px; }
+	
+	#reset		{ 
+		margin: 15px 0px 15px 0px; 
+		font-size: large; 
+		user-select: none; 			/* CSS3 */
+		-moz-user-select: none; 	/* Firefox */
+		-webkit-user-select: none; 	/* Safari、Chrome */
+		-ms-user-select: none; 		/* IE10 */	
+	}
+	.hint 		{ font-size: small; margin: 0px 0px 0px 0px; }
+	.developer 	{ font-size: x-small; margin: 3px 0px 0px 0px; }
+
+	#map-canvas { border: 1px red dotted; height: 50%; margin: 0; padding: 0;}
+	
+	-->
+	</style>
+	
+</head>
+<body>
+<div id="map-canvas"></div>
+<form name="F1" id="F1">
+	<div class="title" id="potalLevel">
+		LINK RANGE
+	</div>
+	<div>
+		<textarea name="result" id="result" rows="1" readonly></textarea>
+		<textarea name="discription" id="discription" rows="2" readonly></textarea>
+	</div>
+	<div class="title">
+		RESONATORS
+	</div>
+	<div class="cSlotDIV">
+		<div class="cResoSlot R8" id="Resonator00">8</div>
+		<div class="cDIVmargin"></div>
+		<div class="cResoSlot R8" id="Resonator01">8</div>
+		<div class="cDIVmargin"></div>
+		<div class="cResoSlot R8" id="Resonator02">8</div>
+		<div class="cDIVmargin"></div>
+		<div class="cResoSlot R8" id="Resonator03">8</div>
+	</div>
+	<div class="cDIVmargin"></div>
+	<div class="cSlotDIV">
+		<div class="cResoSlot R8" id="Resonator04">8</div>
+		<div class="cDIVmargin"></div>
+		<div class="cResoSlot R8" id="Resonator05">8</div>
+		<div class="cDIVmargin"></div>
+		<div class="cResoSlot R8" id="Resonator06">8</div>
+		<div class="cDIVmargin"></div>
+		<div class="cResoSlot R8" id="Resonator07">8</div>
+	</div>
+	<div class="title">
+		MOD SLOTS
+	</div>
+	<div class="cSlotDIV">
+		<div class="cModSlot" id="ModSlot00"> </div>
+		<div class="cDIVmargin"></div>
+		<div class="cModSlot" id="ModSlot01"> </div>
+		<div class="cDIVmargin"></div>
+		<div class="cModSlot" id="ModSlot02"> </div>
+		<div class="cDIVmargin"></div>
+		<div class="cModSlot" id="ModSlot03"> </div>
+	</div>
+	<div><input type="button" value="reset" name="reset" id="reset"></div>
+	<div class="hint">Long press resonator-slot to default (R8).</div>
+	<div class="developer">DEVELOPED BY DOOOON.</div>
+		
+</form>
+</body>
