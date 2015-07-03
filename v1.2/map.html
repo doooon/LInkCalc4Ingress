@@ -325,7 +325,9 @@
 				AddEventListener('ModSlot03', "click", modSlotClick);
 				AddEventListener('reset', "click", allReset);
 				AddEventListener('result', "click", function(e){e.target.select()});
+				AddEventListener('separate-bar', "click", separatebarClick);	
 			}
+						
 			funcResult();
 			
 			// map draw
@@ -388,6 +390,25 @@
 
 			logProfile("setCookie", Date.now() - startTime); // debug
 		}
+
+		function separatebarClick() {
+			if (document.getElementById('separate-bar').className.match(/down-cursor/)) {
+				separatebarDown();
+			} else {
+				separatebarUp();
+			}
+		}
+		
+		function separatebarDown() {
+			document.getElementById('separate-bar').className = "up-cursor";
+			document.getElementById('calc').style.top = "90%";
+		}
+
+		function separatebarUp() {
+			document.getElementById('separate-bar').className = "down-cursor";
+			document.getElementById('calc').style.top = "0%";
+		}
+
 
 		function funcResult() {
 			var startTime = Date.now();	// debug
@@ -466,7 +487,7 @@
 
 	<style type="text/css">
 	<!--
-	html, body {
+	html, body, #calc {
 	    margin: 0;
 	    padding: 0;
 	    height: 100%;
@@ -479,6 +500,23 @@
 		-webkit-user-select: none; 	/* Safari、Chrome */
 		-ms-user-select: none; 		/* IE10 */	
 	}
+	
+	#calc {
+		position: absolute; top: 0px; left: 0px;
+		background-color: white;
+		transition-property: top;
+		transition-duration: 1s;
+		transition-delay: 0s;
+		transition-timing-function: linear;
+		/*
+		transition: 		top 1s linear 1s;
+		-moz-transition: 	top 1s linear 0 , width 1s linear 0 , height 1s linear 0;
+		-webkit-transition: top 1s linear 0 , width 1s linear 0 , height 1s linear 0;
+		-o-transition: 		top 1s linear 0 , width 1s linear 0 , height 1s linear 0;
+		-ms-transition: 	top 1s linear 0 , width 1s linear 0 , height 1s linear 0;
+		*/
+	}
+	
 	/*div { border: 1px red dotted; }*/
 	textarea {
 		font-size: medium; 
@@ -493,6 +531,7 @@
 	textarea#discription { 
 		line-height: 1.2em;
 		border: 0px white solid;
+		background-color: transparent;
 	}
 	.cSlotDIV {
 		display:table;
@@ -561,7 +600,11 @@
 	.hint 		{ font-size: small; margin: 0px 0px 0px 0px; }
 	.developer 	{ font-size: x-small; margin: 3px 0px 0px 0px; }
 
-	#map-canvas { border: 1px red dotted; height: 50%; margin: 0; padding: 0;}
+	#map-canvas { border: 0px red dotted; height: 100%; margin: 0; padding: 0;}
+	
+	#separate-bar { border: 1px blue solid; height: 10px; margin: 0; padding: 0; background-color: gray; }
+	.up-cursor { cursor: n-resize; }
+	.down-cursor { cursor: s-resize; }
 	
 	-->
 	</style>
@@ -569,6 +612,8 @@
 </head>
 <body>
 <div id="map-canvas"></div>
+<div id="calc">
+<div id="separate-bar" class="down-cursor"></div>
 <form name="F1" id="F1">
 	<div class="title" id="potalLevel">
 		LINK RANGE
@@ -617,4 +662,5 @@
 	<div class="developer">DEVELOPED BY DOOOON.</div>
 		
 </form>
+</div>
 </body>
