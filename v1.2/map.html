@@ -12,25 +12,46 @@
 	<!--link rel="apple-touch-icon" href="apple-touch-icon.png"-->
 	<title>Link Calc</title>
 	
+
+	<script type="text/javascript" charset="utf-8">
+		// debug profile
+		// 計測開始 var startTime = Date.now();	
+		// 記録 logProfile("関数名", Date.now() - startTime);
+		
+		var profileResult = {};
+		function logProfile(funcName, time) {
+			profileResult[funcName] = profileResult[funcName] || 0;
+			profileResult[funcName] += time;
+			console.log(funcName + " = " + profileResult[funcName]);
+		}
+	</script>
+
 	<script type="text/javascript"
 		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDRaTZlZNQ91E4lKF_75VVsTyH0zjnm0fs">
 	</script>
-
+	
 	<script type="text/javascript" charset="utf-8">
+	
+		var circle;
+
 		function initialize(lat, lng, range) {
+			var startTime = Date.now();	// debug
+			
 			var myLatlng = new google.maps.LatLng(lat, lng);	//mashikaku-3tsu
 			var mapOptions = {
 				center: myLatlng,
 				zoom: 15
+			    //,scrollwheel: false
 			};
 			var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 			var marker = new google.maps.Marker({
-				position: myLatlng,
-				map: map,
-				title: 'Here!'
+				map:map,
+				draggable:true,
+				animation: google.maps.Animation.DROP,
+				position: myLatlng
 			});
 
-			var populationOptions = {
+			var circleOptions = {
 				strokeColor: '#0066FF',
 				strokeOpacity: 0.6,
 				strokeWeight: 2,
@@ -40,11 +61,66 @@
 				center: myLatlng,
 				radius: range	// 半径(m)
 			};
+					  
 			// Add the circle for this city to the map.
-			circle = new google.maps.Circle(populationOptions);
+			circle = new google.maps.Circle(circleOptions);
+			
+			// marker moved refresh
+			google.maps.event.addListener(marker, 'dragend', function(){circle.setCenter(marker.getPosition())});
+			// Circle with Marker move 
+			// circle.bindTo("center", marker, "position");
+			
+			logProfile("initialize", Date.now() - startTime); // debug
 		}
+		
+		
+		function googleMapDraw (range){
+			var startTime = Date.now();	// debug
+			
+			if (navigator.geolocation) {
+				var lat = 25;
+				var lng = 0;
+				navigator.geolocation.getCurrentPosition(
+					function(position){
+						lat = position.coords.latitude;
+						lng = position.coords.longitude;
+						initialize(lat, lng, range);
+					}, 
+					function(error){
+						var err_msg = "";
+						switch(error.code)
+						{
+						case 1:
+							err_msg = "位置情報の利用が許可されていません";
+							break;
+						case 2:
+							err_msg = "デバイスの位置が判定できません";
+							break;
+						case 3:
+							err_msg = "タイムアウトしました";
+							break;
+						}
+						alert(err_msg);
+						initialize(lat, lng, range);
+					}
+				);
+			} else {
+				initialize(31.593885, 130.553668, range);
+			}
+			logProfile("googleMapDraw", Date.now() - startTime); // debug
+		}
+	</script>
+
+	<script type="text/javascript" charset="utf-8">
+		var startTime = Date.now();	// debug
+
+		var flag_press = 0;
+		var timerID = '';
+		var amplifiedLinkRange_km = 0;
 
 		function AddEventListener(elementID, type, listener) {
+			var startTime = Date.now();	// debug
+			
 			var element = document.getElementById(elementID);
 		    if( element.addEventListener ) {
 		        element.addEventListener( type, listener, false );
@@ -56,40 +132,62 @@
 		    else {
 		        // not support.
 		    }
+		
+			logProfile("AddEventListener", Date.now() - startTime); // debug
 		}
 
 		function ArraySortNumeric(prev,next){
+			var startTime = Date.now();	// debug
+			
 			return next - prev;
+			logProfile("ArraySortNumeric", Date.now() - startTime); // debug
 		}
 		
 		function resonatorClick(e) {
+			var startTime = Date.now();	// debug
+			
 			var elem = e.target;
 			if (elem.textContent == 1) { elem.textContent = 8; elem.className = "cResoSlot R8"; }
 			else { elem.textContent --; elem.className = "cResoSlot R" + elem.textContent; }
 			setCookie();
 			funcResult();
+			// googleMap circle range change
+			(function(){circle.setRadius(amplifiedLinkRange_km*1000)})();
+			logProfile("resonatorClick", Date.now() - startTime); // debug
 		}
 		
 		function resonatorPress(elemID) {
+			var startTime = Date.now();	// debug
+			
 			var elem = document.getElementById(elemID);
 			flag_press = 0;
 			elem.textContent = 8; 
 			elem.className = "cResoSlot R8";
 			setCookie();
 			funcResult();
+			// googleMap circle range change
+			(function(){circle.setRadius(amplifiedLinkRange_km*1000)})();
+			logProfile("resonatorPress", Date.now() - startTime); // debug
 		}
 		
 		function modSlotClick(e) {
+			var startTime = Date.now();	// debug
+			
 			var elem = e.target;
 			if (elem.textContent.match(/^\s*$/i)) 	{ elem.textContent = "LA"; 		elem.className = "cModSlot LA"; 	}
-			else if (elem.textContent == "LA") 		{ elem.textContent = "VRLA"; 		elem.className = "cModSlot VRLA"; 	}
-			else if (elem.textContent == "VRLA") 		{ elem.textContent = "SBUL"; 	elem.className = "cModSlot SBUL"; 	}
+			else if (elem.textContent == "LA") 		{ elem.textContent = "VRLA"; 	elem.className = "cModSlot VRLA"; 	}
+			else if (elem.textContent == "VRLA") 	{ elem.textContent = "SBUL"; 	elem.className = "cModSlot SBUL"; 	}
 			else if (elem.textContent == "SBUL") 	{ elem.textContent = " "; 		elem.className = "cModSlot none"; 	}
 			setCookie();
 			funcResult();
+			// googleMap circle range change
+			(function(){circle.setRadius(amplifiedLinkRange_km*1000)})();
+			logProfile("modSlotClick", Date.now() - startTime); // debug
 		}
 		
 		function allReset() {
+			var startTime = Date.now();	// debug
+			
 			flag_press = 0;
 			document.getElementById('Resonator00').textContent = '8'; 
 			document.getElementById('Resonator00').className = "cResoSlot R8";
@@ -117,9 +215,14 @@
 			document.getElementById('ModSlot03').className = "cModSlot none";
 			setCookie();
 			funcResult();
+			// googleMap circle range change
+			(function(){circle.setRadius(amplifiedLinkRange_km*1000)})();
+			logProfile("allReset", Date.now() - startTime); // debug
 		}
 
 		function touchHandler(e) {
+			var startTime = Date.now();	// debug
+			
 			e.preventDefault();
 			switch (e.type) {
 				case "touchstart" :
@@ -134,11 +237,17 @@
 					clearTimeout(timerID);
 					if (flag_press == 1) { resonatorClick(e) }
 					flag_press = 0;
+					// googleMap circle range change
+					//(function(){circle.setRadius(amplifiedLinkRange_km*1000)})();
 					break;
 			}
+			
+			logProfile("touchHandler", Date.now() - startTime); // debug
 		}
 
 		function mouseHandler(e) {
+			var startTime = Date.now();	// debug
+			
 			e.preventDefault();
 			switch (e.type) {
 				case "mousedown" :
@@ -149,11 +258,17 @@
 					clearTimeout(timerID);
 					if (flag_press == 1) { resonatorClick(e) }
 					flag_press = 0;
+					// googleMap circle range change
+					//(function(){circle.setRadius(amplifiedLinkRange_km*1000)})();
 					break;
 			}
+
+			logProfile("mouseHandler", Date.now() - startTime); // debug
 		}
 
 		function load() {
+			var startTime = Date.now();	// debug
+			
 			getCookie();
 			
 			if(window.TouchEvent){
@@ -212,9 +327,16 @@
 				AddEventListener('result', "click", function(e){e.target.select()});
 			}
 			funcResult();
+			
+			// map draw
+			(function(){googleMapDraw(amplifiedLinkRange_km*1000)})();			
+			
+			logProfile("load", Date.now() - startTime); // debug
 		}
 		
 		function setCookie() {
+			var startTime = Date.now();	// debug
+			
 			var rList = new Array(8);
 			for (var i=0; i<8; i++) {
 				rList[i] = document.getElementById('Resonator0' + i).textContent;
@@ -228,9 +350,13 @@
 			var str = rList.join(',') + '+' + mList.join(',');
 			var escstr = encodeURIComponent(str);
 			document.cookie = "LinkCalc4Ingress=" + escstr + "; expires=" + exp.toGMTString();
+
+			logProfile("setCookie", Date.now() - startTime); // debug
 		}
 		
 		function getCookie() {
+			var startTime = Date.now();	// debug
+			
 		    var cookieList = new Array();
 		    var allcookies = document.cookie;
 		    if( allcookies != '' ) {
@@ -259,10 +385,12 @@
 					}
 				}
 	    	}
-			funcResult();
+
+			logProfile("setCookie", Date.now() - startTime); // debug
 		}
-		
+
 		function funcResult() {
+			var startTime = Date.now();	// debug
 			
 			var outLink = 8;
 			document.F1.result.value = "";
@@ -315,7 +443,7 @@
 			document.getElementById('potalLevel').textContent = "LINK RANGE " + "(P" + Math.floor(averageLevel) + ")";
 			
 			// result
-			var  amplifiedLinkRange_km = rawLinkRange_km * rate;
+			amplifiedLinkRange_km = rawLinkRange_km * rate;
 			document.F1.result.value = document.F1.result.value 
 				+ amplifiedLinkRange_km.toFixed(3) + ' km' 
 			
@@ -323,46 +451,16 @@
 			document.F1.discription.value = rawLinkRange_km.toFixed(3) + ' km' + ' ×' + rate.toFixed(2) + '\n';
 			document.F1.discription.value = document.F1.discription.value + 'Max Outbound Links = ' + outLink;
 			
-			// Map draw
-			if (navigator.geolocation) {
-				navigator.geolocation.getCurrentPosition(map_successCallback, map_errorCallback);
-				initialize(lat, lng, amplifiedLinkRange_km * 1000);
-			} else {
-				initialize(31.593885, 130.553668, amplifiedLinkRange_km * 1000);
+			logProfile("funcResult", Date.now() - startTime); // debug
+			
 			}
-		}
-
-		var lat = "";
-		var lng = "";
-		function map_successCallback(position) {
-			lat = position.coords.latitude;
-			lng = position.coords.latitude;
-		}
-
-		function map_errorCallback(error) {
-			var err_msg = "";
-			switch(error.code)
-			{
-			case 1:
-				err_msg = "位置情報の利用が許可されていません";
-				break;
-			case 2:
-				err_msg = "デバイスの位置が判定できません";
-				break;
-			case 3:
-				err_msg = "タイムアウトしました";
-				break;
-			}
-		}
-		
-		var flag_press = 0;
-		var timerID = '';
-		var circle;	// google Map
-		
+				
 		// window scroll cancel
 		document.addEventListener("touchmove", function(elem) { if(window.innerHeight >= document.body.scrollHeight){elem.preventDefault()} }, false);
 		
 		document.addEventListener("DOMContentLoaded", load, false);
+		
+		logProfile("main", Date.now() - startTime); // debug
 		
 	</script>
 
@@ -452,7 +550,7 @@
 	.R8 		{ background-color: #5E2ABA; color: #ffffff; }
 	.R8touch 	{ background-color: #5E2ABA; color: #ffffff; height: 100px; position: relative; top: -50px; }
 	
-	#reset		{ 
+	#reset, #mapButton		{ 
 		margin: 15px 0px 15px 0px; 
 		font-size: large; 
 		user-select: none; 			/* CSS3 */
@@ -514,6 +612,7 @@
 		<div class="cModSlot" id="ModSlot03"> </div>
 	</div>
 	<div><input type="button" value="reset" name="reset" id="reset"></div>
+	<!--div><input type="button" value="map" name="mapButton" id="mapButton"></div-->
 	<div class="hint">Long press resonator-slot to default (R8).</div>
 	<div class="developer">DEVELOPED BY DOOOON.</div>
 		
