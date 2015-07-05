@@ -91,8 +91,7 @@
 			
 			// press & hold relocate marker
 			google.maps.event.addListener(map, 'mousedown', function(e) {
-				console.log(e.latLng.toString());
-				timerID = setTimeout(function(){relocateMarker(e.latLng)}, 400);
+				timerID = setTimeout(function(){relocateMarker(e.latLng)}, 1000);
 			});
 			google.maps.event.addListener(map, 'mouseup', function(e) {
 				clearTimeout(timerID);
@@ -100,7 +99,6 @@
 		}
 		
 		function relocateMarker(latLng) {
-			//console.log(myLatLng);
 			marker.setPosition(latLng);
 			circle.setCenter(marker.getPosition());
 			//marker.setZIndex(2);
@@ -143,7 +141,8 @@
 				google.maps.event.addDomListener(
 					controlUI, 'touchend', function(){
 						getCurrentLocation(); 
-						map.setCenter(currentLocation)
+						map.setCenter(currentLocation);
+						relocateMarker(currentLocation);
 					}
 				);
 			} else {
@@ -151,6 +150,7 @@
 					controlUI, 'click', function(){
 						getCurrentLocation(); 
 						map.setCenter(currentLocation)
+						relocateMarker(currentLocation);
 					}
 				);
 			}
@@ -278,7 +278,7 @@
 			switch (e.type) {
 				case "touchstart" :
 					flag_press = 1;
-					timerID = setTimeout('resonatorPress("' + e.target.id + '")', 400);
+					timerID = setTimeout(function(){resonatorPress(e.target.id)}, 400);
 					break;
 				case "touchcancel" :
 					clearTimeout(timerID);
@@ -297,7 +297,7 @@
 			switch (e.type) {
 				case "mousedown" :
 					flag_press = 1;
-					timerID = setTimeout('resonatorPress("' + e.target.id + '")', 400);
+					timerID = setTimeout(function(){resonatorPress(e.target.id)}, 400);
 					break;
 				case "mouseup" :
 					clearTimeout(timerID);
