@@ -85,7 +85,10 @@
 			map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(mapCurrentLocationButtonDiv);
 
 			// marker moved refresh
-			google.maps.event.addListener(marker, 'dragend', function(){circle.setCenter(marker.getPosition())});
+			google.maps.event.addListener(marker, 'dragend', function(){
+				marker.setAnimation( google.maps.Animation.DROP );
+				circle.setCenter(marker.getPosition());
+			});
 			// Circle with Marker move 
 			// circle.bindTo("center", marker, "position");
 			
@@ -100,6 +103,7 @@
 		
 		function relocateMarker(latLng) {
 			marker.setPosition(latLng);
+			marker.setAnimation( google.maps.Animation.DROP );
 			circle.setCenter(marker.getPosition());
 			//marker.setZIndex(2);
 		}
