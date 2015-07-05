@@ -33,22 +33,24 @@
 	<script type="text/javascript" charset="utf-8">
 	
 		var circle;
-
+		var map;
+		var currentLocation = {};
+		var marker;
+		
 		function initialize(lat, lng, range) {
-			var startTime = Date.now();	// debug
-			
 			var myLatlng = new google.maps.LatLng(lat, lng);	//mashikaku-3tsu
 			var mapOptions = {
 				center: myLatlng,
 				zoom: 7
 			    //,scrollwheel: false
 			};
-			var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-			var marker = new google.maps.Marker({
+			map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+			marker = new google.maps.Marker({
 				map:map,
 				draggable:true,
 				animation: google.maps.Animation.DROP,
-				position: myLatlng
+				position: myLatlng,
+				zIndex: 1
 			});
 
 			var circleOptions = {
@@ -66,30 +68,61 @@
 			circle = new google.maps.Circle(circleOptions);
 			
 			// Add custom button
-			var customButtonDiv = document.createElement('div');
-			var customButton = new customMapButton(customButtonDiv, map);
-			customButtonDiv.index = 1;
-			map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(customButtonDiv);
+			var mapBackButtonDiv = document.createElement('div');
+			var mapBackButton = new funcMapBackButton(mapBackButtonDiv, map);
+			mapBackButtonDiv.index = 1;
+			map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(mapBackButtonDiv);
 			
+			/*
+			google.maps.ControlPosition
+			TOP_CENTER, TOP_LEFT, TOP_RIGHT, LEFT_TOP, RIGHT_TOP, LEFT_CENTER, RIGHT_CENTER, LEFT_BOTTOM, RIGHT_BOTTOM, BOTTOM_CENTER, BOTTOM_LEFT, BOTTOM_RIGHT
+			*/
+			
+			// Add custom button
+			var mapCurrentLocationButtonDiv = document.createElement('div');
+			var mapCurrentLocationButton = new funcMapCurrentLocationButton(mapCurrentLocationButtonDiv, map);
+			mapCurrentLocationButtonDiv.index = 1;
+			map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(mapCurrentLocationButtonDiv);
+
 			// marker moved refresh
 			google.maps.event.addListener(marker, 'dragend', function(){circle.setCenter(marker.getPosition())});
 			// Circle with Marker move 
 			// circle.bindTo("center", marker, "position");
 			
-			logProfile("initialize", Date.now() - startTime); // debug
+			// press & hold relocate marker
+			google.maps.event.addListener(map, 'mousedown', function(e) {
+				console.log(e.latLng.toString());
+				timerID = setTimeout(function(){relocateMarker(e.latLng)}, 400);
+			});
+			google.maps.event.addListener(map, 'mouseup', function(e) {
+				clearTimeout(timerID);
+			});
 		}
 		
-		function customMapButton(controlDiv, map) {
-
-			// Set CSS for the control border
-			var controlUI = document.createElement('input');
-			controlUI.id = 'map-close-button';
-			controlUI.type = 'button';
+		function relocateMarker(latLng) {
+			//console.log(myLatLng);
+			marker.setPosition(latLng);
+			circle.setCenter(marker.getPosition());
+			//marker.setZIndex(2);
+		}
+		
+		// Add a marker to the map and push to the array.
+		function addMarker(location) {
+			var marker = new google.maps.Marker({
+				position: location,
+				map: map
+			});
+		}
+		
+		
+		function funcMapBackButton(controlDiv, map) {
+			// add close button on map
+			var controlUI = document.createElement('div');
+			controlUI.id = 'map-close-button-div';
 			controlUI.title = 'Click to calc board';
-			controlUI.value = '←BACK';
+			controlUI.innerText = 'BACK';
 			controlDiv.appendChild(controlUI);
 
-			// Setup the click event listeners: simply set the map to
 			if(window.TouchEvent){
 				google.maps.event.addDomListener(controlUI, 'touchend', mapClose);
 			} else {
@@ -98,17 +131,38 @@
 
 		}
 		
-		function googleMapDraw (range){
-			var startTime = Date.now();	// debug
-			
+		function funcMapCurrentLocationButton(controlDiv, map) {
+			// add current position button on map
+			var controlUI = document.createElement('div');
+			controlUI.id = 'map-current-location-button-div';
+			controlUI.title = 'Move current location.';
+			controlUI.innerText = 'CL';
+			controlDiv.appendChild(controlUI);
+
+			if(window.TouchEvent){
+				google.maps.event.addDomListener(
+					controlUI, 'touchend', function(){
+						getCurrentLocation(); 
+						map.setCenter(currentLocation)
+					}
+				);
+			} else {
+				google.maps.event.addDomListener(
+					controlUI, 'click', function(){
+						getCurrentLocation(); 
+						map.setCenter(currentLocation)
+					}
+				);
+			}
+
+		}
+		
+		function getCurrentLocation (){
 			if (navigator.geolocation) {
-				var lat = 25;
-				var lng = 0;
 				navigator.geolocation.getCurrentPosition(
 					function(position){
-						lat = position.coords.latitude;
-						lng = position.coords.longitude;
-						initialize(lat, lng, range);
+						currentLocation['lat'] = position.coords.latitude;
+						currentLocation['lng'] = position.coords.longitude;
 					}, 
 					function(error){
 						var err_msg = "";
@@ -125,27 +179,30 @@
 							break;
 						}
 						alert(err_msg);
-						initialize(lat, lng, range);
 					}
 				);
-			} else {
-				initialize(31.593885, 130.553668, range);
 			}
-			logProfile("googleMapDraw", Date.now() - startTime); // debug
+		}
+		
+		function googleMapDraw (range){
+			if (currentLocation.length) {
+				initialize(currentLocation['lat'], currentLocation['lng'], range);
+			} else {
+				// default position on map (sakurajima)
+				currentLocation['lat'] = 31.588636;
+				currentLocation['lng'] = 130.658511;
+				initialize(currentLocation['lat'], currentLocation['lng'], range);
+			}
 		}
 		
 	</script>
 
 	<script type="text/javascript" charset="utf-8">
-		var startTime = Date.now();	// debug
-
 		var flag_press = 0;
 		var timerID = '';
 		var amplifiedLinkRange_km = 0;
 
 		function AddEventListener(elementID, type, listener) {
-			var startTime = Date.now();	// debug
-			
 			var element = document.getElementById(elementID);
 		    if( element.addEventListener ) {
 		        element.addEventListener( type, listener, false );
@@ -157,62 +214,37 @@
 		    else {
 		        // not support.
 		    }
-		
-			logProfile("AddEventListener", Date.now() - startTime); // debug
 		}
 
 		function ArraySortNumeric(prev,next){
-			var startTime = Date.now();	// debug
-			
 			return next - prev;
-			logProfile("ArraySortNumeric", Date.now() - startTime); // debug
 		}
 		
 		function resonatorClick(e) {
-			var startTime = Date.now();	// debug
-			
 			var elem = e.target;
 			if (elem.textContent == 1) { elem.textContent = 8; elem.className = "cResoSlot R8"; }
 			else { elem.textContent --; elem.className = "cResoSlot R" + elem.textContent; }
-			setCookie();
 			funcResult();
-			// googleMap circle range change
-			(function(){circle.setRadius(amplifiedLinkRange_km*1000)})();
-			logProfile("resonatorClick", Date.now() - startTime); // debug
 		}
 		
 		function resonatorPress(elemID) {
-			var startTime = Date.now();	// debug
-			
 			var elem = document.getElementById(elemID);
 			flag_press = 0;
 			elem.textContent = 8; 
 			elem.className = "cResoSlot R8";
-			setCookie();
 			funcResult();
-			// googleMap circle range change
-			(function(){circle.setRadius(amplifiedLinkRange_km*1000)})();
-			logProfile("resonatorPress", Date.now() - startTime); // debug
 		}
 		
 		function modSlotClick(e) {
-			var startTime = Date.now();	// debug
-			
 			var elem = e.target;
 			if (elem.textContent.match(/^\s*$/i)) 	{ elem.textContent = "LA"; 		elem.className = "cModSlot LA"; 	}
 			else if (elem.textContent == "LA") 		{ elem.textContent = "VRLA"; 	elem.className = "cModSlot VRLA"; 	}
 			else if (elem.textContent == "VRLA") 	{ elem.textContent = "SBUL"; 	elem.className = "cModSlot SBUL"; 	}
 			else if (elem.textContent == "SBUL") 	{ elem.textContent = " "; 		elem.className = "cModSlot none"; 	}
-			setCookie();
 			funcResult();
-			// googleMap circle range change
-			(function(){circle.setRadius(amplifiedLinkRange_km*1000)})();
-			logProfile("modSlotClick", Date.now() - startTime); // debug
 		}
 		
 		function allReset() {
-			var startTime = Date.now();	// debug
-			
 			flag_press = 0;
 			document.getElementById('Resonator00').textContent = '8'; 
 			document.getElementById('Resonator00').className = "cResoSlot R8";
@@ -238,16 +270,10 @@
 			document.getElementById('ModSlot02').className = "cModSlot none";
 			document.getElementById('ModSlot03').textContent = ''; 
 			document.getElementById('ModSlot03').className = "cModSlot none";
-			setCookie();
 			funcResult();
-			// googleMap circle range change
-			(function(){circle.setRadius(amplifiedLinkRange_km*1000)})();
-			logProfile("allReset", Date.now() - startTime); // debug
 		}
 
 		function touchHandler(e) {
-			var startTime = Date.now();	// debug
-			
 			e.preventDefault();
 			switch (e.type) {
 				case "touchstart" :
@@ -262,17 +288,11 @@
 					clearTimeout(timerID);
 					if (flag_press == 1) { resonatorClick(e) }
 					flag_press = 0;
-					// googleMap circle range change
-					//(function(){circle.setRadius(amplifiedLinkRange_km*1000)})();
 					break;
 			}
-			
-			logProfile("touchHandler", Date.now() - startTime); // debug
 		}
 
 		function mouseHandler(e) {
-			var startTime = Date.now();	// debug
-			
 			e.preventDefault();
 			switch (e.type) {
 				case "mousedown" :
@@ -283,17 +303,11 @@
 					clearTimeout(timerID);
 					if (flag_press == 1) { resonatorClick(e) }
 					flag_press = 0;
-					// googleMap circle range change
-					//(function(){circle.setRadius(amplifiedLinkRange_km*1000)})();
 					break;
 			}
-
-			logProfile("mouseHandler", Date.now() - startTime); // debug
 		}
 
 		function load() {
-			var startTime = Date.now();	// debug
-			
 			getCookie();
 			
 			if(window.TouchEvent){
@@ -326,9 +340,7 @@
 				AddEventListener('ModSlot02', "touchend", modSlotClick);
 				AddEventListener('ModSlot03', "touchend", modSlotClick);
 				AddEventListener('reset', "touchend", allReset);
-				AddEventListener('result', "touchstart", function(e){e.target.select()});
-				AddEventListener('separate-bar', "touchend", separatebarClick);	
-				AddEventListener('map-open-button', "touchend", mapOpen);	
+				AddEventListener('map-open-button-div', "touchend", mapOpen);	
 			}else{
 				AddEventListener('Resonator00', "mousedown", mouseHandler);
 				AddEventListener('Resonator00', "mouseup", mouseHandler);
@@ -351,19 +363,14 @@
 				AddEventListener('ModSlot02', "click", modSlotClick);
 				AddEventListener('ModSlot03', "click", modSlotClick);
 				AddEventListener('reset', "click", allReset);
-				AddEventListener('result', "click", function(e){e.target.select()});
-				AddEventListener('separate-bar', "click", separatebarClick);	
-				AddEventListener('map-open-button', "click", mapOpen);	
+				AddEventListener('map-open-button-div', "mouseup", mapOpen);	
 			}
-						
-			funcResult();
 			
-			logProfile("load", Date.now() - startTime); // debug
+			document.getElementById('calc').addEventListener("transitionend", calcTransitionFinish, true);
+			funcResult();
 		}
 		
 		function setCookie() {
-			var startTime = Date.now();	// debug
-			
 			var rList = new Array(8);
 			for (var i=0; i<8; i++) {
 				rList[i] = document.getElementById('Resonator0' + i).textContent;
@@ -377,13 +384,9 @@
 			var str = rList.join(',') + '+' + mList.join(',');
 			var escstr = encodeURIComponent(str);
 			document.cookie = "LinkCalc4Ingress=" + escstr + "; expires=" + exp.toGMTString();
-
-			logProfile("setCookie", Date.now() - startTime); // debug
 		}
 		
 		function getCookie() {
-			var startTime = Date.now();	// debug
-			
 		    var cookieList = new Array();
 		    var allcookies = document.cookie;
 		    if( allcookies != '' ) {
@@ -412,14 +415,21 @@
 					}
 				}
 	    	}
-
-			logProfile("setCookie", Date.now() - startTime); // debug
+		}
+		
+		function forcusOut() {
+			// フォーカスを外してモバイルでのキーボードを非表示にする
+			var active_element = document.activeElement;
+			if (active_element){active_element.blur()}
 		}
 		
 		function mapOpen() {
+			// get current location
+			if (!currentLocation.length) {getCurrentLocation()}
+			
 			// map draw
 			if (!circle) {googleMapDraw(amplifiedLinkRange_km*1000)}
-			document.getElementById('calc').addEventListener("transitionend", calcTransitionFinish, true);
+			
 			document.getElementById('calc').style.top = "100%";
 		}
 		function mapClose() {
@@ -433,32 +443,8 @@
 			}
 		}
 
-		function separatebarClick() {
-			// map draw
-			if (!circle) {googleMapDraw(amplifiedLinkRange_km*1000)}
-			
-			document.getElementById('calc').addEventListener("transitionend", calcTransitionEnd, true);
-			if (document.getElementById('separate-bar').className.match(/down-cursor/)) {
-				document.getElementById('separate-bar').className = "up-cursor";
-				document.getElementById('calc').style.top = "90%";
-			} else {
-				document.getElementById('separate-bar').className = "down-cursor";
-				document.getElementById('calc').style.top = "0%";
-				document.getElementById('calc').style.height = "100%";
-			}
-		}
-		
-		function calcTransitionEnd(){
-			if (!document.getElementById('separate-bar').className.match(/down-cursor/)) {
-				document.getElementById('calc').style.height = "10%";
-			}
-		}
-
 		function funcResult() {
-			var startTime = Date.now();	// debug
-			
 			var outLink = 8;
-			document.F1.result.value = "";
 			
 			var resoList = new Array(8);
 			resoList[0] = Number(document.getElementById("Resonator00").textContent);
@@ -509,14 +495,17 @@
 			
 			// result
 			amplifiedLinkRange_km = rawLinkRange_km * rate;
-			document.F1.result.value = document.F1.result.value 
-				+ amplifiedLinkRange_km.toFixed(3) + ' km' 
+			document.getElementById('result').innerHTML = amplifiedLinkRange_km.toFixed(3) + ' km' 
 			
 			// discription
-			document.F1.discription.value = rawLinkRange_km.toFixed(3) + ' km' + ' ×' + rate.toFixed(2) + '\n';
-			document.F1.discription.value = document.F1.discription.value + 'Max Outbound Links = ' + outLink;
+			document.getElementById('discription').innerHTML = rawLinkRange_km.toFixed(3) + ' km' + ' ×' + rate.toFixed(2) + '<br>\n';
+			document.getElementById('discription').innerHTML = document.getElementById('discription').innerHTML + 'Max Outbound Links = ' + outLink;
 			
-			logProfile("funcResult", Date.now() - startTime); // debug
+			// cookie set
+			setCookie();
+			
+			// googleMap circle range change
+			if (circle) {circle.setRadius(amplifiedLinkRange_km*1000)}
 			
 			}
 				
@@ -525,12 +514,16 @@
 		
 		document.addEventListener("DOMContentLoaded", load, false);
 		
-		logProfile("main", Date.now() - startTime); // debug
-		
 	</script>
 
 	<style type="text/css">
 	<!--
+	* {
+		user-select: none; 				/* CSS3 */
+		-moz-user-select: none; 		/* Firefox */
+		-webkit-user-select: none; 		/* Safari、Chrome */
+		-ms-user-select: none; 			/* IE10 */	
+	}
 	html, body, #calc {
 	    margin: 0;
 	    padding: 0;
@@ -538,11 +531,13 @@
 	    width: 100%;
 		padding: 0px;
 	    overflow: hidden;
-		text-align: center;
-		user-select: none; 			/* CSS3 */
-		-moz-user-select: none; 	/* Firefox */
-		-webkit-user-select: none; 	/* Safari、Chrome */
-		-ms-user-select: none; 		/* IE10 */	
+	}
+
+	#map-canvas { 
+		border: 0px red dotted; 
+		height: 100%; 
+		margin: 0; 
+		padding: 0;
 	}
 	
 	#calc {
@@ -550,32 +545,87 @@
 		background-color: white;
 		transition-property: top;
 		transition-duration: 0.5s;
-		transition-delay: 0s;
 		transition-timing-function: ease;
-		/*
-		transition: 		top 1s linear 1s;
-		-moz-transition: 	top 1s linear 0 , width 1s linear 0 , height 1s linear 0;
-		-webkit-transition: top 1s linear 0 , width 1s linear 0 , height 1s linear 0;
-		-o-transition: 		top 1s linear 0 , width 1s linear 0 , height 1s linear 0;
-		-ms-transition: 	top 1s linear 0 , width 1s linear 0 , height 1s linear 0;
-		*/
+		transition-delay: 0.3s;
+		-moz-transition: 	top 0.5s ease 0.3s;
+		-webkit-transition: top 0.5s ease 0.3s;
+		-o-transition: 		top 0.5s ease 0.3s;
+		-ms-transition: 	top 0.5s ease 0.3s;
+		
+		text-align: center;
+	}
+		
+	/*
+	div { 
+		border: 1px red dotted; 
+	}
+	*/
+	
+	#result { 
+		font-size: xx-large;
+		font-family: sans-serif;
+		width: 80%;
+		margin: 0px auto;
+		padding: 0px;
+		
+		border: 1px solid #999;
+		border-radius: 8px;	
+		box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.2) inset;
+		
+		user-select: text; 				/* CSS3 */
+		-moz-user-select: text; 		/* Firefox */
+		-webkit-user-select: text; 		/* Safari、Chrome */
+		-ms-user-select: text; 			/* IE10 */	
 	}
 	
-	/*div { border: 1px red dotted; }*/
-	textarea {
-		font-size: medium; 
-		width: 60%; 
-		text-align: center; 
+	.cMap-open-button-div-parentbox {
+		display:table;
+		margin: 7px auto 0px auto;
+
+		font-family: sans-serif;
+		font-weight: bold;
+		font-size: x-large;
+		text-align: center;
+	}
+	#map-open-button-div, #map-close-button-div, #map-current-location-button-div {
+		height: 1.2em;
+		border: 2px solid #fff;
+		border-radius: 8px;	
+		box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.2);
+
 		margin: 0px;
-		padding: 0px;
+		padding: 2px 0px 0px 0px;
+				
+		background-color: #ff6600;
+		color: white;
+		
+		font-family: sans-serif;
+		font-weight: bold;
+		font-size: x-large;
+		text-align: center;
+				
+		display: table-cell;
+		vertical-align: middle;
+
+		cursor: pointer;
 	}
-	textarea#result { 
-		font-size: xx-large; 
-	}
-	textarea#discription { 
+	#map-open-button-div { width: 5em; }
+	#map-close-button-div { width: 5em; position: relative; bottom: 20px; }
+	#map-current-location-button-div { width: 2em; position: relative; bottom: 10px; right: 10px; background-color: #6666ff; }
+
+	#discription { 
+		font-size: medium; 
+		font-family: sans-serif;
 		line-height: 1.2em;
-		border: 0px white solid;
-		background-color: transparent;
+		height: 2em;
+		width: 80%;
+		margin: 5px auto 0px auto;
+		padding: 0px;
+		
+		user-select: text; 				/* CSS3 */
+		-moz-user-select: text; 		/* Firefox */
+		-webkit-user-select: text; 		/* Safari、Chrome */
+		-ms-user-select: text; 			/* IE10 */	
 	}
 	.cSlotDIV {
 		display:table;
@@ -595,6 +645,7 @@
 		border-radius: 8px;	
 		font-family: sans-serif;
 		box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.2) inset;
+		cursor: pointer;
 	}
 	.cModSlot 	{ 
 		font-size: large; 
@@ -607,6 +658,7 @@
 		border-radius: 8px;	
 		font-family: sans-serif;
 		box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.2) inset;
+		cursor: pointer;
 	}
 	.title {
 		margin: 10px 0px 3px 0px;
@@ -617,25 +669,19 @@
 	.VRLA 		{ background-color: #ff8af7; }
 	.none 		{ background-color: #ffffff; }
 	.R1 		{ background-color: #FFE600; }
-	.R1touch 	{ background-color: #FFE600; height: 100px; position: relative; top: -50px; }
 	.R2 		{ background-color: #FFAB00; }
-	.R2touch 	{ background-color: #FFAB00; height: 100px; position: relative; top: -50px; }
 	.R3 		{ background-color: #FF6200; color: #ffffff; }
-	.R3touch 	{ background-color: #FF6200; color: #ffffff; height: 100px; position: relative; top: -50px; }
 	.R4 		{ background-color: #F00000; color: #ffffff; }
-	.R4touch 	{ background-color: #F00000; color: #ffffff; height: 100px; position: relative; top: -50px; }
 	.R5 		{ background-color: #F00090; color: #ffffff; }
-	.R5touch 	{ background-color: #F00090; color: #ffffff; height: 100px; position: relative; top: -50px; }
 	.R6 		{ background-color: #CB3DC4; color: #ffffff; }
-	.R6touch 	{ background-color: #CB3DC4; color: #ffffff; height: 100px; position: relative; top: -50px; }
 	.R7 		{ background-color: #892A9A; color: #ffffff; }
-	.R7touch 	{ background-color: #892A9A; color: #ffffff; height: 100px; position: relative; top: -50px; }
 	.R8 		{ background-color: #5E2ABA; color: #ffffff; }
-	.R8touch 	{ background-color: #5E2ABA; color: #ffffff; height: 100px; position: relative; top: -50px; }
 	
-	#reset, #mapButton		{ 
+	#reset		{ 
 		margin: 15px 0px 15px 0px; 
 		font-size: large; 
+		
+		/*iPhoneでテキストルーペが出てしまうため*/
 		user-select: none; 			/* CSS3 */
 		-moz-user-select: none; 	/* Firefox */
 		-webkit-user-select: none; 	/* Safari、Chrome */
@@ -643,61 +689,21 @@
 	}
 	.hint 		{ font-size: small; margin: 0px 0px 0px 0px; }
 	.developer 	{ font-size: x-small; margin: 3px 0px 0px 0px; }
-
-	#map-canvas { border: 0px red dotted; height: 100%; margin: 0; padding: 0;}
-	
-	#resultBox {
-		vertical-align: middle;
-		line-height: 0px;
-	}
-	#map-open-button, #map-close-button { 
-		background-color: #ff6600;
-		color: white;
-		border: 2px solid #fff;
-		border-radius: 8px;
-		box-shadow: 0 2px 6px rgba(0,0,0,.3);
-		cursor: pointer;
-		width: 150px;
 		
-		font-family: sans-serif;
-		font-weight: bold;
-		font-size: xx-large;
-		text-align: center;
-
-		user-select: none; 			/* CSS3 */
-		-moz-user-select: none; 	/* Firefox */
-		-webkit-user-select: none; 	/* Safari、Chrome */
-		-ms-user-select: none; 		/* IE10 */	
-
-		/*display: table-cell;*/
-		/*vertical-align: middle;*/
-
-		/*padding: 10px 20px;*/
-	}
-	#map-close-button { margin: 20px;}
-	
-	#separate-bar { border: 0px blue solid; height: 10px; margin: 0; padding: 0; background-color: gray; }
-	.up-cursor 	{ cursor: n-resize; }
-	.down-cursor { cursor: s-resize; }
-	
 	-->
 	</style>
 	
 </head>
-<body>
+<body id="body-div">
 <div id="map-canvas"></div>
 <div id="calc">
-<div id="separate-bar" class="down-cursor"></div>
-<form name="F1" id="F1">
 	<div class="title" id="potalLevel">
 		LINK RANGE
 	</div>
-	<div>
-		<div id="resultBox">
-			<textarea name="result" id="result" rows="1" readonly></textarea>
-			<textarea name="map-open-button" id="map-open-button" rows="1" readonly>MAP</textarea>
-		</div>
-		<textarea name="discription" id="discription" rows="2" readonly></textarea>
+		<div id="result">result result result result</div>
+		<div id="discription">discription discription discription</div>
+	<div class="cMap-open-button-div-parentbox">
+		<div id="map-open-button-div">MAP</div>
 	</div>
 	<div class="title">
 		RESONATORS
@@ -734,10 +740,7 @@
 		<div class="cModSlot" id="ModSlot03"> </div>
 	</div>
 	<div><input type="button" value="reset" name="reset" id="reset"></div>
-	<!--div><input type="button" value="map" name="mapButton" id="mapButton"></div-->
 	<div class="hint">Long press resonator-slot to default (R8).</div>
 	<div class="developer">DEVELOPED BY DOOOON.</div>
-		
-</form>
 </div>
 </body>
