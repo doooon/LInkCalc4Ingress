@@ -38,10 +38,10 @@
 		var marker;
 		
 		function initialize(lat, lng, range) {
-			var myLatlng = new google.maps.LatLng(lat, lng);	//mashikaku-3tsu
+			var myLatlng = new google.maps.LatLng(lat, lng);				
 			var mapOptions = {
 				center: myLatlng,
-				zoom: 7
+				zoom: getZoomLevel(range)
 			    //,scrollwheel: false
 			};
 			map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
@@ -138,7 +138,7 @@
 			var controlUI = document.createElement('div');
 			controlUI.id = 'map-current-location-button-div';
 			controlUI.title = 'Move current location.';
-			controlUI.innerText = 'CL';
+			controlUI.innerText = '⦿';
 			controlDiv.appendChild(controlUI);
 
 			if(window.TouchEvent){
@@ -186,6 +186,29 @@
 					}
 				);
 			}
+		}
+		
+		function getZoomLevel(range) {
+			var zoomlevel = 7;
+			if 		(range > 10000000)	{ zoomlevel = 3 }
+			else if (range > 5000000) 	{ zoomlevel = 3 }
+			else if (range > 3100000) 	{ zoomlevel = 3 }
+			else if (range > 1600000) 	{ zoomlevel = 4 }
+			else if (range > 800000) 	{ zoomlevel = 5 }
+			else if (range > 400000) 	{ zoomlevel = 6 }
+			else if (range > 220000) 	{ zoomlevel = 7 }
+			else if (range > 100000) 	{ zoomlevel = 8 }
+			else if (range > 50000) 	{ zoomlevel = 9 }
+			else if (range > 25000) 	{ zoomlevel = 10 }
+			else if (range > 10000) 	{ zoomlevel = 11 }
+			else if (range > 6000) 		{ zoomlevel = 12 }
+			else if (range > 3000) 		{ zoomlevel = 13 }
+			else if (range > 1500) 		{ zoomlevel = 14 }
+			else if (range > 700) 		{ zoomlevel = 15 }
+			else if (range > 350) 		{ zoomlevel = 16 }
+			else if (range > 170) 		{ zoomlevel = 17 }
+			else if (range > 0) 		{ zoomlevel = 18 }
+			return zoomlevel;
 		}
 		
 		function googleMapDraw (range){
@@ -511,6 +534,8 @@
 			// googleMap circle range change
 			if (circle) {circle.setRadius(amplifiedLinkRange_km*1000)}
 			
+			// googleMap zoom change
+			if (map) {map.setZoom(getZoomLevel(amplifiedLinkRange_km*1000))}
 			}
 				
 		// window scroll cancel
@@ -591,7 +616,7 @@
 		font-size: x-large;
 		text-align: center;
 	}
-	#map-open-button-div, #map-close-button-div, #map-current-location-button-div {
+	#map-open-button-div, #map-close-button-div {
 		height: 1.2em;
 		border: 2px solid #fff;
 		border-radius: 8px;	
@@ -615,7 +640,32 @@
 	}
 	#map-open-button-div { width: 5em; }
 	#map-close-button-div { width: 5em; position: relative; bottom: 20px; }
-	#map-current-location-button-div { width: 2em; position: relative; bottom: 10px; right: 10px; background-color: #6666ff; }
+	#map-current-location-button-div { 
+		width: 1.2em; 
+		height: 1em; 
+		padding: 0px; 
+		margin: 0px; 
+		
+		position: relative; 
+		bottom: 10px; 
+		right: 10px; 
+		
+		border: 1px solid #999;
+		border-radius: 4px;	
+		box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.2);
+		background-color: #fff; 
+		
+		color: #666;
+		font-family: sans-serif;
+		font-weight: bold;
+		font-size: x-large;
+		text-align: center;
+		
+		display: table-cell;
+		vertical-align: middle;
+		
+		cursor: pointer;
+	}
 
 	#discription { 
 		font-size: medium; 
