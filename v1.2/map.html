@@ -100,11 +100,14 @@
 			
 			// press & hold relocate marker
 			google.maps.event.addListener(map, 'mousedown', function(e) {
-				timerID = setTimeout(function(){relocateMarker(e.latLng)}, 1000);
+				timerID = setTimeout(function(){ relocateMarker(e.latLng) }, 1000);
+				console.log(e.touches);
+				//if (e.touches.length > 1) { clearTimeout(timerID) }
 			});
 			google.maps.event.addListener(map, 'mouseup', function(e) {
 				clearTimeout(timerID);
 			});
+			
 		}
 		
 		function funcMapBackButton(controlDiv, map) {
@@ -150,7 +153,7 @@
 						latLng['lat'] = position.coords.latitude;
 						latLng['lng'] = position.coords.longitude;
 						latLng['place'] = "current location";
-						mapMarkerDropping(latLng);
+						mapReCenterAndMarkerDropping(latLng);
 					}, 
 					function(error){
 						var err_msg = "";
@@ -166,14 +169,14 @@
 								break;
 						}
 						alert(err_msg);
-						mapMarkerDropping();
+						mapReCenterAndMarkerDropping();
 					}
 				);
 			}
 			return;
 		}
 		
-		function mapMarkerDropping(geoLocLatLng){
+		function mapReCenterAndMarkerDropping(geoLocLatLng){
 			var latLng = {};
 			
 			// default latLng Sakurajima
@@ -202,7 +205,8 @@
 				initialize(latLng['lat'], latLng['lng'], amplifiedLinkRange_km*1000); 
 				newMarkerAndCircle(latLng, amplifiedLinkRange_km*1000);
 			} else {
-				map.setCenter(latLng);
+				//map.setCenter(latLng);
+				map.panTo(latLng);
 				relocateMarker(latLng);
 			}						
 
