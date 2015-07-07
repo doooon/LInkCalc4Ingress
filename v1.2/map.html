@@ -65,6 +65,7 @@
 		
 		function relocateMarker(latLng) {
 			marker.setPosition(latLng);
+			marker.setAnimation();
 			marker.setAnimation( google.maps.Animation.DROP );
 			circle.setCenter(latLng);
 			//marker.setZIndex(2);
@@ -580,8 +581,8 @@
 	
 	#calc {
 		position: absolute; top: 0px; left: 0px;
-		//* background-color: white; */
-		background-color: rgba(255,255,255,0.6);
+		background-color: white;
+		/* background-color: rgba(255,255,255,0.6); */
 		/* opacity:0.5;	debug */
 		transition-property: top;
 		transition-duration: 0.5s;
