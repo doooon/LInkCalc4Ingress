@@ -69,7 +69,8 @@
 		marker.setPosition(latLng);
 		//marker.setAnimation();
 		marker.setAnimation( google.maps.Animation.DROP );
-		setTimeout(function(){circle.setCenter(latLng)}, 300);
+		circle.setCenter(latLng);
+		//setTimeout(function(){circle.setCenter(latLng)}, 300);
 		setLocationCookie(lat, lng);
 		//marker.setZIndex(2);
 	}
