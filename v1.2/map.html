@@ -1,184 +1,216 @@
 <!DOCTYPE html>
 <head>
-	<meta http-equiv="Content-type" content="text/html; charset=utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-	<meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="format-detection" content="telephone=no">
-	<meta name="robots" content="noindex,nofollow">
-	<meta name="description" content="Link Calculator for Ingress (ver.1.2)">
-	<meta name="author" content="doooon">
-	<link rel="apple-touch-icon" href="apple-touch-icon-precomposed.png">
-	<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-	<!--link rel="apple-touch-icon" href="apple-touch-icon.png"-->
-	<title>Link Calc</title>
-	
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<meta name="robots" content="noindex,nofollow">
+<meta name="description" content="Link Calculator for Ingress (ver.1.2.1)">
+<meta name="author" content="doooon">
+<link rel="apple-touch-icon" href="apple-touch-icon-precomposed.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<!--link rel="apple-touch-icon" href="apple-touch-icon.png"-->
+<title>Link Calc</title>
 
-	<script type="text/javascript" charset="utf-8">
-		// debug profile
-		// 計測開始 var startTime = Date.now();	
-		// 記録 logProfile("関数名", Date.now() - startTime);
-		
-		var profileResult = {};
-		function logProfile(funcName, time) {
-			profileResult[funcName] = profileResult[funcName] || 0;
-			profileResult[funcName] += time;
-			console.log(funcName + " = " + profileResult[funcName]);
-		}
-	</script>
 
-	<script type="text/javascript"
-		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDRaTZlZNQ91E4lKF_75VVsTyH0zjnm0fs">
-	</script>
+<script type="text/javascript" charset="utf-8">
+	// debug profile
+	// 計測開始 var startTime = Date.now();	
+	// 記録 logProfile("関数名", Date.now() - startTime);
 	
-	<script type="text/javascript" charset="utf-8">
+	var profileResult = {};
+	function logProfile(funcName, time) {
+		profileResult[funcName] = profileResult[funcName] || 0;
+		profileResult[funcName] += time;
+	}
+</script>
+
+<script type="text/javascript"
+	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDRaTZlZNQ91E4lKF_75VVsTyH0zjnm0fs">
+</script>
+
+<script type="text/javascript" charset="utf-8">
+
+	var map;
+	var marker;
+	var circle;
 	
-		var map;
-		var marker;
-		var circle;
+	function initialize(lat, lng, range) {
+		var myLatlng = new google.maps.LatLng(lat, lng);				
+		var mapOptions = {
+			center: myLatlng,
+			zoom: getZoomLevel(range)
+		    //,scrollwheel: false
+		};
+		map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 		
-		function initialize(lat, lng, range) {
-			var myLatlng = new google.maps.LatLng(lat, lng);				
-			var mapOptions = {
-				center: myLatlng,
-				zoom: getZoomLevel(range)
-			    //,scrollwheel: false
-			};
-			map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+		/*
+		google.maps.ControlPosition
+		TOP_CENTER, TOP_LEFT, TOP_RIGHT, LEFT_TOP, RIGHT_TOP, LEFT_CENTER, RIGHT_CENTER, LEFT_BOTTOM, RIGHT_BOTTOM, BOTTOM_CENTER, BOTTOM_LEFT, BOTTOM_RIGHT
+		*/
+
+		// Add custom button
+		var mapBackButtonDiv = document.createElement('div');
+		var mapBackButton = new funcMapBackButton(mapBackButtonDiv, map);
+		mapBackButtonDiv.index = 1;
+		map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(mapBackButtonDiv);
+					
+		// Add custom button
+		var mapCurrentLocationButtonDiv = document.createElement('div');
+		var mapCurrentLocationButton = new funcMapCurrentLocationButton(mapCurrentLocationButtonDiv, map);
+		mapCurrentLocationButtonDiv.index = 1;
+		map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(mapCurrentLocationButtonDiv);
+	}
+	
+	function relocateMarker(lat, lng) {
+		var latLng = {};
+		latLng['lat'] = lat;
+		latLng['lng'] = lng;
+		marker.setPosition(latLng);
+		//marker.setAnimation();
+		marker.setAnimation( google.maps.Animation.DROP );
+		setTimeout(function(){circle.setCenter(latLng)}, 300);
+		setLocationCookie(lat, lng);
+		//marker.setZIndex(2);
+	}
 			
-			/*
-			google.maps.ControlPosition
-			TOP_CENTER, TOP_LEFT, TOP_RIGHT, LEFT_TOP, RIGHT_TOP, LEFT_CENTER, RIGHT_CENTER, LEFT_BOTTOM, RIGHT_BOTTOM, BOTTOM_CENTER, BOTTOM_LEFT, BOTTOM_RIGHT
-			*/
-
-			// Add custom button
-			var mapBackButtonDiv = document.createElement('div');
-			var mapBackButton = new funcMapBackButton(mapBackButtonDiv, map);
-			mapBackButtonDiv.index = 1;
-			map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(mapBackButtonDiv);
-						
-			// Add custom button
-			var mapCurrentLocationButtonDiv = document.createElement('div');
-			var mapCurrentLocationButton = new funcMapCurrentLocationButton(mapCurrentLocationButtonDiv, map);
-			mapCurrentLocationButtonDiv.index = 1;
-			map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(mapCurrentLocationButtonDiv);
-		}
+	function newMarkerAndCircle(latLng, range) {
+		marker = new google.maps.Marker({
+			map:map,
+			draggable:true,
+			animation: google.maps.Animation.DROP,
+			position: latLng,
+			zIndex: 1
+		});
 		
-		function relocateMarker(latLng) {
-			marker.setPosition(latLng);
-			marker.setAnimation();
-			marker.setAnimation( google.maps.Animation.DROP );
-			circle.setCenter(latLng);
-			//marker.setZIndex(2);
-		}
-				
-		function newMarkerAndCircle(latLng, range) {
-			marker = new google.maps.Marker({
-				map:map,
-				draggable:true,
-				animation: google.maps.Animation.DROP,
-				position: latLng,
-				zIndex: 1
-			});
-			circle = new google.maps.Circle({
-				strokeColor: '#ff0000',
-				strokeOpacity: 0.6,
-				strokeWeight: 2,
-				fillColor: '#ff0000',
-				fillOpacity: 0.10,
-				map: map,
-				center: marker.getPosition(),
-				radius: range	// 半径(m)
-			});
-
-			// marker moved refresh
-			google.maps.event.addListener(marker, 'dragend', function(){
-				marker.setAnimation( google.maps.Animation.DROP );
-				circle.setCenter(marker.getPosition());
-			});
-			// Circle with Marker move 
-			// circle.bindTo("center", marker, "position");
-			
-			// press & hold relocate marker
+		setTimeout(
+			function (){
+				circle = new google.maps.Circle({
+					strokeColor: '#ff0000',
+					strokeOpacity: 0.6,
+					strokeWeight: 2,
+					fillColor: '#ff0000',
+					fillOpacity: 0.10,
+					map: map,
+					center: marker.getPosition(),
+					radius: range	// 半径(m)
+				});
+		
+				// marker moved refresh
+				google.maps.event.addListener(marker, 'dragend', function(){
+					marker.setAnimation( google.maps.Animation.DROP );
+					circle.setCenter(marker.getPosition());
+					setLocationCookie(marker.getPosition().lat(), marker.getPosition().lng());
+				});
+				// Circle with Marker move 
+				// circle.bindTo("center", marker, "position");
+			}
+			,500
+		);
+		
+		// press & hold relocate marker
+		if(window.TouchEvent){
+			console.log("window.TouchEvent is true");
 			google.maps.event.addListener(map, 'mousedown', function(e) {
-				timerID = setTimeout(function(){ relocateMarker(e.latLng) }, 1000);
+				timerID = setTimeout(function(){ relocateMarker(e.latLng['A'], e.latLng['F']) }, 1000);
 				console.log(e.touches);
 				//if (e.touches.length > 1) { clearTimeout(timerID) }
 			});
-			google.maps.event.addListener(map, 'mouseup', function(e) {
+			google.maps.event.addListener(map, 'mouseup', function() {
 				clearTimeout(timerID);
 			});
-			
+		} else {
+			console.log("window.TouchEvent is false");
+			google.maps.event.addListener(map, 'mousedown', function(e) {
+				timerID = setTimeout(function(){ relocateMarker(e.latLng['A'], e.latLng['F']) }, 1000);
+				//if (e.touches.length > 1) { clearTimeout(timerID) }
+			});
+			google.maps.event.addListener(map, 'mouseup', function() {
+				clearTimeout(timerID);
+			});
 		}
-		
-		function funcMapBackButton(controlDiv, map) {
-			// add close button on map
-			var controlUI = document.createElement('div');
-			controlUI.id = 'map-close-button-div';
-			controlUI.title = 'Click to calc board';
-			controlUI.innerText = 'BACK';
-			controlDiv.appendChild(controlUI);
+	}
+	
+	function funcMapBackButton(controlDiv, map) {
+		// add close button on map
+		var controlUI = document.createElement('div');
+		controlUI.id = 'map-close-button-div';
+		controlUI.title = 'Click to calc board';
+		controlUI.innerText = 'BACK';
+		controlDiv.appendChild(controlUI);
 
-			if(window.TouchEvent){
-				google.maps.event.addDomListener(controlUI, 'touchend', mapClose);
-			} else {
-				google.maps.event.addDomListener(controlUI, 'click', mapClose);
-			}
-
+		if(window.TouchEvent){
+			google.maps.event.addDomListener(controlUI, 'touchend', mapClose);
+		} else {
+			google.maps.event.addDomListener(controlUI, 'click', mapClose);
 		}
-		
-		function funcMapCurrentLocationButton(controlDiv, map) {
-			// add current position button on map
-			var controlUI = document.createElement('div');
-			controlUI.id = 'map-current-location-button-div';
-			controlUI.title = 'Move current location.';
-			controlUI.innerText = '⦿';
-			controlDiv.appendChild(controlUI);
 
-			if(window.TouchEvent){
-				google.maps.event.addDomListener(
-					controlUI, 'touchend', getCurrentLocation
-				);
-			} else {
-				google.maps.event.addDomListener(
-					controlUI, 'click', getCurrentLocation
-				);
-			}
+	}
+	
+	function funcMapCurrentLocationButton(controlDiv, map) {
+		// add current position button on map
+		var controlUI = document.createElement('div');
+		controlUI.id = 'map-current-location-button-div';
+		controlUI.title = 'Move current location.';
+		controlUI.innerText = '⦿';
+		controlDiv.appendChild(controlUI);
+
+		if(window.TouchEvent){
+			google.maps.event.addDomListener(
+				controlUI, 'touchend', getCurrentLocation
+			);
+		} else {
+			google.maps.event.addDomListener(
+				controlUI, 'click', getCurrentLocation
+			);
 		}
-						
-		function getCurrentLocation (){			
-			if (navigator.geolocation) {
-				navigator.geolocation.getCurrentPosition(
-					function(position){
-						var latLng = {};
-						latLng['lat'] = position.coords.latitude;
-						latLng['lng'] = position.coords.longitude;
-						latLng['place'] = "current location";
-						mapReCenterAndMarkerDropping(latLng);
-					}, 
-					function(error){
-						var err_msg = "";
-						switch(error.code) {
-							case 1:
-								err_msg = "位置情報の利用が許可されていません";
-								break;
-							case 2:
-								err_msg = "デバイスの位置が判定できません";
-								break;
-							case 3:
-								err_msg = "タイムアウトしました";
-								break;
-						}
-						alert(err_msg);
-						mapReCenterAndMarkerDropping();
+	}
+					
+	function getCurrentLocation (){			
+		if (navigator.geolocation) {
+			navigator.geolocation.getCurrentPosition(
+				function(position){
+					var latLng = {};
+					latLng['lat'] = position.coords.latitude;
+					latLng['lng'] = position.coords.longitude;
+					latLng['place'] = "current location";
+					map.panTo(latLng);
+					relocateMarker(latLng['lat'], latLng['lng']);
+				}, 
+				function(error){
+					var err_msg = "";
+					switch(error.code) {
+						case 1:
+							err_msg = "位置情報の利用が許可されていません";
+							break;
+						case 2:
+							err_msg = "デバイスの位置が判定できません";
+							break;
+						case 3:
+							err_msg = "タイムアウトしました";
+							break;
 					}
-				);
-			}
-			return;
+					alert(err_msg);
+					
+					getCookie();
+					
+					var latLng = {};					
+					latLng = getDefaultLatLng();					
+
+					map.panTo(latLng);
+					relocateMarker(latLng['lat'], latLng['lng']);
+				}
+			);
 		}
-		
-		function mapReCenterAndMarkerDropping(geoLocLatLng){
-			var latLng = {};
-			
+	}
+
+	function getDefaultLatLng() {
+		var latLng = {};					
+		if ('lat' in cookieLatLng) 	{ 
+			latLng['lat'] = Number(cookieLatLng['lat']);
+			latLng['lng'] = Number(cookieLatLng['lng']);
+			latLng['place'] = "cookieLatLng";
+		} else {
 			// default latLng Sakurajima
 			latLng['lat'] = 31.588636;
 			latLng['lng'] = 130.658511;
@@ -193,371 +225,318 @@
 			latLng['lat'] = 31.0;
 			latLng['lng'] = 0.0;
 			latLng['place'] = "debug";
+		}
+		return latLng;
+	}
 			
-			if (geoLocLatLng) { 
-				latLng['lat'] = geoLocLatLng['lat'];
-				latLng['lng'] = geoLocLatLng['lng'];
-			} else {
-				if (map) {latLng = map.getCenter();}
-			}
-			
-			if (!map) { 
-				initialize(latLng['lat'], latLng['lng'], amplifiedLinkRange_km*1000); 
-				newMarkerAndCircle(latLng, amplifiedLinkRange_km*1000);
-			} else {
-				//map.setCenter(latLng);
-				map.panTo(latLng);
-				relocateMarker(latLng);
-			}						
+	function getZoomLevel(range) {
+		var zoomlevel = 7;
+		if 		(range >= 5242880)	{ zoomlevel = 2 }
+		else if (range >= 2621440) 	{ zoomlevel = 2 }
+		else if (range >= 1310720) 	{ zoomlevel = 3 }
+		else if (range >= 655360) 	{ zoomlevel = 4 }
+		else if (range >= 327680) 	{ zoomlevel = 5 }
+		else if (range >= 163840) 	{ zoomlevel = 6 }
+		else if (range >= 81920) 	{ zoomlevel = 7 }
+		else if (range >= 40960) 	{ zoomlevel = 8 }
+		else if (range >= 20480) 	{ zoomlevel = 9 }
+		else if (range >= 10240) 	{ zoomlevel = 10 }
+		else if (range >= 5120) 	{ zoomlevel = 11 }
+		else if (range >= 2560) 	{ zoomlevel = 12 }
+		else if (range >= 1280) 	{ zoomlevel = 13 }
+		else if (range >= 640) 		{ zoomlevel = 14 }
+		else if (range >= 320) 		{ zoomlevel = 15 }
+		else if (range >= 160) 		{ zoomlevel = 16 }
+		else if (range >= 0) 		{ zoomlevel = 17 }
+		return zoomlevel;
+	}
+	
+</script>
 
-		}
-		
-		function getZoomLevel(range) {
-			var zoomlevel = 7;
-			if 		(range >= 5242880)	{ zoomlevel = 1 }
-			else if (range >= 2621440) 	{ zoomlevel = 2 }
-			else if (range >= 1310720) 	{ zoomlevel = 3 }
-			else if (range >= 655360) 	{ zoomlevel = 4 }
-			else if (range >= 327680) 	{ zoomlevel = 5 }
-			else if (range >= 163840) 	{ zoomlevel = 6 }
-			else if (range >= 81920) 	{ zoomlevel = 7 }
-			else if (range >= 40960) 	{ zoomlevel = 8 }
-			else if (range >= 20480) 	{ zoomlevel = 9 }
-			else if (range >= 10240) 	{ zoomlevel = 10 }
-			else if (range >= 5120) 		{ zoomlevel = 11 }
-			else if (range >= 2560) 		{ zoomlevel = 12 }
-			else if (range >= 1280) 		{ zoomlevel = 13 }
-			else if (range >= 640) 		{ zoomlevel = 14 }
-			else if (range >= 320) 		{ zoomlevel = 15 }
-			else if (range >= 160) 		{ zoomlevel = 16 }
-			else if (range >= 0) 		{ zoomlevel = 17 }
-			return zoomlevel;
-		}
-		
-		function googleMapDraw (range){
-			// get current location
-			getCurrentLocation();
-		}
-		
-	</script>
+<script type="text/javascript" charset="utf-8">
 
-	<script type="text/javascript" charset="utf-8">
-		var flag_press = 0;
-		var timerID = '';
-		var amplifiedLinkRange_km = 0;
+	function AddEventListener(elementID, type, listener) {
+		var element = document.getElementById(elementID);
+	    if( element.addEventListener ) {
+	        element.addEventListener( type, listener, false );
+	    }
+	    else if( element.attachEvent ) {
+	        element.attachEvent( 'on' + type,
+	            function() { listener.apply( element, arguments ); } );
+	    }
+	    else {
+	        // not support.
+	    }
+	}
 
-		function AddEventListener(elementID, type, listener) {
-			var element = document.getElementById(elementID);
-		    if( element.addEventListener ) {
-		        element.addEventListener( type, listener, false );
-		    }
-		    else if( element.attachEvent ) {
-		        element.attachEvent( 'on' + type,
-		            function() { listener.apply( element, arguments ); } );
-		    }
-		    else {
-		        // not support.
-		    }
+	function ArraySortNumeric(prev,next){
+		return next - prev;
+	}
+	
+	function resonatorClick(e) {
+		var elem = e.target;
+		if (elem.textContent == 1) { elem.textContent = 8; elem.className = "cResoSlot R8"; }
+		else { elem.textContent --; elem.className = "cResoSlot R" + elem.textContent; }
+		funcResult();
+	}
+	
+	function resonatorPress(elemID) {
+		var elem = document.getElementById(elemID);
+		flag_press = 0;
+		elem.textContent = 8; 
+		elem.className = "cResoSlot R8";
+		funcResult();
+	}
+	
+	function modSlotClick(e) {
+		var elem = e.target;
+		if (elem.textContent.match(/^\s*$/i)) 	{ elem.textContent = "LA"; 		elem.className = "cModSlot LA"; 	}
+		else if (elem.textContent == "LA") 		{ elem.textContent = "VRLA"; 	elem.className = "cModSlot VRLA"; 	}
+		else if (elem.textContent == "VRLA") 	{ elem.textContent = "SBUL"; 	elem.className = "cModSlot SBUL"; 	}
+		else if (elem.textContent == "SBUL") 	{ elem.textContent = " "; 		elem.className = "cModSlot none"; 	}
+		funcResult();
+	}
+	
+	function allReset() {
+		flag_press = 0;
+		for (var i=0; i<8; i++ ) {
+			document.getElementById('Resonator0' + i).textContent = '8'; 
+			document.getElementById('Resonator0' + i).className = "cResoSlot R8";
 		}
+		for (var i=0; i<4; i++ ) {
+			document.getElementById('ModSlot0' + i).textContent = ''; 
+			document.getElementById('ModSlot0' + i).className = "cModSlot none";
+		}
+		funcResult();
+	}
 
-		function ArraySortNumeric(prev,next){
-			return next - prev;
+	function touchHandler(e) {
+		e.preventDefault();
+		switch (e.type) {
+			case "touchstart" :
+				flag_press = 1;
+				timerID = setTimeout(function(){resonatorPress(e.target.id)}, 400);
+				break;
+			case "touchcancel" :
+				clearTimeout(timerID);
+				flag_press = 0;
+				break;
+			case "touchend" :
+				clearTimeout(timerID);
+				if (flag_press == 1) { resonatorClick(e) }
+				flag_press = 0;
+				break;
 		}
-		
-		function resonatorClick(e) {
-			var elem = e.target;
-			if (elem.textContent == 1) { elem.textContent = 8; elem.className = "cResoSlot R8"; }
-			else { elem.textContent --; elem.className = "cResoSlot R" + elem.textContent; }
-			funcResult();
-		}
-		
-		function resonatorPress(elemID) {
-			var elem = document.getElementById(elemID);
-			flag_press = 0;
-			elem.textContent = 8; 
-			elem.className = "cResoSlot R8";
-			funcResult();
-		}
-		
-		function modSlotClick(e) {
-			var elem = e.target;
-			if (elem.textContent.match(/^\s*$/i)) 	{ elem.textContent = "LA"; 		elem.className = "cModSlot LA"; 	}
-			else if (elem.textContent == "LA") 		{ elem.textContent = "VRLA"; 	elem.className = "cModSlot VRLA"; 	}
-			else if (elem.textContent == "VRLA") 	{ elem.textContent = "SBUL"; 	elem.className = "cModSlot SBUL"; 	}
-			else if (elem.textContent == "SBUL") 	{ elem.textContent = " "; 		elem.className = "cModSlot none"; 	}
-			funcResult();
-		}
-		
-		function allReset() {
-			flag_press = 0;
-			document.getElementById('Resonator00').textContent = '8'; 
-			document.getElementById('Resonator00').className = "cResoSlot R8";
-			document.getElementById('Resonator01').textContent = '8'; 
-			document.getElementById('Resonator01').className = "cResoSlot R8";
-			document.getElementById('Resonator02').textContent = '8'; 
-			document.getElementById('Resonator02').className = "cResoSlot R8";
-			document.getElementById('Resonator03').textContent = '8'; 
-			document.getElementById('Resonator03').className = "cResoSlot R8";
-			document.getElementById('Resonator04').textContent = '8'; 
-			document.getElementById('Resonator04').className = "cResoSlot R8";
-			document.getElementById('Resonator05').textContent = '8'; 
-			document.getElementById('Resonator05').className = "cResoSlot R8";
-			document.getElementById('Resonator06').textContent = '8'; 
-			document.getElementById('Resonator06').className = "cResoSlot R8";
-			document.getElementById('Resonator07').textContent = '8'; 
-			document.getElementById('Resonator07').className = "cResoSlot R8";
-			document.getElementById('ModSlot00').textContent = ''; 
-			document.getElementById('ModSlot00').className = "cModSlot none";
-			document.getElementById('ModSlot01').textContent = ''; 
-			document.getElementById('ModSlot01').className = "cModSlot none";
-			document.getElementById('ModSlot02').textContent = ''; 
-			document.getElementById('ModSlot02').className = "cModSlot none";
-			document.getElementById('ModSlot03').textContent = ''; 
-			document.getElementById('ModSlot03').className = "cModSlot none";
-			funcResult();
-		}
+	}
 
-		function touchHandler(e) {
-			e.preventDefault();
-			switch (e.type) {
-				case "touchstart" :
-					flag_press = 1;
-					timerID = setTimeout(function(){resonatorPress(e.target.id)}, 400);
-					break;
-				case "touchcancel" :
-					clearTimeout(timerID);
-					flag_press = 0;
-					break;
-				case "touchend" :
-					clearTimeout(timerID);
-					if (flag_press == 1) { resonatorClick(e) }
-					flag_press = 0;
-					break;
-			}
+	function mouseHandler(e) {
+		e.preventDefault();
+		switch (e.type) {
+			case "mousedown" :
+				flag_press = 1;
+				timerID = setTimeout(function(){resonatorPress(e.target.id)}, 400);
+				break;
+			case "mouseup" :
+				clearTimeout(timerID);
+				if (flag_press == 1) { resonatorClick(e) }
+				flag_press = 0;
+				break;
 		}
+	}
 
-		function mouseHandler(e) {
-			e.preventDefault();
-			switch (e.type) {
-				case "mousedown" :
-					flag_press = 1;
-					timerID = setTimeout(function(){resonatorPress(e.target.id)}, 400);
-					break;
-				case "mouseup" :
-					clearTimeout(timerID);
-					if (flag_press == 1) { resonatorClick(e) }
-					flag_press = 0;
-					break;
-			}
-		}
-
-		function load() {
-			getCookie();
-			
-			if(window.TouchEvent){
-				AddEventListener('Resonator00', "touchstart", touchHandler);
-				AddEventListener('Resonator00', "touchend", touchHandler);
-				AddEventListener('Resonator00', "touchcancel", touchHandler);
-				AddEventListener('Resonator01', "touchstart", touchHandler);
-				AddEventListener('Resonator01', "touchend", touchHandler);
-				AddEventListener('Resonator01', "touchcancel", touchHandler);
-				AddEventListener('Resonator02', "touchstart", touchHandler);
-				AddEventListener('Resonator02', "touchend", touchHandler);
-				AddEventListener('Resonator02', "touchcancel", touchHandler);
-				AddEventListener('Resonator03', "touchstart", touchHandler);
-				AddEventListener('Resonator03', "touchend", touchHandler);
-				AddEventListener('Resonator03', "touchcancel", touchHandler);
-				AddEventListener('Resonator04', "touchstart", touchHandler);
-				AddEventListener('Resonator04', "touchend", touchHandler);
-				AddEventListener('Resonator04', "touchcancel", touchHandler);
-				AddEventListener('Resonator05', "touchstart", touchHandler);
-				AddEventListener('Resonator05', "touchend", touchHandler);
-				AddEventListener('Resonator05', "touchcancel", touchHandler);
-				AddEventListener('Resonator06', "touchstart", touchHandler);
-				AddEventListener('Resonator06', "touchend", touchHandler);
-				AddEventListener('Resonator06', "touchcancel", touchHandler);
-				AddEventListener('Resonator07', "touchstart", touchHandler);
-				AddEventListener('Resonator07', "touchend", touchHandler);
-				AddEventListener('Resonator07', "touchcancel", touchHandler);
-				AddEventListener('ModSlot00', "touchend", modSlotClick);
-				AddEventListener('ModSlot01', "touchend", modSlotClick);
-				AddEventListener('ModSlot02', "touchend", modSlotClick);
-				AddEventListener('ModSlot03', "touchend", modSlotClick);
-				AddEventListener('reset', "touchend", allReset);
-				AddEventListener('map-open-button-div', "touchend", mapOpen);	
-			}else{
-				AddEventListener('Resonator00', "mousedown", mouseHandler);
-				AddEventListener('Resonator00', "mouseup", mouseHandler);
-				AddEventListener('Resonator01', "mousedown", mouseHandler);
-				AddEventListener('Resonator01', "mouseup", mouseHandler);
-				AddEventListener('Resonator02', "mousedown", mouseHandler);
-				AddEventListener('Resonator02', "mouseup", mouseHandler);
-				AddEventListener('Resonator03', "mousedown", mouseHandler);
-				AddEventListener('Resonator03', "mouseup", mouseHandler);
-				AddEventListener('Resonator04', "mousedown", mouseHandler);
-				AddEventListener('Resonator04', "mouseup", mouseHandler);
-				AddEventListener('Resonator05', "mousedown", mouseHandler);
-				AddEventListener('Resonator05', "mouseup", mouseHandler);
-				AddEventListener('Resonator06', "mousedown", mouseHandler);
-				AddEventListener('Resonator06', "mouseup", mouseHandler);
-				AddEventListener('Resonator07', "mousedown", mouseHandler);
-				AddEventListener('Resonator07', "mouseup", mouseHandler);
-				AddEventListener('ModSlot00', "click", modSlotClick);
-				AddEventListener('ModSlot01', "click", modSlotClick);
-				AddEventListener('ModSlot02', "click", modSlotClick);
-				AddEventListener('ModSlot03', "click", modSlotClick);
-				AddEventListener('reset', "click", allReset);
-				AddEventListener('map-open-button-div', "mouseup", mapOpen);	
-			}
-			
-			document.getElementById('calc').addEventListener("transitionend", calcTransitionFinish, true);
-			funcResult();
-		}
+	function load() {
+		getCookie();
 		
-		function setCookie() {
-			var rList = new Array(8);
+		if(window.TouchEvent){
 			for (var i=0; i<8; i++) {
-				rList[i] = document.getElementById('Resonator0' + i).textContent;
+				AddEventListener('Resonator0' + i, "touchstart", touchHandler);
+				AddEventListener('Resonator0' + i, "touchend", touchHandler);
+				AddEventListener('Resonator0' + i, "touchcancel", touchHandler);
 			}
-			var mList = new Array(4);
-			for (i=0; i<4; i++) {
-				mList[i] = document.getElementById('ModSlot0' + i).textContent;
-			}			
+			for (var i=0; i<4; i++) {
+				AddEventListener('ModSlot0' + i, "touchend", modSlotClick);
+			}
+			AddEventListener('reset', "touchend", allReset);
+			AddEventListener('map-open-button-div', "touchend", mapOpen);	
+		}else{
+			for (var i=0; i<8; i++) {
+				AddEventListener('Resonator0' + i, "mousedown", mouseHandler);
+				AddEventListener('Resonator0' + i, "mouseup", mouseHandler);
+			}
+			for (var i=0; i<4; i++) {
+				AddEventListener('ModSlot0' + i, "click", modSlotClick);
+			}
+			AddEventListener('reset', "click", allReset);
+			AddEventListener('map-open-button-div', "mouseup", mapOpen);	
+		}
+		AddEventListener('calc', "transitionend", calcTransitionFinish);
+		funcResult();
+		
+		var latLng = getDefaultLatLng();					
+		initialize(latLng['lat'], latLng['lng'], amplifiedLinkRange_km*1000); 
+	}
+	
+	function setSlotCookie() {
+		var rList = new Array(8);
+		for (var i=0; i<8; i++) {
+			rList[i] = document.getElementById('Resonator0' + i).textContent;
+		}
+		var mList = new Array(4);
+		for (i=0; i<4; i++) {
+			mList[i] = document.getElementById('ModSlot0' + i).textContent;
+		}			
+		var exp = new Date();
+		exp.setTime(exp.getTime()+1000*60*60*24*1);
+		var str = rList.join(',') + '+' + mList.join(',');
+		var escstr = encodeURIComponent(str);
+		document.cookie = "LinkCalc4Ingress=" + escstr + "; expires=" + exp.toGMTString();
+	}
+	
+	function setLocationCookie(lat, lng) {
+		if (map) {
 			var exp = new Date();
-			exp.setTime(exp.getTime()+1000*60*60*24*1);
-			var str = rList.join(',') + '+' + mList.join(',');
+			exp.setTime(exp.getTime()+1000*60*60*24*365);
+			var str = lat + "," + lng;
 			var escstr = encodeURIComponent(str);
-			document.cookie = "LinkCalc4Ingress=" + escstr + "; expires=" + exp.toGMTString();
+			document.cookie = "LinkCalc4IngressLocation=" + escstr + "; expires=" + exp.toGMTString();
 		}
-		
-		function getCookie() {
-		    var cookieList = new Array();
-		    var allcookies = document.cookie;
-		    if( allcookies != '' ) {
-		        var cookies = allcookies.split( '; ' );
-		        for( var i = 0; i < cookies.length; i++ ) {
-		            var cookie = cookies[ i ].split( '=' );
-		            cookieList[cookie[0]] = decodeURIComponent(cookie[1]);
-		        }
-				if (cookieList['LinkCalc4Ingress']) {
-					var rList = new Array(8);
-					rList = cookieList['LinkCalc4Ingress'].split('+')[0].split(',');
-					var mList = new Array(4);
-					mList = cookieList['LinkCalc4Ingress'].split('+')[1].split(',');
-					for (var i in rList) {
-						var elem = document.getElementById("Resonator0" + i );
-						elem.textContent = rList[i];
-						elem.className = "cResoSlot R" + elem.textContent;
-					}
-					for (i in mList) {
-						var elem = document.getElementById("ModSlot0" + i );
-						elem.textContent = mList[i];
-						if (elem.textContent.match(/^\s*$/i)) 	{ elem.className = "cModSlot none"; }
-						else if (elem.textContent == "LA") 		{ elem.className = "cModSlot LA"; 	}
-						else if (elem.textContent == "VRLA") 	{ elem.className = "cModSlot VRLA"; }
-						else if (elem.textContent == "SBUL") 	{ elem.className = "cModSlot SBUL"; }
-					}
-				}
-	    	}
-		}
-		
-		function forcusOut() {
-			// フォーカスを外してモバイルでのキーボードを非表示にする
-			var active_element = document.activeElement;
-			if (active_element){active_element.blur()}
-		}
-		
-		function mapOpen() {
-			// map draw
-			if (!map) { googleMapDraw( amplifiedLinkRange_km*1000 ) }
-			document.getElementById('calc').style.top = "100%";
-		}
-		
-		function mapClose() {
-			document.getElementById('calc').style.top = "0%";
-			document.getElementById('calc').style.height = "100%";
-		}
-		
-		function calcTransitionFinish(){
-			if (document.getElementById('calc').style.top == "100%") {
-				document.getElementById('calc').style.height = "0%";
+	}
+	
+	function getCookie() {
+	    var cookieList = new Array();
+	    var allcookies = document.cookie;
+	    if( allcookies != '' ) {
+	        var cookies = allcookies.split( '; ' );
+	        for( var i = 0; i < cookies.length; i++ ) {
+	            var cookie = cookies[ i ].split( '=' );
+	            cookieList[cookie[0]] = decodeURIComponent(cookie[1]);
+	        }
+			if (cookieList['LinkCalc4IngressLocation']) {
+				cookieLatLng['lat'] = Number(cookieList['LinkCalc4IngressLocation'].split(',')[0]);
+				cookieLatLng['lng'] = Number(cookieList['LinkCalc4IngressLocation'].split(',')[1]);
+				cookieLatLng['function'] = "getCookie()";
 			}
-		}
-
-		function funcResult() {
-			var outLink = 8;
-			
-			var resoList = new Array(8);
-			resoList[0] = Number(document.getElementById("Resonator00").textContent);
-			resoList[1] = Number(document.getElementById("Resonator01").textContent);
-			resoList[2] = Number(document.getElementById("Resonator02").textContent);
-			resoList[3] = Number(document.getElementById("Resonator03").textContent);
-			resoList[4] = Number(document.getElementById("Resonator04").textContent);
-			resoList[5] = Number(document.getElementById("Resonator05").textContent);
-			resoList[6] = Number(document.getElementById("Resonator06").textContent);
-			resoList[7] = Number(document.getElementById("Resonator07").textContent);
-			
-			var modList = new Array(4);
-			modList[0] = document.getElementById("ModSlot00").textContent;
-			modList[1] = document.getElementById("ModSlot01").textContent;
-			modList[2] = document.getElementById("ModSlot02").textContent;
-			modList[3] = document.getElementById("ModSlot03").textContent;
-			
-			var modNList = new Array(4);
-
-			var averageLevel = eval(resoList.join("+"))/8;
-			var rawLinkRange_km = 160 * (averageLevel * averageLevel * averageLevel * averageLevel) / 1000;
-			
-			for (var i in modList) {
-				if (modList[i].match(/^VRLA$/i)) { 	// very rare LinkAmp
-					modNList[i] = 7;
-				} else if (modList[i].match(/^SBUL$/i)) { // softbank Ultra Link
-					modNList[i] = 5;
-					outLink += 8;
-				} else if (modList[i].match(/^LA$/i)) { // rare LinkAmp
-					modNList[i] = 2;
+			if (cookieList['LinkCalc4Ingress']) {
+				var rList = new Array(8);
+				rList = cookieList['LinkCalc4Ingress'].split('+')[0].split(',');
+				var mList = new Array(4);
+				mList = cookieList['LinkCalc4Ingress'].split('+')[1].split(',');
+				for (var i in rList) {
+					var elem = document.getElementById("Resonator0" + i );
+					elem.textContent = rList[i];
+					elem.className = "cResoSlot R" + elem.textContent;
+				}
+				for (i in mList) {
+					var elem = document.getElementById("ModSlot0" + i );
+					elem.textContent = mList[i];
+					if (elem.textContent.match(/^\s*$/i)) 	{ elem.className = "cModSlot none"; }
+					else if (elem.textContent == "LA") 		{ elem.className = "cModSlot LA"; 	}
+					else if (elem.textContent == "VRLA") 	{ elem.className = "cModSlot VRLA"; }
+					else if (elem.textContent == "SBUL") 	{ elem.className = "cModSlot SBUL"; }
 				}
 			}
+    	}
+	}
 			
-			// ソート
-			modNList.sort(ArraySortNumeric);
-			
-			var rate = 0;
-			for (var i in modNList) {
-				if (i == 0) { rate += (modNList[i]*1.00) }
-				else if (i == 1) { rate += (modNList[i]*0.25) }
-				else if (i == 2) { rate += (modNList[i]*0.125) }
-				else if (i == 3) { rate += (modNList[i]*0.125) }
-			}
-			if (rate == 0) { rate = 1 }
-			
-			// Potal Level
-			document.getElementById('potalLevel').textContent = "LINK RANGE " + "(P" + Math.floor(averageLevel) + ")";
-			
-			// result
-			amplifiedLinkRange_km = rawLinkRange_km * rate;
-			document.getElementById('result').innerHTML = amplifiedLinkRange_km.toFixed(3) + ' km' 
-			
-			// discription
-			document.getElementById('discription').innerHTML = rawLinkRange_km.toFixed(3) + ' km' + ' ×' + rate.toFixed(2) + '<br>\n';
-			document.getElementById('discription').innerHTML = document.getElementById('discription').innerHTML + 'Max Outbound Links = ' + outLink;
-			
-			// cookie set
-			setCookie();
-			
-			// googleMap circle range change
-			if (circle) {circle.setRadius(amplifiedLinkRange_km*1000)}
-			
-			// googleMap zoom change
-			if (map) {map.setZoom(getZoomLevel(amplifiedLinkRange_km*1000))}
-			}
-				
-		// window scroll cancel
-		document.addEventListener("touchmove", function(elem) { if(window.innerHeight >= document.body.scrollHeight){elem.preventDefault()} }, false);
+	function mapOpen() {
+		document.getElementById('calc').style.top = "100%";
+		if(marker == undefined) { 
+			setTimeout( function(){ newMarkerAndCircle(getDefaultLatLng(), amplifiedLinkRange_km*1000) }, 600); 
+		}
+	}
+	
+	function mapClose() {
+		document.getElementById('calc').style.top = "0%";
+		document.getElementById('calc').style.height = "100%";
+	}
+	
+	function calcTransitionFinish(){
+		if (document.getElementById('calc').style.top == "100%") {
+			document.getElementById('calc').style.height = "0%";
+		}
+	}
+
+	function funcResult() {
+		var outLink = 8;
 		
-		document.addEventListener("DOMContentLoaded", load, false);
+		var resoList = new Array(8);
+		resoList[0] = Number(document.getElementById("Resonator00").textContent);
+		resoList[1] = Number(document.getElementById("Resonator01").textContent);
+		resoList[2] = Number(document.getElementById("Resonator02").textContent);
+		resoList[3] = Number(document.getElementById("Resonator03").textContent);
+		resoList[4] = Number(document.getElementById("Resonator04").textContent);
+		resoList[5] = Number(document.getElementById("Resonator05").textContent);
+		resoList[6] = Number(document.getElementById("Resonator06").textContent);
+		resoList[7] = Number(document.getElementById("Resonator07").textContent);
 		
-	</script>
+		var modList = new Array(4);
+		modList[0] = document.getElementById("ModSlot00").textContent;
+		modList[1] = document.getElementById("ModSlot01").textContent;
+		modList[2] = document.getElementById("ModSlot02").textContent;
+		modList[3] = document.getElementById("ModSlot03").textContent;
+		
+		var modNList = new Array(4);
+
+		var averageLevel = eval(resoList.join("+"))/8;
+		var rawLinkRange_km = 160 * (averageLevel * averageLevel * averageLevel * averageLevel) / 1000;
+		
+		for (var i in modList) {
+			if (modList[i].match(/^VRLA$/i)) { 	// very rare LinkAmp
+				modNList[i] = 7;
+			} else if (modList[i].match(/^SBUL$/i)) { // softbank Ultra Link
+				modNList[i] = 5;
+				outLink += 8;
+			} else if (modList[i].match(/^LA$/i)) { // rare LinkAmp
+				modNList[i] = 2;
+			}
+		}
+		
+		// ソート
+		modNList.sort(ArraySortNumeric);
+		
+		var rate = 0;
+		for (var i in modNList) {
+			if (i == 0) { rate += (modNList[i]*1.00) }
+			else if (i == 1) { rate += (modNList[i]*0.25) }
+			else if (i == 2) { rate += (modNList[i]*0.125) }
+			else if (i == 3) { rate += (modNList[i]*0.125) }
+		}
+		if (rate == 0) { rate = 1 }
+		
+		// Potal Level
+		document.getElementById('potalLevel').textContent = "LINK RANGE " + "(P" + Math.floor(averageLevel) + ")";
+		
+		// result
+		amplifiedLinkRange_km = rawLinkRange_km * rate;
+		document.getElementById('result').innerHTML = amplifiedLinkRange_km.toFixed(3) + ' km' 
+		
+		// discription
+		document.getElementById('discription').innerHTML = rawLinkRange_km.toFixed(3) + ' km' + ' ×' + rate.toFixed(2) + '<br>\n';
+		document.getElementById('discription').innerHTML = document.getElementById('discription').innerHTML + 'Max Outbound Links = ' + outLink;
+		
+		// cookie set
+		setSlotCookie();
+		
+		// googleMap circle range change
+		if (circle) {circle.setRadius(amplifiedLinkRange_km*1000)}
+		
+		// googleMap zoom change
+		if (map) {map.setZoom(getZoomLevel(amplifiedLinkRange_km*1000))}
+		}
+			
+</script>
+
+<script type="text/javascript" charset="utf-8">
+	var flag_press = 0;
+	var timerID = '';
+	var amplifiedLinkRange_km = 0;
+	var cookieLatLng = {};
+
+	// window scroll cancel
+	document.addEventListener("touchmove", function(elem) { if(window.innerHeight >= document.body.scrollHeight){elem.preventDefault()} }, false);
+	
+	document.addEventListener("DOMContentLoaded", load, false);
+</script>
 
 	<style type="text/css">
 	<!--
