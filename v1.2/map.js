@@ -1,5 +1,5 @@
 /*
-Link Calculator for Ingress (ver.1.2.2b)
+Link Calculator for Ingress (ver.1.2.2c)
 */
 	var map;
 	var marker;
@@ -118,7 +118,7 @@ Link Calculator for Ingress (ver.1.2.2b)
 
 		if(window.TouchEvent){
 			google.maps.event.addDomListener(controlUI, 'touchend', function(e) {
-				relocateMarker(map.getCenter().lat(), map.getCenter().lat());
+				relocateMarker(map.getCenter().lat(), map.getCenter().lng());
 			} );
 		} else {
 			google.maps.event.addDomListener(controlUI, 'click', function(e) {
