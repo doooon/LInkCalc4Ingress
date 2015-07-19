@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="format-detection" content="telephone=no">
 <meta name="robots" content="noindex,nofollow">
-<meta name="description" content="Link Calculator for Ingress (ver.1.2.1)">
+<meta name="description" content="Link Calculator for Ingress (ver.1.2.2b)">
 <meta name="author" content="doooon">
 <link rel="apple-touch-icon" href="apple-touch-icon-precomposed.png">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
@@ -301,7 +301,7 @@
 		script2.src = "./map.js";
 		document.body.appendChild(script2);
 	}, 0);
-
+	
 </script>
 
 	<style type="text/css">
@@ -374,7 +374,7 @@
 		font-size: x-large;
 		text-align: center;
 	}
-	#map-open-button-div, #map-close-button-div {
+	#map-open-button-div, #map-close-button-div, #map-marker-button-div {
 		height: 1.2em;
 		border: 2px solid #fff;
 		border-radius: 8px;	
@@ -397,7 +397,8 @@
 		cursor: pointer;
 	}
 	#map-open-button-div { width: 5em; }
-	#map-close-button-div { width: 5em; position: relative; bottom: 20px; }
+	#map-close-button-div { width: 5em; position: relative; bottom: 40px; }
+	#map-marker-button-div { width: 1.2em; position: relative; top: 40px; }
 	#map-current-location-button-div { 
 		width: 1.2em; 
 		height: 1em; 

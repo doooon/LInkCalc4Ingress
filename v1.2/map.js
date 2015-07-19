@@ -1,4 +1,6 @@
-
+/*
+Link Calculator for Ingress (ver.1.2.2b)
+*/
 	var map;
 	var marker;
 	var circle;
@@ -28,6 +30,12 @@
 		var mapCurrentLocationButton = new funcMapCurrentLocationButton(mapCurrentLocationButtonDiv, map);
 		mapCurrentLocationButtonDiv.index = 1;
 		map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(mapCurrentLocationButtonDiv);
+					
+		// Add custom button
+		var mapMarkerButtonDiv = document.createElement('div');
+		var mapMarkerButton = new funcMapDropMarkerButton(mapMarkerButtonDiv, map);
+		mapMarkerButtonDiv.index = 1;
+		map.controls[google.maps.ControlPosition.TOP_CENTER].push(mapMarkerButtonDiv);
 	}
 	
 	function relocateMarker(lat, lng) {
@@ -77,13 +85,12 @@
 			,500
 		);
 		
+		/*
 		// press & hold relocate marker
 		if(window.TouchEvent){
 			console.log("window.TouchEvent is true");
 			google.maps.event.addListener(map, 'mousedown', function(e) {
 				timerID = setTimeout(function(){ relocateMarker(e.latLng['A'], e.latLng['F']) }, 1000);
-				console.log(e.touches);
-				//if (e.touches.length > 1) { clearTimeout(timerID) }
 			});
 			google.maps.event.addListener(map, 'mouseup', function() {
 				clearTimeout(timerID);
@@ -92,12 +99,33 @@
 			console.log("window.TouchEvent is false");
 			google.maps.event.addListener(map, 'mousedown', function(e) {
 				timerID = setTimeout(function(){ relocateMarker(e.latLng['A'], e.latLng['F']) }, 1000);
-				//if (e.touches.length > 1) { clearTimeout(timerID) }
 			});
 			google.maps.event.addListener(map, 'mouseup', function() {
 				clearTimeout(timerID);
 			});
 		}
+		*/
+		
+	}
+	
+	function funcMapDropMarkerButton(controlDiv, map) {
+		// add close button on map
+		var controlUI = document.createElement('div');
+		controlUI.id = 'map-marker-button-div';
+		controlUI.title = 'drop marker';
+		controlUI.innerText = '↓';
+		controlDiv.appendChild(controlUI);
+
+		if(window.TouchEvent){
+			google.maps.event.addDomListener(controlUI, 'touchend', function(e) {
+				relocateMarker(map.getCenter().lat(), map.getCenter().lat());
+			} );
+		} else {
+			google.maps.event.addDomListener(controlUI, 'click', function(e) {
+				relocateMarker(map.getCenter().lat(), map.getCenter().lng());
+			} );
+		}
+
 	}
 	
 	function funcMapBackButton(controlDiv, map) {
