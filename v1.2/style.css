@@ -90,7 +90,7 @@ html, body, #calc {
 }
 #map-open-button-div { width: 5em; }
 #map-close-button-div { width: 5em; position: relative; bottom: 40px; }
-#map-marker-button-div { width: 1.2em; position: relative; top: 20px; }
+#map-marker-button-div { width: 1.2em; position: relative; top: 20px; margin: 0px auto; }
 #map-current-location-button-div { 
 	width: 1.2em; 
 	height: 1em; 
@@ -116,6 +116,24 @@ html, body, #calc {
 	vertical-align: middle;
 	
 	cursor: pointer;
+}
+#map-result-div {
+	position: absolute; 
+	top: 100px;
+	width: 100%;
+	border: 0px green dotted;
+	
+	font-size: small;
+	font-family: sans-serif;
+	margin: 20px auto;
+	padding: 0px;
+	text-align: center;
+
+	/*iPhoneでテキストルーペが出てしまうため*/
+	user-select: none; 			/* CSS3 */
+	-moz-user-select: none; 	/* Firefox */
+	-webkit-user-select: none; 	/* Safari、Chrome */
+	-ms-user-select: none; 		/* IE10 */	
 }
 
 #discription { 

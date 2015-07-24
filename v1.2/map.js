@@ -270,6 +270,7 @@ var latLng = getDefaultLatLng();
 initialize(latLng['lat'], latLng['lng'], amplifiedLinkRange_km*1000); 
 
 
-// map のセンタークロスを描画
+// map のセンタークロスを描画 + mapのresult位置を調整
 window.addEventListener( "resize", function(){setCenterCross(getWindowCenter())}, false )
 setCenterCross(getWindowCenter());
+

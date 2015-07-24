@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="format-detection" content="telephone=no">
 <meta name="robots" content="noindex,nofollow">
-<meta name="description" content="Link Calculator for Ingress (ver.1.2.2f)">
+<meta name="description" content="Link Calculator for Ingress (ver.1.2.3)">
 <meta name="author" content="doooon">
 <link rel="apple-touch-icon" href="apple-touch-icon-precomposed.png">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
@@ -270,7 +270,8 @@
 		
 		// result
 		amplifiedLinkRange_km = rawLinkRange_km * rate;
-		document.getElementById('result').innerHTML = amplifiedLinkRange_km.toFixed(3) + ' km' 
+		document.getElementById('result').innerText = amplifiedLinkRange_km.toFixed(3) + ' km' 
+		document.getElementById('map-result-div').innerText = amplifiedLinkRange_km.toFixed(3) + ' km' 
 		
 		// discription
 		document.getElementById('discription').innerHTML = rawLinkRange_km.toFixed(3) + ' km' + ' ×' + rate.toFixed(2) + '<br>\n';
@@ -305,6 +306,9 @@
 		result['y'] = Number((centerXY['y'] - 11).toFixed(0));	
 		document.getElementById('centerCross-canvas').style.top = result['y'] + "px";
 		document.getElementById('centerCross-canvas').style.left = result['x'] + "px";
+		
+		// mapのresult位置をセンター下へセット
+		document.getElementById('map-result-div').style.top = centerXY['y'] + "px";
 	}
 		
 </script>
@@ -339,6 +343,7 @@
 <body id="body-div">
 <div id="map-canvas"></div>
 <div id="centerCross-canvas"></div>
+<div id="map-result-div"></div>
 <div id="calc">
 	<div class="title" id="potalLevel">
 		LINK RANGE
