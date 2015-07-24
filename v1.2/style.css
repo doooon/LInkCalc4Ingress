@@ -201,8 +201,8 @@ html, body, #calc {
 	left: 0px;
     height: 21px;
     width: 21px;
-    margin: auto;
-	padding: auto;
+    margin: 0px;
+	padding: 0px;
     overflow: hidden;
 
 	border: 1px red dotted; 
@@ -213,5 +213,4 @@ html, body, #calc {
 	/* opacity:0.5;	debug */
 	
 	z-index: 0;
-	text-align: center;
 }
