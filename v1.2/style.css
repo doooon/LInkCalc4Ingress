@@ -90,7 +90,7 @@ html, body, #calc {
 }
 #map-open-button-div { width: 5em; }
 #map-close-button-div { width: 5em; position: relative; bottom: 40px; }
-#map-marker-button-div { width: 1.2em; position: relative; top: 40px; }
+#map-marker-button-div { width: 1.2em; position: relative; top: 20px; }
 #map-current-location-button-div { 
 	width: 1.2em; 
 	height: 1em; 

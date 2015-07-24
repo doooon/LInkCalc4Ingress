@@ -268,3 +268,8 @@ if(window.TouchEvent){
 
 var latLng = getDefaultLatLng();					
 initialize(latLng['lat'], latLng['lng'], amplifiedLinkRange_km*1000); 
+
+
+// map のセンタークロスを描画
+window.addEventListener( "resize", function(){setCenterCross(getWindowCenter())}, false )
+setCenterCross(getWindowCenter());

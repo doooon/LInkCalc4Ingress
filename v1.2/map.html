@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="format-detection" content="telephone=no">
 <meta name="robots" content="noindex,nofollow">
-<meta name="description" content="Link Calculator for Ingress (ver.1.2.2e2)">
+<meta name="description" content="Link Calculator for Ingress (ver.1.2.2f)">
 <meta name="author" content="doooon">
 <link rel="apple-touch-icon" href="apple-touch-icon-precomposed.png">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
@@ -133,10 +133,6 @@
 			AddEventListener('map-open-button-div', "mouseup", mapOpen);	
 		}
 		AddEventListener('calc', "transitionend", calcTransitionFinish);
-		
-		// map のセンタークロスを描画
-		window.addEventListener( "resize", function(){setCenterCross(getWindowCenter())}, false )
-		setTimeout(function(){setCenterCross(getWindowCenter())}, 500);
 		
 		funcResult();
 				
@@ -294,8 +290,12 @@
 		console.log("------- getWindowCenter() ---------");
 		console.log("window.innerWidth = " + window.innerWidth + ", " + "window.innerHeight = " + window.innerHeight);
 		var center = {};
+		/*
 		center['x'] = window.innerWidth / 2;
 		center['y'] = window.innerHeight / 2;
+		*/
+		center['x'] = document.getElementById('map-canvas').offsetWidth / 2;
+		center['y'] = document.getElementById('map-canvas').offsetHeight / 2;
 		return center;
 	}
 	
@@ -319,14 +319,14 @@
 	document.addEventListener("touchmove", function(elem) { if(window.innerHeight >= document.body.scrollHeight){elem.preventDefault()} }, false);
 	
 	document.addEventListener("DOMContentLoaded", FuncLoad, false);
-				
+	
 	// maps load
 	setTimeout(function(){	
 		var script2 = document.createElement("script");
 		script2.type = "text/javascript";
 		script2.src = "./map.js";
 		document.head.appendChild(script2);
-	}, 0);
+	}, 2000);
 	
 </script>
 
