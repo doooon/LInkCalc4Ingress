@@ -205,7 +205,7 @@ html, body, #calc {
 	padding: 0px;
     overflow: hidden;
 
-	border: 1px red dotted; 
+	border: 0px red dotted; 
 	
 	background-image: url("./centerCross.png");
 	/* background-color: white; */

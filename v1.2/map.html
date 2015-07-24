@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="format-detection" content="telephone=no">
 <meta name="robots" content="noindex,nofollow">
-<meta name="description" content="Link Calculator for Ingress (ver.1.2.2e1)">
+<meta name="description" content="Link Calculator for Ingress (ver.1.2.2e2)">
 <meta name="author" content="doooon">
 <link rel="apple-touch-icon" href="apple-touch-icon-precomposed.png">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
@@ -136,10 +136,10 @@
 		
 		// map のセンタークロスを描画
 		window.addEventListener( "resize", function(){setCenterCross(getWindowCenter())}, false )
+		setTimeout(function(){setCenterCross(getWindowCenter())}, 500);
 		
 		funcResult();
 				
-		setCenterCross(getWindowCenter());
 	}
 	
 	function setSlotCookie() {
