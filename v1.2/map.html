@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="format-detection" content="telephone=no">
 <meta name="robots" content="noindex,nofollow">
-<meta name="description" content="Link Calculator for Ingress (ver.1.2.2c)">
+<meta name="description" content="Link Calculator for Ingress (ver.1.2.2d)">
 <meta name="author" content="doooon">
 <link rel="apple-touch-icon" href="apple-touch-icon-precomposed.png">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
@@ -133,7 +133,13 @@
 			AddEventListener('map-open-button-div', "mouseup", mapOpen);	
 		}
 		AddEventListener('calc', "transitionend", calcTransitionFinish);
+		
+		// map のセンタークロスを描画
+		window.addEventListener( "resize", function(){setCenterCross(getWindowCenter())}, false )
+		
 		funcResult();
+				
+		setCenterCross(getWindowCenter());
 	}
 	
 	function setSlotCookie() {
@@ -153,6 +159,9 @@
 	}
 	
 	function setLocationCookie(lat, lng) {
+		console.log("------- setLocationCookie() --------");
+		console.log("lat = " + lat);
+		console.log("lng = " + lng);
 		if (map) {
 			var exp = new Date();
 			exp.setTime(exp.getTime()+1000*60*60*24*365);
@@ -280,7 +289,24 @@
 		// googleMap zoom change
 		//if (map) {map.setZoom(getZoomLevel(amplifiedLinkRange_km*1000))}
 	}
-			
+		
+	function getWindowCenter() {
+		console.log("------- getWindowCenter() ---------");
+		console.log("window.innerWidth = " + window.innerWidth + ", " + "window.innerHeight = " + window.innerHeight);
+		var center = {};
+		center['x'] = window.innerWidth / 2;
+		center['y'] = window.innerHeight / 2;
+		return center;
+	}
+	
+	function setCenterCross(centerXY) {
+		var result = {};
+		result['x'] = Number((centerXY['x'] - 11).toFixed(0));	
+		result['y'] = Number((centerXY['y'] - 11).toFixed(0));	
+		document.getElementById('centerCross-canvas').style.top = result['y'] + "px";
+		document.getElementById('centerCross-canvas').style.left = result['x'] + "px";
+	}
+		
 </script>
 
 <script type="text/javascript" charset="utf-8">
@@ -299,216 +325,20 @@
 		var script2 = document.createElement("script");
 		script2.type = "text/javascript";
 		script2.src = "./map.js";
-		document.body.appendChild(script2);
+		document.head.appendChild(script2);
 	}, 0);
 	
 </script>
 
-	<style type="text/css">
-	<!--
-	* {
-		user-select: none; 				/* CSS3 */
-		-moz-user-select: none; 		/* Firefox */
-		-webkit-user-select: none; 		/* Safari、Chrome */
-		-ms-user-select: none; 			/* IE10 */	
-	}
-	html, body, #calc {
-	    margin: 0;
-	    padding: 0;
-	    height: 100%;
-	    width: 100%;
-		padding: 0px;
-	    overflow: hidden;
-	}
 
-	#map-canvas { 
-		border: 0px red dotted; 
-		height: 100%; 
-		margin: 0; 
-		padding: 0;
-	}
-	
-	#calc {
-		position: absolute; top: 0px; left: 0px;
-		background-color: white;
-		/* background-color: rgba(255,255,255,0.6); */
-		/* opacity:0.5;	debug */
-		transition-property: top;
-		transition-duration: 0.5s;
-		transition-timing-function: ease;
-		transition-delay: 0s;
-		-moz-transition: 	top 0.5s ease 0s;
-		-webkit-transition: top 0.5s ease 0s;
-		-o-transition: 		top 0.5s ease 0s;
-		-ms-transition: 	top 0.5s ease 0s;
-		
-		text-align: center;
-	}
-		
-	/*
-	*/
-	
-	#result { 
-		font-size: xx-large;
-		font-family: sans-serif;
-		width: 80%;
-		margin: 0px auto;
-		padding: 0px;
-		
-		border: 1px solid #999;
-		border-radius: 8px;	
-		box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.2) inset;
-		
-		user-select: text; 				/* CSS3 */
-		-moz-user-select: text; 		/* Firefox */
-		-webkit-user-select: text; 		/* Safari、Chrome */
-		-ms-user-select: text; 			/* IE10 */	
-	}
-	
-	.cMap-open-button-div-parentbox {
-		display:table;
-		margin: 7px auto 0px auto;
-
-		font-family: sans-serif;
-		font-weight: bold;
-		font-size: x-large;
-		text-align: center;
-	}
-	#map-open-button-div, #map-close-button-div, #map-marker-button-div {
-		height: 1.2em;
-		border: 2px solid #fff;
-		border-radius: 8px;	
-		box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.2);
-
-		margin: 0px;
-		padding: 2px 0px 0px 0px;
-				
-		background-color: #ff6600;
-		color: white;
-		
-		font-family: sans-serif;
-		font-weight: bold;
-		font-size: x-large;
-		text-align: center;
-				
-		display: table-cell;
-		vertical-align: middle;
-
-		cursor: pointer;
-	}
-	#map-open-button-div { width: 5em; }
-	#map-close-button-div { width: 5em; position: relative; bottom: 40px; }
-	#map-marker-button-div { width: 1.2em; position: relative; top: 40px; }
-	#map-current-location-button-div { 
-		width: 1.2em; 
-		height: 1em; 
-		padding: 0px; 
-		margin: 0px; 
-		
-		position: relative; 
-		bottom: 10px; 
-		right: 10px; 
-		
-		border: 1px solid #999;
-		border-radius: 4px;	
-		box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.2);
-		background-color: #fff; 
-		
-		color: #666;
-		font-family: sans-serif;
-		font-weight: bold;
-		font-size: x-large;
-		text-align: center;
-		
-		display: table-cell;
-		vertical-align: middle;
-		
-		cursor: pointer;
-	}
-
-	#discription { 
-		font-size: medium; 
-		font-family: sans-serif;
-		line-height: 1.2em;
-		height: 2em;
-		width: 80%;
-		margin: 5px auto 0px auto;
-		padding: 0px;
-		
-		user-select: text; 				/* CSS3 */
-		-moz-user-select: text; 		/* Firefox */
-		-webkit-user-select: text; 		/* Safari、Chrome */
-		-ms-user-select: text; 			/* IE10 */	
-	}
-	.cSlotDIV {
-		display:table;
-		margin: 0px auto;
-	}
-	.cDIVmargin {	
-		margin: 10px;
-	}
-	.cResoSlot 	{ 
-		font-size: xx-large; 
-		border: 1px black solid; 
-		width: 50px;
-		height: 50px;
-		margin: 10px;
-		display: table-cell;
-		vertical-align: middle;
-		border-radius: 8px;	
-		font-family: sans-serif;
-		box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.2) inset;
-		cursor: pointer;
-	}
-	.cModSlot 	{ 
-		font-size: large; 
-		border: 1px black solid; 
-		width: 50px;
-		height: 50px;
-		margin: 10px;
-		display: table-cell;
-		vertical-align: middle;
-		border-radius: 8px;	
-		font-family: sans-serif;
-		box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.2) inset;
-		cursor: pointer;
-	}
-	.title {
-		margin: 10px 0px 3px 0px;
-	}
-		
-	.LA 		{ background-color: #9d8af3; color: #ffffff; }
-	.SBUL 		{ background-color: #FFCC33; }
-	.VRLA 		{ background-color: #ff8af7; }
-	.none 		{ background-color: #ffffff; }
-	.R1 		{ background-color: #FFE600; }
-	.R2 		{ background-color: #FFAB00; }
-	.R3 		{ background-color: #FF6200; color: #ffffff; }
-	.R4 		{ background-color: #F00000; color: #ffffff; }
-	.R5 		{ background-color: #F00090; color: #ffffff; }
-	.R6 		{ background-color: #CB3DC4; color: #ffffff; }
-	.R7 		{ background-color: #892A9A; color: #ffffff; }
-	.R8 		{ background-color: #5E2ABA; color: #ffffff; }
-	
-	#reset		{ 
-		margin: 15px 0px 15px 0px; 
-		font-size: large; 
-		
-		/*iPhoneでテキストルーペが出てしまうため*/
-		user-select: none; 			/* CSS3 */
-		-moz-user-select: none; 	/* Firefox */
-		-webkit-user-select: none; 	/* Safari、Chrome */
-		-ms-user-select: none; 		/* IE10 */	
-	}
-	.hint 		{ font-size: small; margin: 0px 0px 0px 0px; }
-	.developer 	{ font-size: x-small; margin: 3px 0px 0px 0px; }
-		
-	-->
-	</style>
+<style type="text/css">
+	@import url("style.css");
+</style>
 	
 </head>
 <body id="body-div">
 <div id="map-canvas"></div>
+<div id="centerCross-canvas"></div>
 <div id="calc">
 	<div class="title" id="potalLevel">
 		LINK RANGE
