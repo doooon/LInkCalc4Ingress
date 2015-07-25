@@ -1,5 +1,5 @@
 /*
-Link Calculator for Ingress (ver.1.2.4a)
+Link Calculator for Ingress
 */
 
 // 位取りを定義

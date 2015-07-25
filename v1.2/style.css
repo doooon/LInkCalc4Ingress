@@ -66,7 +66,7 @@ html, body, #calc {
 	font-size: x-large;
 	text-align: center;
 }
-#map-open-button-div, #map-close-button-div, #map-marker-button-div {
+#map-open-button-div, #map-close-button-div {
 	height: 1.2em;
 	border: 2px solid #fff;
 	border-radius: 8px;	
@@ -90,11 +90,25 @@ html, body, #calc {
 }
 #map-open-button-div { width: 5em; }
 #map-close-button-div { width: 5em; position: relative; bottom: 40px; }
-#map-marker-button-div { width: 1.2em; position: relative; top: 20px; margin: 0px auto; }
-#map-current-location-button-div { 
-	width: 1.2em; 
-	height: 1em; 
+#map-marker-button-div { 
+	width: 25px;
+	height: 25px;
+	position: relative; 
+	top: 20px; 
 	padding: 0px; 
+	margin: 0px; 
+	background-color: white;
+	background-image: url("./marker_gray.png");
+	background-repeat: no-repeat;
+	background-position: 7px 3px;
+	border: 1px solid #999;
+	border-radius: 4px;	
+	box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.2);
+	cursor: pointer;
+}
+#map-current-location-button-div { 
+	width: 25px; 
+	height: 25px; 
 	margin: 0px; 
 	
 	position: relative; 
@@ -104,16 +118,11 @@ html, body, #calc {
 	border: 1px solid #999;
 	border-radius: 4px;	
 	box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.2);
+	
 	background-color: #fff; 
-	
-	color: #666;
-	font-family: sans-serif;
-	font-weight: bold;
-	font-size: x-large;
-	text-align: center;
-	
-	display: table-cell;
-	vertical-align: middle;
+	background-image: url("./currentLocationMark.png");
+	background-repeat: no-repeat;
+	background-position: 0px 0px;
 	
 	cursor: pointer;
 }

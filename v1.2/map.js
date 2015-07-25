@@ -115,7 +115,7 @@ function funcMapDropMarkerButton(controlDiv, map) {
 	var controlUI = document.createElement('div');
 	controlUI.id = 'map-marker-button-div';
 	controlUI.title = 'drop marker';
-	controlUI.innerText = '↓';
+	controlUI.innerText = '';
 	controlDiv.appendChild(controlUI);
 
 	if(window.TouchEvent){
@@ -151,7 +151,8 @@ function funcMapCurrentLocationButton(controlDiv, map) {
 	var controlUI = document.createElement('div');
 	controlUI.id = 'map-current-location-button-div';
 	controlUI.title = 'Move current location.';
-	controlUI.innerText = '⦿';
+	//controlUI.innerText = '⦿';
+	controlUI.innerHTML = '';
 	controlDiv.appendChild(controlUI);
 
 	if(window.TouchEvent){
