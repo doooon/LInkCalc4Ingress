@@ -1,5 +1,5 @@
 /*
-Link Calculator for Ingress (ver.1.2.2c)
+Link Calculator for Ingress (ver.1.2.4a)
 */
 var map;
 var marker;
