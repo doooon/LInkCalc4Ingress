@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="format-detection" content="telephone=no">
 <meta name="robots" content="noindex,nofollow">
-<meta name="description" content="Link Calculator for Ingress (ver.1.2.3)">
+<meta name="description" content="Link Calculator for Ingress (ver.1.2.4)">
 <meta name="author" content="doooon">
 <link rel="apple-touch-icon" href="apple-touch-icon-precomposed.png">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
@@ -17,6 +17,11 @@
 </script>
 
 <script type="text/javascript" charset="utf-8">
+
+	// 位取りを定義
+	String.prototype.reverse=function(){return this.split('').reverse().join('')};
+	Number.prototype.commify=function(){return this.toString().reverse().replace(/(\d\d\d)(?=\d)(?!\d*\.)/g,'$1,').reverse()};
+
 
 	function AddEventListener(elementID, type, listener) {
 		var element = document.getElementById(elementID);
@@ -270,8 +275,8 @@
 		
 		// result
 		amplifiedLinkRange_km = rawLinkRange_km * rate;
-		document.getElementById('result').innerText = amplifiedLinkRange_km.toFixed(3) + ' km' 
-		document.getElementById('map-result-div').innerText = amplifiedLinkRange_km.toFixed(3) + ' km' 
+		document.getElementById('result').innerText = Number(amplifiedLinkRange_km.toFixed(3)).commify() + ' km' 
+		document.getElementById('map-result-div').innerText = 'r ' + Number(amplifiedLinkRange_km.toFixed(0)).commify() + ' km' 
 		
 		// discription
 		document.getElementById('discription').innerHTML = rawLinkRange_km.toFixed(3) + ' km' + ' ×' + rate.toFixed(2) + '<br>\n';
