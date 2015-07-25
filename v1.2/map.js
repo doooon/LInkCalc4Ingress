@@ -81,6 +81,9 @@ function newMarkerAndCircle(latLng, range) {
 			google.maps.event.addListener(marker, 'click', function() {
 				infowindow.open(map,marker);
 			});
+			document.getElementById('map-open-button-div').addEventListener("click", function(){
+				infowindow.setContent("r " + document.getElementById('result').innerHTML);
+			}, false);
 			infowindow.open(map,marker);
 
 	

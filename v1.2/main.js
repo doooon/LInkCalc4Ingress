@@ -144,9 +144,6 @@ function setSlotCookie() {
 }
 
 function setLocationCookie(lat, lng) {
-	console.log("------- setLocationCookie() --------");
-	console.log("lat = " + lat);
-	console.log("lng = " + lng);
 	if (map) {
 		var exp = new Date();
 		exp.setTime(exp.getTime()+1000*60*60*24*365);
