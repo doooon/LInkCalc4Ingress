@@ -1,9 +1,10 @@
 /*
-Link Calculator for Ingress (ver.1.2.4a)
+Link Calculator for Ingress
 */
 var map;
 var marker;
 var circle;
+var infowindow;
 
 function initialize(lat, lng, range) {
 	var myLatlng = new google.maps.LatLng(lat, lng);				
@@ -72,6 +73,16 @@ function newMarkerAndCircle(latLng, range) {
 				center: marker.getPosition(),
 				radius: range	// 半径(m)
 			});
+			
+			// info window
+			infowindow = new google.maps.InfoWindow({
+				content: "r " + document.getElementById('result').innerHTML
+			});
+			google.maps.event.addListener(marker, 'click', function() {
+				infowindow.open(map,marker);
+			});
+			infowindow.open(map,marker);
+
 	
 			// marker moved refresh
 			google.maps.event.addListener(marker, 'dragend', function(){
@@ -82,7 +93,7 @@ function newMarkerAndCircle(latLng, range) {
 			// Circle with Marker move 
 			// circle.bindTo("center", marker, "position");
 		}
-		,500
+		,1000
 	);
 	
 	setLocationCookie(marker.getPosition().lat(), marker.getPosition().lng());

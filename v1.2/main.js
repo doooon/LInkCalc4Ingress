@@ -260,7 +260,6 @@ function funcResult() {
 	// result
 	amplifiedLinkRange_km = rawLinkRange_km * rate;
 	document.getElementById('result').innerText = Number(amplifiedLinkRange_km.toFixed(3)).commify() + ' km' 
-	document.getElementById('map-result-div').innerText = 'r ' + Number(amplifiedLinkRange_km.toFixed(0)).commify() + ' km' 
 	
 	// discription
 	document.getElementById('discription').innerHTML = rawLinkRange_km.toFixed(3) + ' km' + ' ×' + rate.toFixed(2) + '<br>\n';
@@ -295,8 +294,5 @@ function setCenterCross(centerXY) {
 	result['y'] = Number((centerXY['y'] - 11).toFixed(0));	
 	document.getElementById('centerCross-canvas').style.top = result['y'] + "px";
 	document.getElementById('centerCross-canvas').style.left = result['x'] + "px";
-	
-	// mapのresult位置をセンター下へセット
-	document.getElementById('map-result-div').style.top = centerXY['y'] + "px";
 }
 	
