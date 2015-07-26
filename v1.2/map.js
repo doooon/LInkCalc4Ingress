@@ -36,7 +36,7 @@ function initialize(lat, lng, range) {
 	var mapMarkerButtonDiv = document.createElement('div');
 	var mapMarkerButton = new funcMapDropMarkerButton(mapMarkerButtonDiv, map);
 	mapMarkerButtonDiv.index = 1;
-	map.controls[google.maps.ControlPosition.TOP_CENTER].push(mapMarkerButtonDiv);
+	map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(mapMarkerButtonDiv);
 }
 
 function relocateMarker(lat, lng) {
