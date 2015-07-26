@@ -91,10 +91,10 @@ html, body, #calc {
 #map-open-button-div { width: 5em; }
 #map-close-button-div { width: 5em; position: relative; bottom: 40px; }
 #map-marker-button-div { 
-	width: 29px;
-	height: 29px;
+	width: 33px;
+	height: 33px;
 	padding: 0px; 
-	margin: 0px 0px 10px 0px; 
+	margin: 0px 0px 33px 0px; 
 
 	position: relative; 
 	bottom: 10px; 
@@ -107,13 +107,13 @@ html, body, #calc {
 	background-color: white;
 	background-image: url("./marker_gray.png");
 	background-repeat: no-repeat;
-	background-position: 9px 5px;
+	background-position: 11px 7px;
 
 	cursor: pointer;
 }
 #map-current-location-button-div { 
-	width: 29px; 
-	height: 29px; 
+	width: 33px; 
+	height: 33px; 
 	padding: 0px; 
 	margin: 0px; 
 	
@@ -128,7 +128,7 @@ html, body, #calc {
 	background-color: #fff; 
 	background-image: url("./currentLocationMark.png");
 	background-repeat: no-repeat;
-	background-position: 2px 2px;
+	background-position: 4px 4px;
 	
 	cursor: pointer;
 }
