@@ -91,7 +91,7 @@ function touchHandler(e) {
 			break;
 		case "touchmove" :
 			console.log(e.type + " > " + targetElem);
-			if (e.type != targetElem) { 
+			if (e.target.id != targetElem) { 
 				clearTimeout(timerID);
 				timerID = 0;
 				console.log("timerID = " + timerID);
