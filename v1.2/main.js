@@ -33,6 +33,7 @@ function resonatorClick(e) {
 }
 
 function resonatorPress(elemID) {
+	console.log("catch longPress");
 	var elem = document.getElementById(elemID);
 	flag_press = 0;
 	elem.textContent = 8; 
@@ -66,17 +67,35 @@ function touchHandler(e) {
 	e.preventDefault();
 	switch (e.type) {
 		case "touchstart" :
+			console.log(e.type + " > " + targetElem);
 			flag_press = 1;
-			timerID = setTimeout(function(){resonatorPress(e.target.id)}, 400);
+			targetElem = e.target.id;
+			timerID = setTimeout(function(){resonatorPress(e.target.id)}, 500);
 			break;
 		case "touchcancel" :
+			console.log(e.type + " > " + targetElem);
 			clearTimeout(timerID);
+			timerID = 0;
+			console.log("timerID = " + timerID);
+			targetElem = "";
 			flag_press = 0;
 			break;
 		case "touchend" :
+			console.log(e.type + " > " + targetElem);
 			clearTimeout(timerID);
-			if (flag_press == 1) { resonatorClick(e) }
+			timerID = 0;
+			console.log("timerID = " + timerID);
+			if (flag_press == 1 && targetElem == e.target.id) { resonatorClick(e) }
+			targetElem = "";
 			flag_press = 0;
+			break;
+		case "touchmove" :
+			console.log(e.type + " > " + targetElem);
+			if (e.type != targetElem) { 
+				clearTimeout(timerID);
+				timerID = 0;
+				console.log("timerID = " + timerID);
+			}
 			break;
 	}
 }
@@ -85,13 +104,26 @@ function mouseHandler(e) {
 	e.preventDefault();
 	switch (e.type) {
 		case "mousedown" :
+			console.log(e.type + " > " + targetElem);
 			flag_press = 1;
-			timerID = setTimeout(function(){resonatorPress(e.target.id)}, 400);
+			targetElem = e.target.id;
+			timerID = setTimeout(function(){resonatorPress(e.target.id)}, 500);
+			console.log("timerID = " + timerID);
 			break;
 		case "mouseup" :
+			console.log(e.type + " > " + targetElem);
 			clearTimeout(timerID);
-			if (flag_press == 1) { resonatorClick(e) }
+			timerID = 0;
+			console.log("timerID = " + timerID);
+			if (flag_press == 1 && targetElem == e.target.id) { resonatorClick(e) }
+			targetElem = e.target.id;
 			flag_press = 0;
+			break;
+		case "mouseout" :
+			console.log(e.type + " > " + targetElem);
+			clearTimeout(timerID);
+			timerID = 0;
+			console.log("timerID = " + timerID);
 			break;
 	}
 }
@@ -114,6 +146,7 @@ function FuncLoad() {
 		for (var i=0; i<8; i++) {
 			AddEventListener('Resonator0' + i, "mousedown", mouseHandler);
 			AddEventListener('Resonator0' + i, "mouseup", mouseHandler);
+			AddEventListener('Resonator0' + i, "mouseout", mouseHandler);
 		}
 		for (var i=0; i<4; i++) {
 			AddEventListener('ModSlot0' + i, "click", modSlotClick);
