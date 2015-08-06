@@ -67,35 +67,19 @@ function touchHandler(e) {
 	e.preventDefault();
 	switch (e.type) {
 		case "touchstart" :
-			console.log(e.type + " > " + targetElem);
 			flag_press = 1;
-			targetElem = e.target.id;
 			timerID = setTimeout(function(){resonatorPress(e.target.id)}, 500);
 			break;
 		case "touchcancel" :
-			console.log(e.type + " > " + targetElem);
 			clearTimeout(timerID);
 			timerID = 0;
-			console.log("timerID = " + timerID);
-			targetElem = "";
 			flag_press = 0;
 			break;
 		case "touchend" :
-			console.log(e.type + " > " + targetElem);
 			clearTimeout(timerID);
 			timerID = 0;
-			console.log("timerID = " + timerID);
-			if (flag_press == 1 && targetElem == e.target.id) { resonatorClick(e) }
-			targetElem = "";
+			if (flag_press == 1) { resonatorClick(e) }
 			flag_press = 0;
-			break;
-		case "touchmove" :
-			console.log(e.type + " > " + targetElem);
-			if (e.target.id != targetElem) { 
-				clearTimeout(timerID);
-				timerID = 0;
-				console.log("timerID = " + timerID);
-			}
 			break;
 	}
 }
@@ -104,26 +88,18 @@ function mouseHandler(e) {
 	e.preventDefault();
 	switch (e.type) {
 		case "mousedown" :
-			console.log(e.type + " > " + targetElem);
 			flag_press = 1;
-			targetElem = e.target.id;
 			timerID = setTimeout(function(){resonatorPress(e.target.id)}, 500);
-			console.log("timerID = " + timerID);
 			break;
 		case "mouseup" :
-			console.log(e.type + " > " + targetElem);
 			clearTimeout(timerID);
 			timerID = 0;
-			console.log("timerID = " + timerID);
-			if (flag_press == 1 && targetElem == e.target.id) { resonatorClick(e) }
-			targetElem = e.target.id;
+			if (flag_press == 1) { resonatorClick(e) }
 			flag_press = 0;
 			break;
 		case "mouseout" :
-			console.log(e.type + " > " + targetElem);
 			clearTimeout(timerID);
 			timerID = 0;
-			console.log("timerID = " + timerID);
 			break;
 	}
 }
@@ -157,7 +133,16 @@ function FuncLoad() {
 	AddEventListener('calc', "transitionend", calcTransitionFinish);
 	
 	funcResult();
-			
+	loadMapJS();
+}
+
+// map.js load
+function loadMapJS(){	
+	var script = document.createElement("script");
+	script.type = "text/javascript";
+	script.src = "./map.js";
+	document.body.appendChild(script);
+    console.log("loaded > ./map.js");
 }
 
 function setSlotCookie() {

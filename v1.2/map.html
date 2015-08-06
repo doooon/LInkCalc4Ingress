@@ -5,17 +5,16 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="format-detection" content="telephone=no">
 <meta name="robots" content="noindex,nofollow">
-<meta name="description" content="Link Calculator for Ingress (ver.1.2.6b)">
+<meta name="description" content="Link Calculator for Ingress (ver.1.2.7)">
 <meta name="author" content="doooon">
 <link rel="apple-touch-icon" href="apple-touch-icon-precomposed.png">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
 <!--link rel="apple-touch-icon" href="apple-touch-icon.png"-->
 <title>Link Calc</title>
-<script type="text/javascript" src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyDRaTZlZNQ91E4lKF_75VVsTyH0zjnm0fs"></script>
+<script type="text/javascript" src = "//maps.googleapis.com/maps/api/js?key=AIzaSyDRaTZlZNQ91E4lKF_75VVsTyH0zjnm0fs"></script>
 <script type="text/javascript" charset="utf-8" src = "./main.js"></script>
 <script type="text/javascript" charset="utf-8">
 	var flag_press = 0;
-	var targetElem = "";
 	var timerID = '';
 	var amplifiedLinkRange_km = 0;
 	var cookieLatLng = {};
@@ -24,17 +23,8 @@
 	document.addEventListener("touchmove", function(elem) { if(window.innerHeight >= document.body.scrollHeight){elem.preventDefault()} }, false);
 	
 	document.addEventListener("DOMContentLoaded", FuncLoad, false);
-	
-	// map.js load
-	setTimeout(function(){	
-		var script2 = document.createElement("script");
-		script2.type = "text/javascript";
-		script2.src = "./map.js";
-		document.head.appendChild(script2);
-	}, 1000);
-	
+		
 </script>
-
 
 <style type="text/css">
 	@import url("style.css");
