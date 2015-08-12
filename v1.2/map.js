@@ -47,13 +47,12 @@ function relocateMarker(lat, lng) {
 	//marker.setAnimation();
 	marker.setAnimation( google.maps.Animation.DROP );
 	circle.setCenter(latLng);
+	//setTimeout(function(){circle.setCenter(latLng)}, 300);
 	setLocationCookie(lat, lng);
 	//marker.setZIndex(2);
-	//console.log(latLng);
 }
 		
 function newMarkerAndCircle(latLng, range) {
-  console.log("range = " + range);
 	marker = new google.maps.Marker({
 		map:map,
 		draggable:true,
@@ -86,6 +85,7 @@ function newMarkerAndCircle(latLng, range) {
 				infowindow.setContent("r " + document.getElementById('result').innerHTML);
 			}, false);
 			infowindow.open(map,marker);
+
 	
 			// marker moved refresh
 			google.maps.event.addListener(marker, 'dragend', function(){
@@ -100,8 +100,7 @@ function newMarkerAndCircle(latLng, range) {
 	);
 	
 	setLocationCookie(marker.getPosition().lat(), marker.getPosition().lng());
-	//console.log(latLng);
-
+	
 	/*
 	// press & hold relocate marker
 	if(window.TouchEvent){
@@ -130,7 +129,7 @@ function funcMapDropMarkerButton(controlDiv, map) {
 	var controlUI = document.createElement('div');
 	controlUI.id = 'map-marker-button-div';
 	controlUI.title = 'drop marker';
-	controlUI.textContent = '';
+	controlUI.innerText = '';
 	controlDiv.appendChild(controlUI);
 
 	if(window.TouchEvent){
@@ -150,7 +149,7 @@ function funcMapBackButton(controlDiv, map) {
 	var controlUI = document.createElement('div');
 	controlUI.id = 'map-close-button-div';
 	controlUI.title = 'Click to calc board';
-	controlUI.textContent = 'BACK';
+	controlUI.innerText = 'BACK';
 	controlDiv.appendChild(controlUI);
 
 	if(window.TouchEvent){
@@ -166,6 +165,7 @@ function funcMapCurrentLocationButton(controlDiv, map) {
 	var controlUI = document.createElement('div');
 	controlUI.id = 'map-current-location-button-div';
 	controlUI.title = 'Move current location.';
+	//controlUI.innerText = '⦿';
 	controlUI.innerHTML = '';
 	controlDiv.appendChild(controlUI);
 
