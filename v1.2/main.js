@@ -21,6 +21,20 @@ function AddEventListener(elementID, type, listener) {
     }
 }
 
+function RemoveEventListener(elementID, type, listener) {
+	var element = document.getElementById(elementID);
+    if( element.removeEventListener ) {
+        element.removeEventListener( type, listener, false );
+    }
+    else if( element.detachEvent ) {
+        element.detachEvent( 'on' + type,
+            function() { listener.apply( element, arguments ); } );
+    }
+    else {
+        // not support.
+    }
+}
+
 function ArraySortNumeric(prev,next){
 	return next - prev;
 }
@@ -33,7 +47,7 @@ function resonatorClick(e) {
 }
 
 function resonatorPress(elemID) {
-	console.log("catch longPress");
+	//console.log("catch longPress");
 	var elem = document.getElementById(elemID);
 	flag_press = 0;
 	elem.textContent = 8; 
@@ -82,6 +96,7 @@ function touchHandler(e) {
 			flag_press = 0;
 			break;
 	}
+	console.log(e.type);
 }
 
 function mouseHandler(e) {
@@ -102,35 +117,29 @@ function mouseHandler(e) {
 			timerID = 0;
 			break;
 	}
+	console.log(e.type);
 }
 
 function FuncLoad() {
 	getCookie();
 	
-	if(window.TouchEvent){
-		for (var i=0; i<8; i++) {
-			AddEventListener('Resonator0' + i, "touchstart", touchHandler);
-			AddEventListener('Resonator0' + i, "touchend", touchHandler);
-			AddEventListener('Resonator0' + i, "touchcancel", touchHandler);
-		}
-		for (var i=0; i<4; i++) {
-			AddEventListener('ModSlot0' + i, "touchend", modSlotClick);
-		}
-		AddEventListener('reset', "touchend", allReset);
-		AddEventListener('map-open-button-div', "touchend", mapOpen);	
-	}else{
-		for (var i=0; i<8; i++) {
-			AddEventListener('Resonator0' + i, "mousedown", mouseHandler);
-			AddEventListener('Resonator0' + i, "mouseup", mouseHandler);
-			AddEventListener('Resonator0' + i, "mouseout", mouseHandler);
-		}
-		for (var i=0; i<4; i++) {
-			AddEventListener('ModSlot0' + i, "click", modSlotClick);
-		}
-		AddEventListener('reset', "click", allReset);
-		AddEventListener('map-open-button-div', "mouseup", mapOpen);	
-	}
-	AddEventListener('calc', "transitionend", calcTransitionFinish);
+for (var i=0; i<8; i++) {
+	AddEventListener('Resonator0' + i, "touchstart", touchHandler);
+	AddEventListener('Resonator0' + i, "touchend", touchHandler);
+	AddEventListener('Resonator0' + i, "touchcancel", touchHandler);
+	AddEventListener('Resonator0' + i, "mousedown", mouseHandler);
+	AddEventListener('Resonator0' + i, "mouseup", mouseHandler);
+	AddEventListener('Resonator0' + i, "mouseout", mouseHandler);
+}
+for (var i=0; i<4; i++) {
+	AddEventListener('ModSlot0' + i, "touchend", modSlotClick);
+	AddEventListener('ModSlot0' + i, "click", modSlotClick);
+}
+AddEventListener('reset', "touchend", allReset);
+AddEventListener('reset', "click", allReset);
+AddEventListener('map-open-button-div', "touchend", mapOpen);	
+AddEventListener('map-open-button-div', "mouseup", mapOpen);	
+AddEventListener('calc', "transitionend", calcTransitionFinish);
 	
 	funcResult();
 	loadMapJS();
@@ -142,7 +151,7 @@ function loadMapJS(){
 	script.type = "text/javascript";
 	script.src = "./map.js";
 	document.body.appendChild(script);
-    console.log("loaded > ./map.js");
+  //console.log("loaded > ./map.js");
 }
 
 function setSlotCookie() {
@@ -261,11 +270,11 @@ function funcResult() {
 	modNList.sort(ArraySortNumeric);
 	
 	var rate = 0;
-	for (var i in modNList) {
-		if (i == 0) { rate += (modNList[i]*1.00) }
-		else if (i == 1) { rate += (modNList[i]*0.25) }
-		else if (i == 2) { rate += (modNList[i]*0.125) }
-		else if (i == 3) { rate += (modNList[i]*0.125) }
+	for (var j in modNList) {
+		if (j == 0) { rate += (modNList[j]*1.00) }
+		else if (j == 1) { rate += (modNList[j]*0.25) }
+		else if (j == 2) { rate += (modNList[j]*0.125) }
+		else if (j == 3) { rate += (modNList[j]*0.125) }
 	}
 	if (rate == 0) { rate = 1 }
 	
@@ -274,7 +283,7 @@ function funcResult() {
 	
 	// result
 	amplifiedLinkRange_km = rawLinkRange_km * rate;
-	document.getElementById('result').innerText = Number(amplifiedLinkRange_km.toFixed(3)).commify() + ' km' 
+	document.getElementById('result').textContent = Number(amplifiedLinkRange_km.toFixed(3)).commify() + ' km' 
 	
 	// discription
 	document.getElementById('discription').innerHTML = rawLinkRange_km.toFixed(3) + ' km' + ' ×' + rate.toFixed(2) + '<br>\n';
@@ -291,13 +300,9 @@ function funcResult() {
 }
 	
 function getWindowCenter() {
-	console.log("------- getWindowCenter() ---------");
-	console.log("window.innerWidth = " + window.innerWidth + ", " + "window.innerHeight = " + window.innerHeight);
+	//console.log("------- getWindowCenter() ---------");
+	//console.log("window.innerWidth = " + window.innerWidth + ", " + "window.innerHeight = " + window.innerHeight);
 	var center = {};
-	/*
-	center['x'] = window.innerWidth / 2;
-	center['y'] = window.innerHeight / 2;
-	*/
 	center['x'] = document.getElementById('map-canvas').offsetWidth / 2;
 	center['y'] = document.getElementById('map-canvas').offsetHeight / 2;
 	return center;
