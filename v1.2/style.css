@@ -184,7 +184,7 @@ html, body, #calc {
 #map-inputLocation-div-inner div {
   padding: 5px 0px;
 }
-input[type="text"] { background-color: red; }
+input[type="text"] { background-color: red; readonly: false; }
 
 #discription { 
 	font-size: medium; 
