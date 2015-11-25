@@ -274,7 +274,11 @@ function funcResult() {
 	
 	// result
 	amplifiedLinkRange_km = rawLinkRange_km * rate;
-	document.getElementById('result').innerText = Number(amplifiedLinkRange_km.toFixed(3)).commify() + ' km' 
+	var myTemp = Number(amplifiedLinkRange_km.toFixed(3)).commify() + ' km';
+	document.getElementById('result').innerText = Number(amplifiedLinkRange_km.toFixed(3)).commify() + ' km';
+	//document.getElementById('result').innerText = myTemp;
+	// Firefoxでは innerTextが動かない
+	//document.getElementById('result').textContent = Number(amplifiedLinkRange_km.toFixed(3)).commify() + ' km';
 	
 	// discription
 	document.getElementById('discription').innerHTML = rawLinkRange_km.toFixed(3) + ' km' + ' ×' + rate.toFixed(2) + '<br>\n';
