@@ -26,10 +26,27 @@ function initialize(lat, lng, range) {
 	mapBackButtonDiv.index = 1;
 	map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(mapBackButtonDiv);
 				
+	/*
 	// Add custom button
 	var mapCurrentLocationButtonDiv = document.createElement('div');
 	var mapCurrentLocationButton = new funcMapCurrentLocationButton(mapCurrentLocationButtonDiv, map);
 	mapCurrentLocationButtonDiv.index = 1;
+	map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(mapCurrentLocationButtonDiv);
+  */
+	// Add custom button
+	var mapCurrentLocationButtonDiv = document.createElement('div');
+  mapCurrentLocationButtonDiv.id = 'map-current-location-button-div';
+  mapCurrentLocationButtonDiv.title = 'Move current location.';
+  mapCurrentLocationButtonDiv.innerHTML = '';
+	if(isTouchDevice){
+		google.maps.event.addDomListener(
+			mapCurrentLocationButtonDiv, 'touchend', getCurrentLocation
+		);
+	} else {
+		google.maps.event.addDomListener(
+			mapCurrentLocationButtonDiv, 'click', getCurrentLocation
+		);
+	}
 	map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(mapCurrentLocationButtonDiv);
 				
 	// Add custom button
