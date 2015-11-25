@@ -183,10 +183,6 @@ html, body, #calc {
 }
 #map-inputLocation-div-inner div {
   padding: 5px 0px;
-	user-select: text; 				/* CSS3 */
-	-moz-user-select: text; 		/* Firefox */
-	-webkit-user-select: text; 		/* Safari、Chrome */
-	-ms-user-select: text; 			/* IE10 */	
 }
 
 #discription { 
@@ -204,7 +200,7 @@ html, body, #calc {
 	-ms-user-select: text; 			/* IE10 */	
 }
 .cSlotDIV {
-	display:table;
+	display: table;
 	margin: 0px auto;
 }
 .cDIVmargin {	
@@ -267,16 +263,16 @@ html, body, #calc {
 .developer 	{ font-size: x-small; margin: 3px 0px 0px 0px; }
 	
 #centerCross-canvas {
-	position: absolute; 
-	top: 0px; 
-	left: 0px;
-    height: 21px;
-    width: 21px;
-    margin: 0px;
-	padding: 0px;
-    overflow: hidden;
-
-	border: 0px red dotted; 
+  position: absolute; 
+  top: 0px; 
+  left: 0px;
+  height: 21px;
+  width: 21px;
+  margin: 0px;
+  padding: 0px;
+  overflow: hidden;
+  
+  border: 0px red dotted; 
 	
 	background-image: url("./centerCross.png");
 	/* background-color: white; */
