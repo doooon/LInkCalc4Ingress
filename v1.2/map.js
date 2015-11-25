@@ -77,7 +77,7 @@ function initialize(lat, lng, range) {
 
 function funcInputLocationDiv(controlDiv) {
   if (document.getElementById('map-inputLocation-div')) {
-    document.getElementById('map-inputLocation-div').visibility = true;
+    document.getElementById('map-inputLocation-div').style.display = "block";
   } else {
   	var controlUI = document.createElement('div');
   	controlUI.id = 'map-inputLocation-div';
@@ -85,7 +85,7 @@ function funcInputLocationDiv(controlDiv) {
   	controlDiv.appendChild(controlUI);
   	document.addEventListener("click", function(){
   	  funcAddMapMarking();
-  	  document.getElementById('map-inputLocation-div').visibility = false;
+  	  document.getElementById('map-inputLocation-div').style.display = "none";
   	}, false);
 	}
 }
