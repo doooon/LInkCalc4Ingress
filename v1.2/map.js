@@ -26,13 +26,6 @@ function initialize(lat, lng, range) {
 	mapBackButtonDiv.index = 1;
 	map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(mapBackButtonDiv);
 				
-	/*
-	// Add custom button
-	var mapCurrentLocationButtonDiv = document.createElement('div');
-	var mapCurrentLocationButton = new funcMapCurrentLocationButton(mapCurrentLocationButtonDiv, map);
-	mapCurrentLocationButtonDiv.index = 1;
-	map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(mapCurrentLocationButtonDiv);
-  */
 	// Add custom button
 	var mapCurrentLocationButtonDiv = document.createElement('div');
   mapCurrentLocationButtonDiv.id = 'map-current-location-button-div';
@@ -49,13 +42,6 @@ function initialize(lat, lng, range) {
 	}
 	map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(mapCurrentLocationButtonDiv);
 				
-	/*
-	// Add custom button
-	var mapMarkerButtonDiv = document.createElement('div');
-	var mapMarkerButton = new funcMapDropMarkerButton(mapMarkerButtonDiv, map);
-	mapMarkerButtonDiv.index = 1;
-	map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(mapMarkerButtonDiv);
-  */
 	// Add custom button
 	var mapMarkerButtonDiv = document.createElement('div');
 	mapMarkerButtonDiv.id = 'map-marker-button-div';
@@ -72,6 +58,21 @@ function initialize(lat, lng, range) {
 	}
 	map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(mapMarkerButtonDiv);
 
+	// Add custom button (InputLocation)
+	var inputLocationButtonDiv = document.createElement('div');
+	inputLocationButtonDiv.id = 'map-inputLocation-button-div';
+	inputLocationButtonDiv.title = 'input location';
+	inputLocationButtonDiv.innerHTML = 'LOCATION';
+	if(isTouchDevice){
+		google.maps.event.addDomListener(inputLocationButtonDiv, 'touchend', function(e) {
+			alert('input location TEST');
+		} );
+	} else {
+		google.maps.event.addDomListener(inputLocationButtonDiv, 'click', function(e) {
+			alert('input location TEST');
+		} );
+	}
+	map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(inputLocationButtonDiv);
 }
 
 function relocateMarker(lat, lng) {
@@ -135,69 +136,8 @@ function newMarkerAndCircle(latLng, range) {
 	);
 	
 	setLocationCookie(marker.getPosition().lat(), marker.getPosition().lng());
-	
-	/*
-	// press & hold relocate marker
-	if(isTouchDevice){
-		google.maps.event.addListener(map, 'mousedown', function(e) {
-			timerID = setTimeout(function(){ relocateMarker(e.latLng['A'], e.latLng['F']) }, 1000);
-		});
-		google.maps.event.addListener(map, 'mouseup', function() {
-			clearTimeout(timerID);
-		});
-	} else {
-		google.maps.event.addListener(map, 'mousedown', function(e) {
-			timerID = setTimeout(function(){ relocateMarker(e.latLng['A'], e.latLng['F']) }, 1000);
-		});
-		google.maps.event.addListener(map, 'mouseup', function() {
-			clearTimeout(timerID);
-		});
-	}
-	*/
-	
+		
 }
-/*
-function funcMapDropMarkerButton(controlDiv, map) {
-	// add close button on map
-	var controlUI = document.createElement('div');
-	controlUI.id = 'map-marker-button-div';
-	controlUI.title = 'drop marker';
-	controlUI.innerHTML = '';
-	controlDiv.appendChild(controlUI);
-
-	if(isTouchDevice){
-		google.maps.event.addDomListener(controlUI, 'touchend', function(e) {
-			relocateMarker(map.getCenter().lat(), map.getCenter().lng());
-		} );
-	} else {
-		google.maps.event.addDomListener(controlUI, 'click', function(e) {
-			relocateMarker(map.getCenter().lat(), map.getCenter().lng());
-		} );
-	}
-
-}
-*/
-/*
-function funcMapCurrentLocationButton(controlDiv, map) {
-	// add current position button on map
-	var controlUI = document.createElement('div');
-	controlUI.id = 'map-current-location-button-div';
-	controlUI.title = 'Move current location.';
-	//controlUI.innerHTML = '⦿';
-	controlUI.innerHTML = '';
-	controlDiv.appendChild(controlUI);
-
-	if(isTouchDevice){
-		google.maps.event.addDomListener(
-			controlUI, 'touchend', getCurrentLocation
-		);
-	} else {
-		google.maps.event.addDomListener(
-			controlUI, 'click', getCurrentLocation
-		);
-	}
-}
-*/
 
 
 function funcMapBackButton(controlDiv, map) {
