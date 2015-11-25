@@ -94,7 +94,7 @@ function funcInputLocationDiv(controlDiv) {
   document.getElementById('map-inputLocation-div').style.display = "block";
 }
 function funcAddMapMarking() {
-  alert("test test marking");
+  //alert("test test marking");
   document.getElementById('map-inputLocation-div').style.display = "none";
 }
 
