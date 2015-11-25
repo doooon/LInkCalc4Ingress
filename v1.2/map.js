@@ -79,7 +79,7 @@ function initialize(lat, lng, range) {
 	controlUI.innerHTML = 'Input to IntelMap portal URL or LatLng data.<br><input type="text" id="locURL"><br><input type="button" id="locURL_submit" value="mark">';
 	controlUI.style.display = "none";
 	inputLocationButtonDiv.appendChild(controlUI);
-	document.getElementById('mark').addEventListener("click", function(e){}, false);
+	document.getElementById('locURL_submit').addEventListener("click", function(e){ funcAddMapMarking() }, false);
 
 }
 
