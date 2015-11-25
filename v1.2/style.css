@@ -94,7 +94,7 @@ html, body, #calc {
 	width: 33px;
 	height: 33px;
 	padding: 0px; 
-	margin: 33px; 
+	margin: 0px 33px 0px 0px; 
 
 	/*position: relative; 
 	bottom: 70px; 
@@ -116,7 +116,7 @@ html, body, #calc {
 	width: 33px; 
 	height: 33px; 
 	padding: 0px; 
-	margin: 33px; 
+	margin: 0px 33px 0px 0px; 
 	
 	/*
 	position: relative; 
