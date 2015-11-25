@@ -156,7 +156,6 @@ html, body, #calc {
 }
 #map-inputLocation-div { 
 	padding: 30px; 
-	margin: auto; 
 	background-color: white;
 	display: none;
 	
@@ -173,6 +172,7 @@ html, body, #calc {
 #map-inputLocation-div-inner { 
 	border-radius: 10px;	
 	box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.2);
+	margin: 0px auto; 
 	width: 200px; 
 	height: 100px; 
 	border: 2px dotted green;
