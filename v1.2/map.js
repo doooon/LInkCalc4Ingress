@@ -78,19 +78,20 @@ function initialize(lat, lng, range) {
 	controlUI.id = 'map-inputLocation-div';
 	controlUI.innerHTML = 'Input to IntelMap portal URL or LatLng data.<br><input type="text" id="locURL"><br>';
 	controlUI.style.display = "none";
-	inputLocationButtonDiv.appendChild(controlUI);
 	
 	var controlUI_2 = document.createElement('input');
 	controlUI_2.id = 'locURL_submit';
 	controlUI_2.type = 'button';
 	controlUI_2.value = 'mark';
+	
+	inputLocationButtonDiv.appendChild(controlUI);
 	inputLocationButtonDiv.appendChild(controlUI_2);
 	controlUI_2.addEventListener("click", function(e){ funcAddMapMarking() }, false);
 
 }
 
 function funcInputLocationDiv(controlDiv) {
-    document.getElementById('map-inputLocation-div').style.display = "block";
+  document.getElementById('map-inputLocation-div').style.display = "block";
 }
 function funcAddMapMarking() {
   alert("test test marking");
