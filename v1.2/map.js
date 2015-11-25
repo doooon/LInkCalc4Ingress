@@ -76,11 +76,14 @@ function initialize(lat, lng, range) {
 }
 
 function funcInputLocationDiv(controlDiv) {
-	// add close button on map
-	var controlUI = document.createElement('div');
-	controlUI.id = 'map-inputLocation-div';
-	controlUI.innerHTML = 'Input to IntelMap portal URL or LatLng data.<br><input type="text" id="locURL"><br><input type="button" id="locURL_submit">';
-	controlDiv.appendChild(controlUI);
+  if (document.getElementById('map-inputLocation-div')) {
+    document.getElementById('map-inputLocation-div').visibility = true;
+  } else {
+  	var controlUI = document.createElement('div');
+  	controlUI.id = 'map-inputLocation-div';
+  	controlUI.innerHTML = 'Input to IntelMap portal URL or LatLng data.<br><input type="text" id="locURL"><br><input type="button" id="locURL_submit">';
+  	controlDiv.appendChild(controlUI);
+	}
 }
 
 function relocateMarker(lat, lng) {

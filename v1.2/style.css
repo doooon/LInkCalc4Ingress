@@ -149,16 +149,14 @@ html, body, #calc {
 	background-repeat: no-repeat;
 	background-position: 4px 4px;
 	*/
+	
+	text-align: center;
+	
 	cursor: pointer;
 }
 #map-inputLocation-div { 
 	padding: 2px; 
 	margin: 5px; 
-	
-	border: 1px solid #999;
-	box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.2);
-	
-	background-color: #fff; 
 }
 
 #discription { 
