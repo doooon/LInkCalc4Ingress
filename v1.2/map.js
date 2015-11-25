@@ -178,23 +178,6 @@ function funcMapDropMarkerButton(controlDiv, map) {
 }
 */
 /*
-function funcMapBackButton(controlDiv, map) {
-	// add close button on map
-	var controlUI = document.createElement('div');
-	controlUI.id = 'map-close-button-div';
-	controlUI.title = 'Click to calc board';
-	controlUI.innerHTML = 'BACK';
-	controlDiv.appendChild(controlUI);
-
-	if(isTouchDevice){
-		google.maps.event.addDomListener(controlUI, 'touchend', mapClose);
-	} else {
-		google.maps.event.addDomListener(controlUI, 'click', mapClose);
-	}
-
-}
-*/
-
 function funcMapCurrentLocationButton(controlDiv, map) {
 	// add current position button on map
 	var controlUI = document.createElement('div');
@@ -213,6 +196,24 @@ function funcMapCurrentLocationButton(controlDiv, map) {
 			controlUI, 'click', getCurrentLocation
 		);
 	}
+}
+*/
+
+
+function funcMapBackButton(controlDiv, map) {
+	// add close button on map
+	var controlUI = document.createElement('div');
+	controlUI.id = 'map-close-button-div';
+	controlUI.title = 'Click to calc board';
+	controlUI.innerHTML = 'BACK';
+	controlDiv.appendChild(controlUI);
+
+	if(isTouchDevice){
+		google.maps.event.addDomListener(controlUI, 'touchend', mapClose);
+	} else {
+		google.maps.event.addDomListener(controlUI, 'click', mapClose);
+	}
+
 }
 				
 function getCurrentLocation (){			
