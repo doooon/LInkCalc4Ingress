@@ -160,9 +160,7 @@ html, body, #calc {
 	background-color: white;
 	display: none;
 	
-	border: 2px dotted red;
-	border-radius: 10px;	
-	box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.2);
+	border: 1px dotted red;
 
   text-align: center;
 
@@ -173,6 +171,8 @@ html, body, #calc {
 	height: 100%; 
 }
 #map-inputLocation-div-inner { 
+	border-radius: 10px;	
+	box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.2);
 	width: 200px; 
 	height: 100px; 
 	border: 2px dotted green;
