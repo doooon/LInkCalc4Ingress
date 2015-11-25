@@ -33,7 +33,7 @@ function resonatorClick(e) {
 }
 
 function resonatorPress(elemID) {
-	console.log("catch longPress");
+	//console.log("catch longPress");
 	var elem = document.getElementById(elemID);
 	flag_press = 0;
 	elem.textContent = 8; 
@@ -143,7 +143,7 @@ function loadMapJS(){
 	script.type = "text/javascript";
 	script.src = "./map.js";
 	document.body.appendChild(script);
-    console.log("loaded > ./map.js");
+  //console.log("loaded > ./map.js");
 }
 
 function setSlotCookie() {
@@ -292,8 +292,8 @@ function funcResult() {
 }
 	
 function getWindowCenter() {
-	console.log("------- getWindowCenter() ---------");
-	console.log("window.innerWidth = " + window.innerWidth + ", " + "window.innerHeight = " + window.innerHeight);
+	//console.log("------- getWindowCenter() ---------");
+	//console.log("window.innerWidth = " + window.innerWidth + ", " + "window.innerHeight = " + window.innerHeight);
 	var center = {};
 	/*
 	center['x'] = window.innerWidth / 2;
