@@ -65,14 +65,22 @@ function initialize(lat, lng, range) {
 	inputLocationButtonDiv.innerHTML = 'LOCATION';
 	if(isTouchDevice){
 		google.maps.event.addDomListener(inputLocationButtonDiv, 'touchend', function(e) {
-			alert('input location TEST');
+			funcInputLocationDiv(inputLocationButtonDiv);
 		} );
 	} else {
 		google.maps.event.addDomListener(inputLocationButtonDiv, 'click', function(e) {
-			alert('input location TEST');
+			funcInputLocationDiv(inputLocationButtonDiv);
 		} );
 	}
 	map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(inputLocationButtonDiv);
+}
+
+function funcInputLocationDiv(controlDiv) {
+	// add close button on map
+	var controlUI = document.createElement('div');
+	controlUI.id = 'map-inputLocation-div';
+	controlUI.innerHTML = 'Input to IntelMap portal URL or LatLng data.<br><input type="text" id="locURL"><br><input type="button" id="locURL_submit">';
+	controlDiv.appendChild(controlUI);
 }
 
 function relocateMarker(lat, lng) {
