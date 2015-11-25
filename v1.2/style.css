@@ -96,9 +96,10 @@ html, body, #calc {
 	padding: 0px; 
 	margin: 0px 0px 33px 0px; 
 
-	position: relative; 
+	/*position: relative; 
 	bottom: 70px; 
 	right: 20px; 
+	*/
 	
 	border: 1px solid #999;
 	border-radius: 4px;	
@@ -117,9 +118,11 @@ html, body, #calc {
 	padding: 0px; 
 	margin: 0px; 
 	
+	/*
 	position: relative; 
 	bottom: 20px; 
 	right: 20px; 
+	*/
 	
 	border: 1px solid #999;
 	border-radius: 4px;	
