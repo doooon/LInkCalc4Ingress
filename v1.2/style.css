@@ -155,17 +155,13 @@ html, body, #calc {
 	cursor: pointer;
 }
 #map-inputLocation-div { 
-	padding: 30px; 
-	margin: 0px; 
-	background-color: white;
+	padding: 0px; 
+	margin: 0 auto; 
+	background-color: gray;
 	display: none;
 	
-	border: 1px solid #999;
-	border-radius: 10px;	
-	box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.2);
-
-  text-align: center;
-
+	border: 0px solid #FFF;
+	
 	position: absolute; 
 	left: 0px;
 	top: 0px;
@@ -174,8 +170,8 @@ html, body, #calc {
 }
 #map-inputLocation-div-inner { 
 	padding: 30px; 
-	margin: 0 auto; 
-	background-color: pink;
+	margin: 100 auto; 
+	background-color: green;
 	
 	border: 1px solid #999;
 	border-radius: 10px;	
