@@ -275,8 +275,8 @@ function funcResult() {
 	// result
 	amplifiedLinkRange_km = rawLinkRange_km * rate;
 	var myTemp = Number(amplifiedLinkRange_km.toFixed(3)).commify() + ' km';
-	document.getElementById('result').innerText = Number(amplifiedLinkRange_km.toFixed(3)).commify() + ' km';
-	//document.getElementById('result').innerText = myTemp;
+	//document.getElementById('result').innerText = Number(amplifiedLinkRange_km.toFixed(3)).commify() + ' km';
+	document.getElementById('result').innerText = myTemp;
 	// Firefoxでは innerTextが動かない
 	//document.getElementById('result').textContent = Number(amplifiedLinkRange_km.toFixed(3)).commify() + ' km';
 	
