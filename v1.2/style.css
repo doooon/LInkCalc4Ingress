@@ -179,7 +179,10 @@ html, body, #calc {
   text-align: center;
 
 	width: 300px; 
-	height: 100px; 
+	height: 5em; 
+}
+#map-inputLocation-div-inner div {
+  padding: 5px 0px;
 }
 
 #discription { 
