@@ -81,7 +81,7 @@ function funcInputLocationDiv(controlDiv) {
   } else {
   	var controlUI = document.createElement('div');
   	controlUI.id = 'map-inputLocation-div';
-  	controlUI.innerHTML = 'Input to IntelMap portal URL or LatLng data.<br><input type="text" id="locURL"><br><input type="button" id="locURL_submit">';
+  	controlUI.innerHTML = 'Input to IntelMap portal URL or LatLng data.<br><input type="text" id="locURL"><br><input type="button" id="locURL_submit" value="mark">';
   	controlDiv.appendChild(controlUI);
 	}
 }

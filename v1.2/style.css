@@ -157,6 +157,7 @@ html, body, #calc {
 #map-inputLocation-div { 
 	padding: 2px; 
 	margin: 5px; 
+	background-color: default;
 }
 
 #discription { 
