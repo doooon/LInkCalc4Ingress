@@ -274,7 +274,6 @@ function funcResult() {
 	
 	// result
 	amplifiedLinkRange_km = rawLinkRange_km * rate;
-	document.getElementById('result').innerHTML = "TEST TEST";
 	document.getElementById('result').innerHTML = Number(amplifiedLinkRange_km.toFixed(3)).commify() + ' km';
 	
 	// discription
