@@ -49,11 +49,29 @@ function initialize(lat, lng, range) {
 	}
 	map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(mapCurrentLocationButtonDiv);
 				
+	/*
 	// Add custom button
 	var mapMarkerButtonDiv = document.createElement('div');
 	var mapMarkerButton = new funcMapDropMarkerButton(mapMarkerButtonDiv, map);
 	mapMarkerButtonDiv.index = 1;
 	map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(mapMarkerButtonDiv);
+  */
+	// Add custom button
+	var mapMarkerButtonDiv = document.createElement('div');
+	mapMarkerButtonDiv.id = 'map-marker-button-div';
+	mapMarkerButtonDiv.title = 'drop marker';
+	mapMarkerButtonDiv.innerHTML = '';
+	if(isTouchDevice){
+		google.maps.event.addDomListener(controlUI, 'touchend', function(e) {
+			relocateMarker(map.getCenter().lat(), map.getCenter().lng());
+		} );
+	} else {
+		google.maps.event.addDomListener(controlUI, 'click', function(e) {
+			relocateMarker(map.getCenter().lat(), map.getCenter().lng());
+		} );
+	}
+	map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(mapMarkerButtonDiv);
+
 }
 
 function relocateMarker(lat, lng) {
