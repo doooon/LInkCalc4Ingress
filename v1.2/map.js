@@ -73,21 +73,22 @@ function initialize(lat, lng, range) {
 		} );
 	}
 	map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(inputLocationButtonDiv);
+	
+	var controlUI = document.createElement('div');
+	controlUI.id = 'map-inputLocation-div';
+	controlUI.innerHTML = 'Input to IntelMap portal URL or LatLng data.<br><input type="text" id="locURL"><br><input type="button" id="locURL_submit" value="mark">';
+	controlUI..style.display = "none";
+	controlDiv.appendChild(controlUI);
+	document.getElementById('mark').addEventListener("click", function(e){}, false);
+
 }
 
 function funcInputLocationDiv(controlDiv) {
-  if (document.getElementById('map-inputLocation-div')) {
     document.getElementById('map-inputLocation-div').style.display = "block";
-  } else {
-  	var controlUI = document.createElement('div');
-  	controlUI.id = 'map-inputLocation-div';
-  	controlUI.innerHTML = 'Input to IntelMap portal URL or LatLng data.<br><input type="text" id="locURL"><br><input type="button" id="locURL_submit" value="mark">';
-  	controlDiv.appendChild(controlUI);
-  	document.getElementById('mark').addEventListener("click", function(e){document.getElementById('map-inputLocation-div').style.display = "none"}, false);
-	}
 }
 function funcAddMapMarking() {
   alert("test test marking");
+  document.getElementById('map-inputLocation-div').style.display = "none";
 }
 
 
