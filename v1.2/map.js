@@ -75,6 +75,7 @@ function initialize(lat, lng, range) {
 	map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(inputLocationButtonDiv);
 	
 	document.getElementById('locURL_submit').addEventListener("click", function(e){ funcAddMapMarking() }, false);
+	document.getElementById('map-inputLocation-div').addEventListener("click", function(e){ document.getElementById('map-inputLocation-div').style.display = "none"; }, false);
 
 }
 
