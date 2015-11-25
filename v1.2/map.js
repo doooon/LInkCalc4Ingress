@@ -65,36 +65,21 @@ function initialize(lat, lng, range) {
 	inputLocationButtonDiv.innerHTML = 'LOCATION';
 	if(isTouchDevice){
 		google.maps.event.addDomListener(inputLocationButtonDiv, 'touchend', function(e) {
-			funcInputLocationDiv(inputLocationButtonDiv);
+			document.getElementById('map-inputLocation-div').style.display = "block";
 		} );
 	} else {
 		google.maps.event.addDomListener(inputLocationButtonDiv, 'click', function(e) {
-			funcInputLocationDiv(inputLocationButtonDiv);
+			document.getElementById('map-inputLocation-div').style.display = "block";
 		} );
 	}
 	map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(inputLocationButtonDiv);
 	
-	var controlUI = document.createElement('div');
-	controlUI.id = 'map-inputLocation-div';
-	controlUI.innerHTML = 'Input to IntelMap portal URL or LatLng data.<br><input type="text" id="locURL"><br>';
-	controlUI.style.display = "none";
-	
-	var controlUI_2 = document.createElement('input');
-	controlUI_2.id = 'locURL_submit';
-	controlUI_2.type = 'button';
-	controlUI_2.value = 'mark';
-	
-	inputLocationButtonDiv.appendChild(controlUI);
-	inputLocationButtonDiv.appendChild(controlUI_2);
-	controlUI_2.addEventListener("click", function(e){ funcAddMapMarking() }, false);
+	document.getElementById('locURL_submit').addEventListener("click", function(e){ funcAddMapMarking() }, false);
 
 }
 
-function funcInputLocationDiv(controlDiv) {
-  document.getElementById('map-inputLocation-div').style.display = "block";
-}
 function funcAddMapMarking() {
-  //alert("test test marking");
+  alert("test test marking");
   document.getElementById('map-inputLocation-div').style.display = "none";
 }
 
