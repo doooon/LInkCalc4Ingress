@@ -6,11 +6,11 @@
 	-ms-user-select: none; 			/* IE10 */	
 }
 html, body, #calc {
-    margin: 0;
-    height: 100%;
-    width: 100%;
-	padding: 0px;
-    overflow: hidden;
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  padding: 0px;
+  overflow: hidden;
 }
 
 #map-canvas { 
@@ -183,6 +183,10 @@ html, body, #calc {
 }
 #map-inputLocation-div-inner div {
   padding: 5px 0px;
+	user-select: text; 				/* CSS3 */
+	-moz-user-select: text; 		/* Firefox */
+	-webkit-user-select: text; 		/* Safari、Chrome */
+	-ms-user-select: text; 			/* IE10 */	
 }
 
 #discription { 
