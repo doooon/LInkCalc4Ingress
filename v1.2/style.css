@@ -156,7 +156,7 @@ html, body, #calc {
 }
 #map-inputLocation-div { 
 	padding: 30px; 
-	margin: auto; 
+	margin: 0 auto; 
 	background-color: white;
 	display: none;
 	
