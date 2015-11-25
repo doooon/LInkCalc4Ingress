@@ -162,12 +162,12 @@ html, body, #calc {
 	margin: 0px auto; 
 	width: 300px; 
 	height: 100px; 
-  display:table; /* 要素をテーブルのようにする */
+  /*display: table; *//* 要素をテーブルのようにする */
 }
 #map-inputLocation-div p { 
-    display:table-cell; /* 要素をテーブルのようにする */
-    text-align:center; /* インライン要素の中央揃え */
-    vertical-align:middle; /* 天地中央に揃える */
+    display: table-cell; /* 要素をテーブルのようにする */
+    text-align: center; /* インライン要素の中央揃え */
+    vertical-align: middle; /* 天地中央に揃える */
 }
 
 #discription { 
