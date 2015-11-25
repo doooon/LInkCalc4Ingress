@@ -65,19 +65,22 @@ function initialize(lat, lng, range) {
 	inputLocationButtonDiv.innerHTML = 'LOCATION';
 	if(isTouchDevice){
 		google.maps.event.addDomListener(inputLocationButtonDiv, 'touchend', function(e) {
-			document.getElementById('map-inputLocation-div').style.display = "table";
+			funcInputLocationButton();
 		} );
 	} else {
 		google.maps.event.addDomListener(inputLocationButtonDiv, 'click', function(e) {
-			document.getElementById('map-inputLocation-div').style.display = "table";
+			funcInputLocationButton();
 		} );
 	}
 	map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(inputLocationButtonDiv);
 	
-	document.getElementById('locURL_submit').addEventListener("click", function(e){ funcAddMapMarking() }, false);
+	document.getElementById('map-inputLocation-div').addEventListener("click", function(e){ funcAddMapMarking() }, false);
 
 }
 
+function funcInputLocationButton() {
+    document.getElementById('map-inputLocation-div').style.display = "block";
+}
 function funcAddMapMarking() {
   alert("test test marking");
   document.getElementById('map-inputLocation-div').style.display = "none";

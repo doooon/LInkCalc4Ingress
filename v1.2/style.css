@@ -155,19 +155,22 @@ html, body, #calc {
 	cursor: pointer;
 }
 #map-inputLocation-div { 
-	border: 2px dotted green;
+	padding: 30px; 
+	margin: auto; 
+	background-color: white;
+	display: none;
+	
+	border: 2px dotted red;
 	border-radius: 10px;	
 	box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.2);
-	background-color: white;
-	margin: 0px auto; 
+
+  text-align: center;
+
+	position: absolute; 
+	left: 0px;
+	top: 0px;
 	width: 300px; 
 	height: 100px; 
-  display: none;  /* 要素をテーブルのようにする */
-}
-#map-inputLocation-div p { 
-    display: table-cell; /* 要素をテーブルのようにする */
-    text-align: center; /* インライン要素の中央揃え */
-    vertical-align: middle; /* 天地中央に揃える */
 }
 
 #discription { 
