@@ -107,7 +107,8 @@ function mouseHandler(e) {
 function FuncLoad() {
 	getCookie();
 	
-	if(window.TouchEvent){
+	//if(window.TouchEvent){
+	if(isTouchDevice){
 		for (var i=0; i<8; i++) {
 			AddEventListener('Resonator0' + i, "touchstart", touchHandler);
 			AddEventListener('Resonator0' + i, "touchend", touchHandler);
@@ -310,4 +311,14 @@ function setCenterCross(centerXY) {
 	document.getElementById('centerCross-canvas').style.top = result['y'] + "px";
 	document.getElementById('centerCross-canvas').style.left = result['x'] + "px";
 }
-	
+
+var isTouchDevice = ( function() {
+  var ua = navigator.userAgent;
+  if (ua.indexOf('iPhone') > 0 || ua.indexOf('iPod') > 0 || ua.indexOf('Android') > 0 && ua.indexOf('Mobile') > 0) {
+    return true;
+  } else if (ua.indexOf('iPad') > 0 || ua.indexOf('Android') > 0) {
+    return true;
+  } else {
+    return false;
+  }
+})();
