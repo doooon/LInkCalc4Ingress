@@ -62,11 +62,11 @@ function initialize(lat, lng, range) {
 	mapMarkerButtonDiv.title = 'drop marker';
 	mapMarkerButtonDiv.innerHTML = '';
 	if(isTouchDevice){
-		google.maps.event.addDomListener(controlUI, 'touchend', function(e) {
+		google.maps.event.addDomListener(mapMarkerButtonDiv, 'touchend', function(e) {
 			relocateMarker(map.getCenter().lat(), map.getCenter().lng());
 		} );
 	} else {
-		google.maps.event.addDomListener(controlUI, 'click', function(e) {
+		google.maps.event.addDomListener(mapMarkerButtonDiv, 'click', function(e) {
 			relocateMarker(map.getCenter().lat(), map.getCenter().lng());
 		} );
 	}
@@ -156,7 +156,7 @@ function newMarkerAndCircle(latLng, range) {
 	*/
 	
 }
-
+/*
 function funcMapDropMarkerButton(controlDiv, map) {
 	// add close button on map
 	var controlUI = document.createElement('div');
@@ -176,7 +176,8 @@ function funcMapDropMarkerButton(controlDiv, map) {
 	}
 
 }
-
+*/
+/*
 function funcMapBackButton(controlDiv, map) {
 	// add close button on map
 	var controlUI = document.createElement('div');
@@ -192,6 +193,7 @@ function funcMapBackButton(controlDiv, map) {
 	}
 
 }
+*/
 
 function funcMapCurrentLocationButton(controlDiv, map) {
 	// add current position button on map
