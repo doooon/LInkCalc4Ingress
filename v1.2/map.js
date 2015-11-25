@@ -65,11 +65,11 @@ function initialize(lat, lng, range) {
 	inputLocationButtonDiv.innerHTML = 'LOCATION';
 	if(isTouchDevice){
 		google.maps.event.addDomListener(inputLocationButtonDiv, 'touchend', function(e) {
-			document.getElementById('map-inputLocation-div').style.display = "block";
+			document.getElementById('map-inputLocation-div').style.display = "table";
 		} );
 	} else {
 		google.maps.event.addDomListener(inputLocationButtonDiv, 'click', function(e) {
-			document.getElementById('map-inputLocation-div').style.display = "block";
+			document.getElementById('map-inputLocation-div').style.display = "table";
 		} );
 	}
 	map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(inputLocationButtonDiv);

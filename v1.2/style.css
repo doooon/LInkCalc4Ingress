@@ -162,7 +162,7 @@ html, body, #calc {
 	margin: 0px auto; 
 	width: 300px; 
 	height: 100px; 
-  /*display: table; *//* 要素をテーブルのようにする */
+  display: none;  /* 要素をテーブルのようにする */
 }
 #map-inputLocation-div p { 
     display: table-cell; /* 要素をテーブルのようにする */
