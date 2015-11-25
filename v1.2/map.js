@@ -103,8 +103,7 @@ function newMarkerAndCircle(latLng, range) {
 	
 	/*
 	// press & hold relocate marker
-	if(window.TouchEvent){
-		console.log("window.TouchEvent is true");
+	if(isTouchDevice){
 		google.maps.event.addListener(map, 'mousedown', function(e) {
 			timerID = setTimeout(function(){ relocateMarker(e.latLng['A'], e.latLng['F']) }, 1000);
 		});
@@ -112,7 +111,6 @@ function newMarkerAndCircle(latLng, range) {
 			clearTimeout(timerID);
 		});
 	} else {
-		console.log("window.TouchEvent is false");
 		google.maps.event.addListener(map, 'mousedown', function(e) {
 			timerID = setTimeout(function(){ relocateMarker(e.latLng['A'], e.latLng['F']) }, 1000);
 		});
@@ -132,7 +130,7 @@ function funcMapDropMarkerButton(controlDiv, map) {
 	controlUI.innerHTML = '';
 	controlDiv.appendChild(controlUI);
 
-	if(window.TouchEvent){
+	if(isTouchDevice){
 		google.maps.event.addDomListener(controlUI, 'touchend', function(e) {
 			relocateMarker(map.getCenter().lat(), map.getCenter().lng());
 		} );
@@ -152,7 +150,7 @@ function funcMapBackButton(controlDiv, map) {
 	controlUI.innerHTML = 'BACK';
 	controlDiv.appendChild(controlUI);
 
-	if(window.TouchEvent){
+	if(isTouchDevice){
 		google.maps.event.addDomListener(controlUI, 'touchend', mapClose);
 	} else {
 		google.maps.event.addDomListener(controlUI, 'click', mapClose);
@@ -169,7 +167,7 @@ function funcMapCurrentLocationButton(controlDiv, map) {
 	controlUI.innerHTML = '';
 	controlDiv.appendChild(controlUI);
 
-	if(window.TouchEvent){
+	if(isTouchDevice){
 		google.maps.event.addDomListener(
 			controlUI, 'touchend', getCurrentLocation
 		);
@@ -275,7 +273,7 @@ function newMarkerOfMapOpen() {
 	// googleMap zoom change
 	if (map) {map.setZoom(getZoomLevel(amplifiedLinkRange_km*1000))}
 }
-if(window.TouchEvent){
+if(isTouchDevice){
 	AddEventListener('map-open-button-div', "touchend", newMarkerOfMapOpen);
 } else {
 	AddEventListener('map-open-button-div', "mouseup", newMarkerOfMapOpen);
