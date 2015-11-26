@@ -58,6 +58,7 @@ function initialize(lat, lng, range) {
 	}
 	map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(mapMarkerButtonDiv);
 
+	/*
 	// Add custom button (InputLocation)
 	var inputLocationButtonDiv = document.createElement('div');
 	inputLocationButtonDiv.id = 'map-inputLocation-button-div';
@@ -77,9 +78,11 @@ function initialize(lat, lng, range) {
 	document.getElementById('locURL_submit').addEventListener("click", function(e){ funcAddMapMarking() }, false);
 	document.getElementById('map-inputLocation-div').addEventListener("click", function(e){ document.getElementById('map-inputLocation-div').style.display = "none"; }, false);
 	document.getElementById('map-inputLocation-div-inner').addEventListener("click", function(e){  e.stopPropagation(); }, false);
-
+  */
+  
 }
 
+/*
 function funcInputLocationButton() {
     document.getElementById('map-inputLocation-div').style.display = "block";
 }
@@ -87,7 +90,7 @@ function funcAddMapMarking() {
   alert("test test marking");
   document.getElementById('map-inputLocation-div').style.display = "none";
 }
-
+*/
 
 function relocateMarker(lat, lng) {
 	var latLng = {};
