@@ -6,6 +6,9 @@ Link Calculator for Ingress ver.1.4β1
 String.prototype.reverse=function(){return this.split('').reverse().join('')};
 Number.prototype.commify=function(){return this.toString().reverse().replace(/(\d\d\d)(?=\d)(?!\d*\.)/g,'$1,').reverse()};
 
+// グローバル変数
+var cookieList = new Array();
+
 
 function AddEventListener(elementID, type, listener) {
 	var element = document.getElementById(elementID);
@@ -325,7 +328,6 @@ function setLocationCookie(lat, lng) {
 }
 
 function getCookie() {
-    var cookieList = new Array();
     var allcookies = document.cookie;
     if( allcookies != '' ) {
         var cookies = allcookies.split( '; ' );
