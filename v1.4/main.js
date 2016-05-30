@@ -52,6 +52,11 @@ function modSlotClick(e) {
 	funcResult();
 }
 
+function presetChange(e) {
+	var elem = e.target;
+	funcResult();
+}
+
 function allReset() {
 	flag_press = 0;
 	for (var i=0; i<8; i++ ) {
@@ -134,6 +139,7 @@ function FuncLoad() {
 		AddEventListener('reset', "click", allReset);
 		AddEventListener('map-open-button-div', "mouseup", mapOpen);	
 	}
+	AddEventListener('preset', "change", presetChange);
 	AddEventListener('calc', "transitionend", calcTransitionFinish);
 	
 	funcResult();
@@ -158,10 +164,10 @@ function setSlotCookie() {
 	for (i=0; i<4; i++) {
 		mList[i] = document.getElementById('ModSlot0' + i).textContent;
 	}
-	//var presetval = document.getElementById('preset').selectedIndex;
+	var presetval = document.getElementById('preset').selectedIndex;
 	var exp = new Date();
 	exp.setTime(exp.getTime()+1000*60*60*24*1);
-	var str = rList.join(',') + '+' + mList.join(',');
+	var str = rList.join(',') + '+' + mList.join(',') + '+' + presetval;
 	var escstr = encodeURIComponent(str);
 	document.cookie = "LinkCalc4Ingress=" + escstr + "; expires=" + exp.toGMTString();
 }
@@ -208,8 +214,8 @@ function getCookie() {
 				else if (elem.textContent == "VRLA") 	{ elem.className = "cModSlot VRLA"; }
 				else if (elem.textContent == "SBUL") 	{ elem.className = "cModSlot SBUL"; }
 			}
-			//var presetval = cookieList['LinkCalc4Ingress'].split('+')[2].split(',');
-			//document.getElementById('preset').getElementsByTagName('option')[presetval].selected = true;
+			var presetval = cookieList['LinkCalc4Ingress'].split('+')[2].split(',');
+			if (presetval) document.getElementById('preset').getElementsByTagName('option')[presetval].selected = true;
 		}
 	}
 }
