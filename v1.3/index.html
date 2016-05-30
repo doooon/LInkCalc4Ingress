@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<head>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<meta name="robots" content="noindex,nofollow">
+<meta name="description" content="Link Calculator for Ingress (ver.1.3β1)">
+<meta name="author" content="doooon">
+<link rel="apple-touch-icon" href="apple-touch-icon-precomposed.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<!--link rel="apple-touch-icon" href="apple-touch-icon.png"-->
+<title>LinkCalc4Ingress</title>
+<script type="text/javascript" src = "//maps.googleapis.com/maps/api/js?key=AIzaSyDRaTZlZNQ91E4lKF_75VVsTyH0zjnm0fs"></script>
+<script type="text/javascript" charset="utf-8" src = "./main.js"></script>
+<script type="text/javascript" charset="utf-8">
+	var flag_press = 0;
+	var timerID = '';
+	var amplifiedLinkRange_km = 0;
+	var cookieLatLng = {};
+
+	// window scroll cancel
+	document.addEventListener("touchmove", function(elem) { if(window.innerHeight >= document.body.scrollHeight){elem.preventDefault()} }, false);
+	
+	document.addEventListener("DOMContentLoaded", FuncLoad, false);
+		
+</script>
+
+<style type="text/css">
+	@import url("style.css");
+</style>
+	
+</head>
+<body id="body-div">
+<div id="map-canvas"></div>
+<div id="centerCross-canvas"></div>
+<div id="map-inputLocation-div">
+  <div id="map-inputLocation-div-inner">
+    <div>Input to IntelMap portal URL or LatLng data.</div>
+    <div><input type="text" name="locURL" id="locURL" size="40"></div>
+    <div><input type="button" name="locURL_submit" id="locURL_submit" value="mark"></div>
+  </div>
+</div>
+<div id="calc">
+	<div class="title" id="potalLevel">
+		LINK RANGE
+	</div>
+		<div id="result">result...</div>
+		<div id="discription">discription...</div>
+	<div class="cMap-open-button-div-parentbox">
+		<div id="map-open-button-div">MAP</div>
+	</div>
+	<div class="title">
+		RESONATORS
+	</div>
+	<div class="cSlotDIV">
+		<div class="cResoSlot R8" id="Resonator00">8</div>
+		<div class="cDIVmargin"></div>
+		<div class="cResoSlot R8" id="Resonator01">8</div>
+		<div class="cDIVmargin"></div>
+		<div class="cResoSlot R8" id="Resonator02">8</div>
+		<div class="cDIVmargin"></div>
+		<div class="cResoSlot R8" id="Resonator03">8</div>
+	</div>
+	<div class="cDIVmargin"></div>
+	<div class="cSlotDIV">
+		<div class="cResoSlot R8" id="Resonator04">8</div>
+		<div class="cDIVmargin"></div>
+		<div class="cResoSlot R8" id="Resonator05">8</div>
+		<div class="cDIVmargin"></div>
+		<div class="cResoSlot R8" id="Resonator06">8</div>
+		<div class="cDIVmargin"></div>
+		<div class="cResoSlot R8" id="Resonator07">8</div>
+	</div>
+	<div class="title">
+		MOD SLOTS
+	</div>
+	<div class="cSlotDIV">
+		<div class="cModSlot" id="ModSlot00"> </div>
+		<div class="cDIVmargin"></div>
+		<div class="cModSlot" id="ModSlot01"> </div>
+		<div class="cDIVmargin"></div>
+		<div class="cModSlot" id="ModSlot02"> </div>
+		<div class="cDIVmargin"></div>
+		<div class="cModSlot" id="ModSlot03"> </div>
+	</div>
+	<div><input type="button" value="reset" name="reset" id="reset"></div>
+	<div class="hint">Long press resonator-slot to default (R8).</div>
+	<div class="developer">DEVELOPED BY DOOOON.</div>
+</div>
+</body>
