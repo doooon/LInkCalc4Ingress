@@ -463,21 +463,21 @@ function funcResult() {
 	if (agentn < n) agentn = n;
 	
 	if (agentn==8) {
-		document.getElementById('preset').getElementsByTagName('option')[8].selected = true;
-	} else if (agentn==7) {
-		document.getElementById('preset').getElementsByTagName('option')[7].selected = true;
-	} else if (agentn==6) {
-		document.getElementById('preset').getElementsByTagName('option')[6].selected = true;
-	} else if (agentn==5) {
-		document.getElementById('preset').getElementsByTagName('option')[5].selected = true;
-	} else if (agentn==4) {
-		document.getElementById('preset').getElementsByTagName('option')[4].selected = true;
-	} else if (agentn==3) {
-		document.getElementById('preset').getElementsByTagName('option')[3].selected = true;
-	} else if (agentn==2) {
-		document.getElementById('preset').getElementsByTagName('option')[2].selected = true;
-	} else if (agentn==1) {
 		document.getElementById('preset').getElementsByTagName('option')[1].selected = true;
+	} else if (agentn==7) {
+		document.getElementById('preset').getElementsByTagName('option')[2].selected = true;
+	} else if (agentn==6) {
+		document.getElementById('preset').getElementsByTagName('option')[3].selected = true;
+	} else if (agentn==5) {
+		document.getElementById('preset').getElementsByTagName('option')[4].selected = true;
+	} else if (agentn==4) {
+		document.getElementById('preset').getElementsByTagName('option')[5].selected = true;
+	} else if (agentn==3) {
+		document.getElementById('preset').getElementsByTagName('option')[6].selected = true;
+	} else if (agentn==2) {
+		document.getElementById('preset').getElementsByTagName('option')[7].selected = true;
+	} else if (agentn==1) {
+		document.getElementById('preset').getElementsByTagName('option')[8].selected = true;
 	}
 		
 	// cookie set
