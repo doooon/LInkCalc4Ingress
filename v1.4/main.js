@@ -214,8 +214,10 @@ function getCookie() {
 				else if (elem.textContent == "VRLA") 	{ elem.className = "cModSlot VRLA"; }
 				else if (elem.textContent == "SBUL") 	{ elem.className = "cModSlot SBUL"; }
 			}
-			var presetval = cookieList['LinkCalc4Ingress'].split('+')[2];
-			if (presetval) document.getElementById('preset').getElementsByTagName('option')[presetval].selected = true;
+			if (cookieList['LinkCalc4Ingress'].split('+')[2]) {
+				var presetval = cookieList['LinkCalc4Ingress'].split('+')[2];
+				document.getElementById('preset').getElementsByTagName('option')[presetval].selected = true;
+			}
 		}
 	}
 }
