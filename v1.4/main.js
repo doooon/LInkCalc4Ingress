@@ -440,25 +440,46 @@ function funcResult() {
 	document.getElementById('discription').innerHTML = document.getElementById('discription').innerHTML + 'Max Outbound Links = ' + outLink;
 	
 	// preset
-	var sumResoLevel = eval(resoList.join("+"));
-	if (sumResoLevel<=45) {
-		document.getElementById('preset').getElementsByTagName('option')[8].selected = true;
-	} else if (sumResoLevel<=54) {
-		document.getElementById('preset').getElementsByTagName('option')[7].selected = true;
-	} else if (sumResoLevel<=57) {
-		document.getElementById('preset').getElementsByTagName('option')[6].selected = true;
-	} else if (sumResoLevel<=60) {
-		document.getElementById('preset').getElementsByTagName('option')[5].selected = true;
-	} else if (sumResoLevel<=61) {
-		document.getElementById('preset').getElementsByTagName('option')[4].selected = true;
-	} else if (sumResoLevel<=62) {
-		document.getElementById('preset').getElementsByTagName('option')[3].selected = true;
-	} else if (sumResoLevel<=63) {
-		document.getElementById('preset').getElementsByTagName('option')[2].selected = true;
-	} else if (sumResoLevel<=64) {
-		document.getElementById('preset').getElementsByTagName('option')[1].selected = true;
-	} 
+	var agentn = 0;
+	var reso8n = 0;
+	var reso7n = 0;
+	var reso6n = 0;
+	var reso5n = 0;
+	var reso4n = 0;
+	for (var i=0 in resoList) {
+		if (resoList[i]==8) reso8n++;
+		else if (resoList[i]==7) reso7n++;
+		else if (resoList[i]==6) reso6n++;
+		else if (resoList[i]==5) reso5n++;
+		else if (resoList[i]==4) reso4n++;
+	}
+	agentn = reso8n;
+	if (agentn < reso7n) agentn = reso7n;
+	var n = Math.ceil(reso6n / 2);
+	if (agentn < n) agentn = n;
+	n = Math.ceil(reso5n / 2);
+	if (agentn < n) agentn = n;
+	n = Math.ceil(reso4n / 4);
+	if (agentn < n) agentn = n;
 	
+	if (agentn==8) {
+		document.getElementById('preset').getElementsByTagName('option')[8].selected = true;
+	} else if (agentn==7) {
+		document.getElementById('preset').getElementsByTagName('option')[7].selected = true;
+	} else if (agentn==6) {
+		document.getElementById('preset').getElementsByTagName('option')[6].selected = true;
+	} else if (agentn==5 {
+		document.getElementById('preset').getElementsByTagName('option')[5].selected = true;
+	} else if (agentn==4) {
+		document.getElementById('preset').getElementsByTagName('option')[4].selected = true;
+	} else if (agentn==3) {
+		document.getElementById('preset').getElementsByTagName('option')[3].selected = true;
+	} else if (agentn==2) {
+		document.getElementById('preset').getElementsByTagName('option')[2].selected = true;
+	} else if (agentn==1) {
+		document.getElementById('preset').getElementsByTagName('option')[1].selected = true;
+	}
+		
 	// cookie set
 	setSlotCookie();
 	
