@@ -468,7 +468,7 @@ function funcResult() {
 		document.getElementById('preset').getElementsByTagName('option')[7].selected = true;
 	} else if (agentn==6) {
 		document.getElementById('preset').getElementsByTagName('option')[6].selected = true;
-	} else if (agentn==5 {
+	} else if (agentn==5) {
 		document.getElementById('preset').getElementsByTagName('option')[5].selected = true;
 	} else if (agentn==4) {
 		document.getElementById('preset').getElementsByTagName('option')[4].selected = true;
