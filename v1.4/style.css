@@ -251,7 +251,7 @@ input[type="text"] { background-color: red; }
 .R8 		{ background-color: #5E2ABA; color: #ffffff; }
 
 #reset		{ 
-	margin: 15px 0px 15px 5px; 
+	margin: 15px 0px 15px 10px; 
 	font-size: large; 
 	
 	/*iPhoneでテキストルーペが出てしまうため*/
@@ -262,7 +262,7 @@ input[type="text"] { background-color: red; }
 }
 
 #preset		{ 
-	margin: 15px 5px 15px 0px; 
+	margin: 15px 10px 15px 0px; 
 	font-size: large; 
 }
 
