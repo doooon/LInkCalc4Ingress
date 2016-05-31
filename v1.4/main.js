@@ -32,7 +32,7 @@ function resonatorClick(e) {
 	var elem = e.target;
 	if (elem.textContent == 1) { elem.textContent = 8; elem.className = "cResoSlot R8"; }
 	else { elem.textContent --; elem.className = "cResoSlot R" + elem.textContent; }
-	document.getElementById('preset').getElementsByTagName('option')[0].selected = true;
+	//document.getElementById('preset').getElementsByTagName('option')[0].selected = true;
 	funcResult();
 }
 
@@ -42,7 +42,7 @@ function resonatorPress(elemID) {
 	flag_press = 0;
 	elem.textContent = 8; 
 	elem.className = "cResoSlot R8";
-	document.getElementById('preset').getElementsByTagName('option')[0].selected = true;
+	//document.getElementById('preset').getElementsByTagName('option')[0].selected = true;
 	funcResult();
 }
 
@@ -212,7 +212,7 @@ function allReset() {
 		document.getElementById('ModSlot0' + i).textContent = ''; 
 		document.getElementById('ModSlot0' + i).className = "cModSlot none";
 	}
-	document.getElementById('preset').getElementsByTagName('option')[0].selected = true;
+	//document.getElementById('preset').getElementsByTagName('option')[0].selected = true;
 	funcResult();
 }
 
@@ -440,44 +440,52 @@ function funcResult() {
 	document.getElementById('discription').innerHTML = document.getElementById('discription').innerHTML + 'Max Outbound Links = ' + outLink;
 	
 	// preset
-	var agentn = 0;
-	var reso8n = 0;
-	var reso7n = 0;
-	var reso6n = 0;
-	var reso5n = 0;
-	var reso4n = 0;
-	for (var i=0 in resoList) {
-		if (resoList[i]==8) reso8n++;
-		else if (resoList[i]==7) reso7n++;
-		else if (resoList[i]==6) reso6n++;
-		else if (resoList[i]==5) reso5n++;
-		else if (resoList[i]==4) reso4n++;
-	}
-	agentn = reso8n;
-	if (agentn < reso7n) agentn = reso7n;
-	var n = Math.ceil(reso6n / 2);
-	if (agentn < n) agentn = n;
-	n = Math.ceil(reso5n / 2);
-	if (agentn < n) agentn = n;
-	n = Math.ceil(reso4n / 4);
-	if (agentn < n) agentn = n;
-	
-	if (agentn==8) {
-		document.getElementById('preset').getElementsByTagName('option')[1].selected = true;
-	} else if (agentn==7) {
-		document.getElementById('preset').getElementsByTagName('option')[2].selected = true;
-	} else if (agentn==6) {
-		document.getElementById('preset').getElementsByTagName('option')[3].selected = true;
-	} else if (agentn==5) {
-		document.getElementById('preset').getElementsByTagName('option')[4].selected = true;
-	} else if (agentn==4) {
-		document.getElementById('preset').getElementsByTagName('option')[5].selected = true;
-	} else if (agentn==3) {
-		document.getElementById('preset').getElementsByTagName('option')[6].selected = true;
-	} else if (agentn==2) {
-		document.getElementById('preset').getElementsByTagName('option')[7].selected = true;
-	} else if (agentn==1) {
-		document.getElementById('preset').getElementsByTagName('option')[8].selected = true;
+	{
+		var agentn = 0;
+		var reso8n = 0;
+		var reso7n = 0;
+		var reso6n = 0;
+		var reso5n = 0;
+		var reso4n = 0;
+		for (var i=0 in resoList) {
+			if (resoList[i]==8) reso8n++;
+			else if (resoList[i]==7) reso7n++;
+			else if (resoList[i]==6) reso6n++;
+			else if (resoList[i]==5) reso5n++;
+			else if (resoList[i]==4) reso4n++;
+		}
+		agentn = reso8n;
+		if (agentn < reso7n) agentn = reso7n;
+		var n = Math.ceil(reso6n / 2);
+		if (agentn < n) agentn = n;
+		n = Math.ceil(reso5n / 2);
+		if (agentn < n) agentn = n;
+		n = Math.ceil(reso4n / 4);
+		if (agentn < n) agentn = n;
+		
+		var modCount = 0;
+		for (var i=0 in modList) {
+			if (modList[i].match(/^(VRLA|SBUL|LA)$/)) modCount++;
+		}
+		if (modCount > 2 && agentn == 1)  agentn = 2;
+		
+		if (agentn==8) {
+			document.getElementById('preset').getElementsByTagName('option')[1].selected = true;
+		} else if (agentn==7) {
+			document.getElementById('preset').getElementsByTagName('option')[2].selected = true;
+		} else if (agentn==6) {
+			document.getElementById('preset').getElementsByTagName('option')[3].selected = true;
+		} else if (agentn==5) {
+			document.getElementById('preset').getElementsByTagName('option')[4].selected = true;
+		} else if (agentn==4) {
+			document.getElementById('preset').getElementsByTagName('option')[5].selected = true;
+		} else if (agentn==3) {
+			document.getElementById('preset').getElementsByTagName('option')[6].selected = true;
+		} else if (agentn==2) {
+			document.getElementById('preset').getElementsByTagName('option')[7].selected = true;
+		} else if (agentn==1) {
+			document.getElementById('preset').getElementsByTagName('option')[8].selected = true;
+		}
 	}
 		
 	// cookie set
