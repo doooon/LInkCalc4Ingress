@@ -387,7 +387,7 @@ function FuncLoad() {
 			AddEventListener('ModSlot0' + i, "mouseout", modMouseHandler);
 			//AddEventListener('ModSlot0' + i, "click", modSlotClick);
 		}
-		AddEventListener('reset', "click", allReset);
+		AddEventListener('reset', "mouseup", allReset);
 		AddEventListener('map-open-button-div', "mouseup", mapOpen);	
 	}
 	AddEventListener('preset', "change", presetChange);
