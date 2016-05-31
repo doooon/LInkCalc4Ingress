@@ -272,20 +272,17 @@ function presetChange(e) {
 }
 
 function allReset(e) {
-	e.preventDefault();
-	if (e.type === "mouseup" || e.type === "touchend") {
-		flag_press = 0;
-		for (var i=0; i<8; i++ ) {
-			document.getElementById('Resonator0' + i).textContent = '8'; 
-			document.getElementById('Resonator0' + i).className = "cResoSlot R8";
-		}
-		for (var i=0; i<4; i++ ) {
-			document.getElementById('ModSlot0' + i).textContent = ''; 
-			document.getElementById('ModSlot0' + i).className = "cModSlot none";
-		}
-		//document.getElementById('preset').getElementsByTagName('option')[0].selected = true;
-		funcResult();
+	flag_press = 0;
+	for (var i=0; i<8; i++ ) {
+		document.getElementById('Resonator0' + i).textContent = '8'; 
+		document.getElementById('Resonator0' + i).className = "cResoSlot R8";
 	}
+	for (var i=0; i<4; i++ ) {
+		document.getElementById('ModSlot0' + i).textContent = ''; 
+		document.getElementById('ModSlot0' + i).className = "cModSlot none";
+	}
+	//document.getElementById('preset').getElementsByTagName('option')[0].selected = true;
+	funcResult();
 }
 
 function touchHandler(e) {
@@ -336,7 +333,7 @@ function modTouchHandler(e) {
 			flag_press = 1;
 			break;
 		case "touchend" :
-			if (flag_press == 1) resonatorClick(e);
+			if (flag_press == 1) modSlotClick(e);
 			flag_press = 0;
 			break;
 		case "touchcancel" :
@@ -392,10 +389,8 @@ function FuncLoad() {
 			AddEventListener('ModSlot0' + i, "mouseout", modMouseHandler);
 			//AddEventListener('ModSlot0' + i, "click", modSlotClick);
 		}
-		AddEventListener('reset', "mousedown", allReset);
-		AddEventListener('reset', "mouseup", allReset);
-		AddEventListener('map-open-button-div', "mousedown", mapOpen);	
-		AddEventListener('map-open-button-div', "mouseup", mapOpen);	
+		AddEventListener('reset', "click", allReset); // OS のボタンクリックインタラクションを利用するにclickイベントを使う
+		AddEventListener('map-open-button-div', "click", mapOpen);	// OS のボタンクリックインタラクションを利用するにclickイベントを使う
 	}
 	AddEventListener('preset', "change", presetChange);
 	AddEventListener('calc', "transitionend", calcTransitionFinish);
@@ -480,10 +475,7 @@ function getCookie() {
 }
 		
 function mapOpen(e) {
-	e.preventDefault();
-	if (e.type === "mouseup" || e.type === "touchend") {
-		setTimeout(function(){document.getElementById('calc').style.top = "100%"}, 400);
-	}
+	setTimeout(function(){document.getElementById('calc').style.top = "100%"}, 400);
 }
 
 function mapClose() {
