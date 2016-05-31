@@ -1,5 +1,5 @@
 /*
-Link Calculator for Ingress ver.1.4FC1
+Link Calculator for Ingress ver.1.4FC1.1
 */
 
 // 位取りを定義
@@ -213,7 +213,7 @@ function presetChange(e) {
 			}
 			
 			if (modCount == 4) {
-				for (var i=0 in modList) {
+				for (var i=modList.length-1; i>=0; i--) {
 					if (modList[i].match(/^LA$/) && modCount > 2) {
 						document.getElementById('ModSlot0' + i).textContent = ''; 
 						document.getElementById('ModSlot0' + i).className = "cModSlot none";
@@ -222,7 +222,7 @@ function presetChange(e) {
 				}
 			}
 			if (modCount == 4) {
-				for (var i=0 in modList) {
+				for (var i=modList.length-1; i>=0; i--) {
 					if (modList[i].match(/^SBUL$/) && modCount > 2) {
 						document.getElementById('ModSlot0' + i).textContent = ''; 
 						document.getElementById('ModSlot0' + i).className = "cModSlot none";
@@ -231,7 +231,7 @@ function presetChange(e) {
 				}
 			}
 			if (modCount == 4) {
-				for (var i=0 in modList) {
+				for (var i=modList.length-1; i>=0; i--) {
 					if (modList[i].match(/^VRLA$/) && modCount > 2) {
 						document.getElementById('ModSlot0' + i).textContent = ''; 
 						document.getElementById('ModSlot0' + i).className = "cModSlot none";
@@ -240,7 +240,7 @@ function presetChange(e) {
 				}
 			}
 			if (modCount == 3) {
-				for (var i=0 in modList) {
+				for (var i=modList.length-1; i>=0; i--) {
 					if (modList[i].match(/^LA$/) && modCount > 2) {
 						document.getElementById('ModSlot0' + i).textContent = ''; 
 						document.getElementById('ModSlot0' + i).className = "cModSlot none";
@@ -249,7 +249,7 @@ function presetChange(e) {
 				}
 			}
 			if (modCount == 3) {
-				for (var i=0 in modList) {
+				for (var i=modList.length-1; i>=0; i--) {
 					if (modList[i].match(/^SBUL$/) && modCount > 2) {
 						document.getElementById('ModSlot0' + i).textContent = ''; 
 						document.getElementById('ModSlot0' + i).className = "cModSlot none";
@@ -258,7 +258,7 @@ function presetChange(e) {
 				}
 			}
 			if (modCount == 3) {
-				for (var i=0 in modList) {
+				for (var i=modList.length-1; i>=0; i--) {
 					if (modList[i].match(/^VRLA$/) && modCount > 2) {
 						document.getElementById('ModSlot0' + i).textContent = ''; 
 						document.getElementById('ModSlot0' + i).className = "cModSlot none";
