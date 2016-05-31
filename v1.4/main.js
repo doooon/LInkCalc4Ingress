@@ -198,7 +198,58 @@ function presetChange(e) {
 		document.getElementById('Resonator06').className = "cResoSlot R4";
 		document.getElementById('Resonator07').textContent = '4'; 
 		document.getElementById('Resonator07').className = "cResoSlot R4";
-	}	
+		
+		// 1agent Mod slot
+		{
+			var modList = new Array(4);
+			modList[0] = document.getElementById("ModSlot00").textContent;
+			modList[1] = document.getElementById("ModSlot01").textContent;
+			modList[2] = document.getElementById("ModSlot02").textContent;
+			modList[3] = document.getElementById("ModSlot03").textContent;
+			
+			var modCount = 0;
+			for (var i=0 in modList) {
+				if (modList[i].match(/^(VRLA|SBUL|LA)$/)) modCount++;
+			}
+			if (modCount == 3) {
+				for (var i=0 in modList) {
+					if (modList[i].match(/^LA$/)) {
+						document.getElementById('ModSlot0' + i).textContent = ''; 
+						document.getElementById('ModSlot0' + i).className = "cModSlot none";
+						break;
+					} else if (modList[i].match(/^SBUL$/)) {
+						document.getElementById('ModSlot0' + i).textContent = ''; 
+						document.getElementById('ModSlot0' + i).className = "cModSlot none";
+						break;
+					} else if (modList[i].match(/^VRLA$/)) {
+						document.getElementById('ModSlot0' + i).textContent = ''; 
+						document.getElementById('ModSlot0' + i).className = "cModSlot none";
+						break;
+					}
+				}
+			}
+			if (modCount == 4) {
+				for (var i=0 in modList) {
+					if (modList[i].match(/^LA$/)) {
+						document.getElementById('ModSlot0' + i).textContent = ''; 
+						document.getElementById('ModSlot0' + i).className = "cModSlot none";
+						modCount--;
+						if (modCount <= 2) break;
+					} else if (modList[i].match(/^SBUL$/)) {
+						document.getElementById('ModSlot0' + i).textContent = ''; 
+						document.getElementById('ModSlot0' + i).className = "cModSlot none";
+						modCount--;
+						if (modCount <= 2) break;
+					} else if (modList[i].match(/^VRLA$/)) {
+						document.getElementById('ModSlot0' + i).textContent = ''; 
+						document.getElementById('ModSlot0' + i).className = "cModSlot none";
+						modCount--;
+						if (modCount <= 2) break;
+					}
+				}
+			}
+		} // 1agent Mod slot
+	}	// else if (elem.selectedIndex==8)
 	funcResult();
 }
 
