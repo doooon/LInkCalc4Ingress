@@ -273,22 +273,18 @@ function presetChange(e) {
 
 function allReset(e) {
 	e.preventDefault();
-	switch (e.type) {
-		case "mousedown" :
-			break;
-		case "mouseup" :
-			flag_press = 0;
-			for (var i=0; i<8; i++ ) {
-				document.getElementById('Resonator0' + i).textContent = '8'; 
-				document.getElementById('Resonator0' + i).className = "cResoSlot R8";
-			}
-			for (var i=0; i<4; i++ ) {
-				document.getElementById('ModSlot0' + i).textContent = ''; 
-				document.getElementById('ModSlot0' + i).className = "cModSlot none";
-			}
-			//document.getElementById('preset').getElementsByTagName('option')[0].selected = true;
-			funcResult();
-			break;
+	if (e.type === "mouseup" || e.type === "touchend") {
+		flag_press = 0;
+		for (var i=0; i<8; i++ ) {
+			document.getElementById('Resonator0' + i).textContent = '8'; 
+			document.getElementById('Resonator0' + i).className = "cResoSlot R8";
+		}
+		for (var i=0; i<4; i++ ) {
+			document.getElementById('ModSlot0' + i).textContent = ''; 
+			document.getElementById('ModSlot0' + i).className = "cModSlot none";
+		}
+		//document.getElementById('preset').getElementsByTagName('option')[0].selected = true;
+		funcResult();
 	}
 }
 
@@ -485,12 +481,8 @@ function getCookie() {
 		
 function mapOpen(e) {
 	e.preventDefault();
-	switch (e.type) {
-		case "mousedown" :
-			break;
-		case "mouseup" :
-			setTimeout(function(){document.getElementById('calc').style.top = "100%"}, 400);
-			break;
+	if (e.type === "mouseup" || e.type === "touchend") {
+		setTimeout(function(){document.getElementById('calc').style.top = "100%"}, 400);
 	}
 }
 
