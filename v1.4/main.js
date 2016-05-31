@@ -1,5 +1,5 @@
 /*
-Link Calculator for Ingress ver.1.4FC1.1
+Link Calculator for Ingress ver.1.4.1FC1.1
 */
 
 // 位取りを定義
@@ -292,15 +292,15 @@ function touchHandler(e) {
 			flag_press = 1;
 			timerID = setTimeout(function(){resonatorPress(e.target.id)}, 500);
 			break;
-		case "touchcancel" :
-			clearTimeout(timerID);
-			timerID = 0;
-			flag_press = 0;
-			break;
 		case "touchend" :
 			clearTimeout(timerID);
 			timerID = 0;
 			if (flag_press == 1) { resonatorClick(e) }
+			flag_press = 0;
+			break;
+		case "touchcancel" :
+			clearTimeout(timerID);
+			timerID = 0;
 			flag_press = 0;
 			break;
 	}
@@ -326,6 +326,37 @@ function mouseHandler(e) {
 	}
 }
 
+function modTouchHandler(e) {
+	e.preventDefault();
+	switch (e.type) {
+		case "touchstart" :
+			flag_press = 1;
+			break;
+		case "touchend" :
+			if (flag_press == 1) resonatorClick(e);
+			flag_press = 0;
+			break;
+		case "touchcancel" :
+			flag_press = 0;
+			break;
+	}
+}
+
+function modMouseHandler(e) {
+	e.preventDefault();
+	switch (e.type) {
+		case "mousedown" :
+			flag_press = 1;
+			break;
+		case "mouseup" :
+			if (flag_press == 1) modSlotClick(e);
+			flag_press = 0;
+			break;
+		case "mouseout" :
+			break;
+	}
+}
+
 function FuncLoad() {
 	getCookie();
 	
@@ -337,7 +368,10 @@ function FuncLoad() {
 			AddEventListener('Resonator0' + i, "touchcancel", touchHandler);
 		}
 		for (var i=0; i<4; i++) {
-			AddEventListener('ModSlot0' + i, "touchend", modSlotClick);
+			AddEventListener('ModSlot0' + i, "touchstart", modTouchHandler);
+			AddEventListener('ModSlot0' + i, "touchend", modTouchHandler);
+			AddEventListener('ModSlot0' + i, "touchcancel", modTouchHandler);
+			//AddEventListener('ModSlot0' + i, "touchend", modSlotClick);
 		}
 		AddEventListener('reset', "touchend", allReset);
 		AddEventListener('map-open-button-div', "touchend", mapOpen);	
@@ -348,7 +382,10 @@ function FuncLoad() {
 			AddEventListener('Resonator0' + i, "mouseout", mouseHandler);
 		}
 		for (var i=0; i<4; i++) {
-			AddEventListener('ModSlot0' + i, "click", modSlotClick);
+			AddEventListener('ModSlot0' + i, "mousedown", modMouseHandler);
+			AddEventListener('ModSlot0' + i, "mouseup", modMouseHandler);
+			AddEventListener('ModSlot0' + i, "mouseout", modMouseHandler);
+			//AddEventListener('ModSlot0' + i, "click", modSlotClick);
 		}
 		AddEventListener('reset', "click", allReset);
 		AddEventListener('map-open-button-div', "mouseup", mapOpen);	
