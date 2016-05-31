@@ -1,5 +1,5 @@
 /*
-Link Calculator for Ingress ver.1.4.1FC1.1
+Link Calculator for Ingress ver.1.4.2
 */
 
 // 位取りを定義
@@ -333,7 +333,7 @@ function modTouchHandler(e) {
 			flag_press = 1;
 			break;
 		case "touchend" :
-			if (flag_press == 1) resonatorClick(e);
+			if (flag_press == 1) modSlotClick(e);
 			flag_press = 0;
 			break;
 		case "touchcancel" :
