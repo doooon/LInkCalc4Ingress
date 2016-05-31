@@ -211,40 +211,58 @@ function presetChange(e) {
 			for (var i=0 in modList) {
 				if (modList[i].match(/^(VRLA|SBUL|LA)$/)) modCount++;
 			}
-			if (modCount == 3) {
+			
+			if (modCount == 4) {
 				for (var i=0 in modList) {
-					if (modList[i].match(/^LA$/)) {
+					if (modList[i].match(/^LA$/) && modCount > 2) {
 						document.getElementById('ModSlot0' + i).textContent = ''; 
 						document.getElementById('ModSlot0' + i).className = "cModSlot none";
-						break;
-					} else if (modList[i].match(/^SBUL$/)) {
-						document.getElementById('ModSlot0' + i).textContent = ''; 
-						document.getElementById('ModSlot0' + i).className = "cModSlot none";
-						break;
-					} else if (modList[i].match(/^VRLA$/)) {
-						document.getElementById('ModSlot0' + i).textContent = ''; 
-						document.getElementById('ModSlot0' + i).className = "cModSlot none";
-						break;
+						modCount--;
 					}
 				}
 			}
 			if (modCount == 4) {
 				for (var i=0 in modList) {
-					if (modList[i].match(/^LA$/)) {
+					if (modList[i].match(/^SBUL$/) && modCount > 2) {
 						document.getElementById('ModSlot0' + i).textContent = ''; 
 						document.getElementById('ModSlot0' + i).className = "cModSlot none";
 						modCount--;
-						if (modCount <= 2) break;
-					} else if (modList[i].match(/^SBUL$/)) {
+					}
+				}
+			}
+			if (modCount == 4) {
+				for (var i=0 in modList) {
+					if (modList[i].match(/^VRLA$/) && modCount > 2) {
 						document.getElementById('ModSlot0' + i).textContent = ''; 
 						document.getElementById('ModSlot0' + i).className = "cModSlot none";
 						modCount--;
-						if (modCount <= 2) break;
-					} else if (modList[i].match(/^VRLA$/)) {
+					}
+				}
+			}
+			if (modCount == 3) {
+				for (var i=0 in modList) {
+					if (modList[i].match(/^LA$/) && modCount > 2) {
 						document.getElementById('ModSlot0' + i).textContent = ''; 
 						document.getElementById('ModSlot0' + i).className = "cModSlot none";
 						modCount--;
-						if (modCount <= 2) break;
+					}
+				}
+			}
+			if (modCount == 3) {
+				for (var i=0 in modList) {
+					if (modList[i].match(/^SBUL$/) && modCount > 2) {
+						document.getElementById('ModSlot0' + i).textContent = ''; 
+						document.getElementById('ModSlot0' + i).className = "cModSlot none";
+						modCount--;
+					}
+				}
+			}
+			if (modCount == 3) {
+				for (var i=0 in modList) {
+					if (modList[i].match(/^VRLA$/) && modCount > 2) {
+						document.getElementById('ModSlot0' + i).textContent = ''; 
+						document.getElementById('ModSlot0' + i).className = "cModSlot none";
+						modCount--;
 					}
 				}
 			}
