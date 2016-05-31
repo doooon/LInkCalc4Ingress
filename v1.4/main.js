@@ -491,6 +491,7 @@ function mapOpen(e) {
 		case "mouseup" :
 			setTimeout(function(){document.getElementById('calc').style.top = "100%"}, 400);
 			break;
+	}
 }
 
 function mapClose() {
