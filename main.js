@@ -1,10 +1,13 @@
 /*
-Link Calculator for Ingress
+Link Calculator for Ingress ver.1.4.1FC1.1
 */
 
 // 位取りを定義
 String.prototype.reverse=function(){return this.split('').reverse().join('')};
 Number.prototype.commify=function(){return this.toString().reverse().replace(/(\d\d\d)(?=\d)(?!\d*\.)/g,'$1,').reverse()};
+
+// グローバル変数
+var cookieList = new Array();
 
 
 function AddEventListener(elementID, type, listener) {
@@ -29,6 +32,7 @@ function resonatorClick(e) {
 	var elem = e.target;
 	if (elem.textContent == 1) { elem.textContent = 8; elem.className = "cResoSlot R8"; }
 	else { elem.textContent --; elem.className = "cResoSlot R" + elem.textContent; }
+	//document.getElementById('preset').getElementsByTagName('option')[0].selected = true;
 	funcResult();
 }
 
@@ -38,6 +42,7 @@ function resonatorPress(elemID) {
 	flag_press = 0;
 	elem.textContent = 8; 
 	elem.className = "cResoSlot R8";
+	//document.getElementById('preset').getElementsByTagName('option')[0].selected = true;
 	funcResult();
 }
 
@@ -50,7 +55,223 @@ function modSlotClick(e) {
 	funcResult();
 }
 
-function allReset() {
+function presetChange(e) {
+	var elem = e.target;
+	if (elem.selectedIndex==0) {
+		if (cookieList['LinkCalc4Ingress'].split('+')[2]) {
+			var presetval = cookieList['LinkCalc4Ingress'].split('+')[2];
+			document.getElementById('preset').getElementsByTagName('option')[presetval].selected = true;
+		} 
+	} else if (elem.selectedIndex==1) {
+		document.getElementById('Resonator00').textContent = '8'; 
+		document.getElementById('Resonator00').className = "cResoSlot R8";
+		document.getElementById('Resonator01').textContent = '8'; 
+		document.getElementById('Resonator01').className = "cResoSlot R8";
+		document.getElementById('Resonator02').textContent = '8'; 
+		document.getElementById('Resonator02').className = "cResoSlot R8";
+		document.getElementById('Resonator03').textContent = '8'; 
+		document.getElementById('Resonator03').className = "cResoSlot R8";
+		document.getElementById('Resonator04').textContent = '8'; 
+		document.getElementById('Resonator04').className = "cResoSlot R8";
+		document.getElementById('Resonator05').textContent = '8'; 
+		document.getElementById('Resonator05').className = "cResoSlot R8";
+		document.getElementById('Resonator06').textContent = '8'; 
+		document.getElementById('Resonator06').className = "cResoSlot R8";
+		document.getElementById('Resonator07').textContent = '8'; 
+		document.getElementById('Resonator07').className = "cResoSlot R8";
+	} else if (elem.selectedIndex==2) {
+		document.getElementById('Resonator00').textContent = '8'; 
+		document.getElementById('Resonator00').className = "cResoSlot R8";
+		document.getElementById('Resonator01').textContent = '8'; 
+		document.getElementById('Resonator01').className = "cResoSlot R8";
+		document.getElementById('Resonator02').textContent = '8'; 
+		document.getElementById('Resonator02').className = "cResoSlot R8";
+		document.getElementById('Resonator03').textContent = '8'; 
+		document.getElementById('Resonator03').className = "cResoSlot R8";
+		document.getElementById('Resonator04').textContent = '8'; 
+		document.getElementById('Resonator04').className = "cResoSlot R8";
+		document.getElementById('Resonator05').textContent = '8'; 
+		document.getElementById('Resonator05').className = "cResoSlot R8";
+		document.getElementById('Resonator06').textContent = '8'; 
+		document.getElementById('Resonator06').className = "cResoSlot R8";
+		document.getElementById('Resonator07').textContent = '7'; 
+		document.getElementById('Resonator07').className = "cResoSlot R7";
+	} else if (elem.selectedIndex==3) {
+		document.getElementById('Resonator00').textContent = '8'; 
+		document.getElementById('Resonator00').className = "cResoSlot R8";
+		document.getElementById('Resonator01').textContent = '8'; 
+		document.getElementById('Resonator01').className = "cResoSlot R8";
+		document.getElementById('Resonator02').textContent = '8'; 
+		document.getElementById('Resonator02').className = "cResoSlot R8";
+		document.getElementById('Resonator03').textContent = '8'; 
+		document.getElementById('Resonator03').className = "cResoSlot R8";
+		document.getElementById('Resonator04').textContent = '8'; 
+		document.getElementById('Resonator04').className = "cResoSlot R8";
+		document.getElementById('Resonator05').textContent = '8'; 
+		document.getElementById('Resonator05').className = "cResoSlot R8";
+		document.getElementById('Resonator06').textContent = '7'; 
+		document.getElementById('Resonator06').className = "cResoSlot R7";
+		document.getElementById('Resonator07').textContent = '7'; 
+		document.getElementById('Resonator07').className = "cResoSlot R7";
+	} else if (elem.selectedIndex==4) {
+		document.getElementById('Resonator00').textContent = '8'; 
+		document.getElementById('Resonator00').className = "cResoSlot R8";
+		document.getElementById('Resonator01').textContent = '8'; 
+		document.getElementById('Resonator01').className = "cResoSlot R8";
+		document.getElementById('Resonator02').textContent = '8'; 
+		document.getElementById('Resonator02').className = "cResoSlot R8";
+		document.getElementById('Resonator03').textContent = '8'; 
+		document.getElementById('Resonator03').className = "cResoSlot R8";
+		document.getElementById('Resonator04').textContent = '8'; 
+		document.getElementById('Resonator04').className = "cResoSlot R8";
+		document.getElementById('Resonator05').textContent = '7'; 
+		document.getElementById('Resonator05').className = "cResoSlot R7";
+		document.getElementById('Resonator06').textContent = '7'; 
+		document.getElementById('Resonator06').className = "cResoSlot R7";
+		document.getElementById('Resonator07').textContent = '7'; 
+		document.getElementById('Resonator07').className = "cResoSlot R7";
+	} else if (elem.selectedIndex==5) {
+		document.getElementById('Resonator00').textContent = '8'; 
+		document.getElementById('Resonator00').className = "cResoSlot R8";
+		document.getElementById('Resonator01').textContent = '8'; 
+		document.getElementById('Resonator01').className = "cResoSlot R8";
+		document.getElementById('Resonator02').textContent = '8'; 
+		document.getElementById('Resonator02').className = "cResoSlot R8";
+		document.getElementById('Resonator03').textContent = '8'; 
+		document.getElementById('Resonator03').className = "cResoSlot R8";
+		document.getElementById('Resonator04').textContent = '7'; 
+		document.getElementById('Resonator04').className = "cResoSlot R7";
+		document.getElementById('Resonator05').textContent = '7'; 
+		document.getElementById('Resonator05').className = "cResoSlot R7";
+		document.getElementById('Resonator06').textContent = '7'; 
+		document.getElementById('Resonator06').className = "cResoSlot R7";
+		document.getElementById('Resonator07').textContent = '7'; 
+		document.getElementById('Resonator07').className = "cResoSlot R7";
+	} else if (elem.selectedIndex==6) {
+		document.getElementById('Resonator00').textContent = '8'; 
+		document.getElementById('Resonator00').className = "cResoSlot R8";
+		document.getElementById('Resonator01').textContent = '8'; 
+		document.getElementById('Resonator01').className = "cResoSlot R8";
+		document.getElementById('Resonator02').textContent = '8'; 
+		document.getElementById('Resonator02').className = "cResoSlot R8";
+		document.getElementById('Resonator03').textContent = '7'; 
+		document.getElementById('Resonator03').className = "cResoSlot R7";
+		document.getElementById('Resonator04').textContent = '7'; 
+		document.getElementById('Resonator04').className = "cResoSlot R7";
+		document.getElementById('Resonator05').textContent = '7'; 
+		document.getElementById('Resonator05').className = "cResoSlot R7";
+		document.getElementById('Resonator06').textContent = '6'; 
+		document.getElementById('Resonator06').className = "cResoSlot R6";
+		document.getElementById('Resonator07').textContent = '6'; 
+		document.getElementById('Resonator07').className = "cResoSlot R6";
+	} else if (elem.selectedIndex==7) {
+		document.getElementById('Resonator00').textContent = '8'; 
+		document.getElementById('Resonator00').className = "cResoSlot R8";
+		document.getElementById('Resonator01').textContent = '8'; 
+		document.getElementById('Resonator01').className = "cResoSlot R8";
+		document.getElementById('Resonator02').textContent = '7'; 
+		document.getElementById('Resonator02').className = "cResoSlot R7";
+		document.getElementById('Resonator03').textContent = '7'; 
+		document.getElementById('Resonator03').className = "cResoSlot R7";
+		document.getElementById('Resonator04').textContent = '6'; 
+		document.getElementById('Resonator04').className = "cResoSlot R6";
+		document.getElementById('Resonator05').textContent = '6'; 
+		document.getElementById('Resonator05').className = "cResoSlot R6";
+		document.getElementById('Resonator06').textContent = '6'; 
+		document.getElementById('Resonator06').className = "cResoSlot R6";
+		document.getElementById('Resonator07').textContent = '6'; 
+		document.getElementById('Resonator07').className = "cResoSlot R6";
+	} else if (elem.selectedIndex==8) {
+		document.getElementById('Resonator00').textContent = '8'; 
+		document.getElementById('Resonator00').className = "cResoSlot R8";
+		document.getElementById('Resonator01').textContent = '7'; 
+		document.getElementById('Resonator01').className = "cResoSlot R7";
+		document.getElementById('Resonator02').textContent = '6'; 
+		document.getElementById('Resonator02').className = "cResoSlot R6";
+		document.getElementById('Resonator03').textContent = '6'; 
+		document.getElementById('Resonator03').className = "cResoSlot R6";
+		document.getElementById('Resonator04').textContent = '5'; 
+		document.getElementById('Resonator04').className = "cResoSlot R5";
+		document.getElementById('Resonator05').textContent = '5'; 
+		document.getElementById('Resonator05').className = "cResoSlot R5";
+		document.getElementById('Resonator06').textContent = '4'; 
+		document.getElementById('Resonator06').className = "cResoSlot R4";
+		document.getElementById('Resonator07').textContent = '4'; 
+		document.getElementById('Resonator07').className = "cResoSlot R4";
+		
+		// 1agent Mod slot
+		{
+			var modList = new Array(4);
+			modList[0] = document.getElementById("ModSlot00").textContent;
+			modList[1] = document.getElementById("ModSlot01").textContent;
+			modList[2] = document.getElementById("ModSlot02").textContent;
+			modList[3] = document.getElementById("ModSlot03").textContent;
+			
+			var modCount = 0;
+			for (var i=0 in modList) {
+				if (modList[i].match(/^(VRLA|SBUL|LA)$/)) modCount++;
+			}
+			
+			if (modCount == 4) {
+				for (var i=modList.length-1; i>=0; i--) {
+					if (modList[i].match(/^LA$/) && modCount > 2) {
+						document.getElementById('ModSlot0' + i).textContent = ''; 
+						document.getElementById('ModSlot0' + i).className = "cModSlot none";
+						modCount--;
+					}
+				}
+			}
+			if (modCount == 4) {
+				for (var i=modList.length-1; i>=0; i--) {
+					if (modList[i].match(/^SBUL$/) && modCount > 2) {
+						document.getElementById('ModSlot0' + i).textContent = ''; 
+						document.getElementById('ModSlot0' + i).className = "cModSlot none";
+						modCount--;
+					}
+				}
+			}
+			if (modCount == 4) {
+				for (var i=modList.length-1; i>=0; i--) {
+					if (modList[i].match(/^VRLA$/) && modCount > 2) {
+						document.getElementById('ModSlot0' + i).textContent = ''; 
+						document.getElementById('ModSlot0' + i).className = "cModSlot none";
+						modCount--;
+					}
+				}
+			}
+			if (modCount == 3) {
+				for (var i=modList.length-1; i>=0; i--) {
+					if (modList[i].match(/^LA$/) && modCount > 2) {
+						document.getElementById('ModSlot0' + i).textContent = ''; 
+						document.getElementById('ModSlot0' + i).className = "cModSlot none";
+						modCount--;
+					}
+				}
+			}
+			if (modCount == 3) {
+				for (var i=modList.length-1; i>=0; i--) {
+					if (modList[i].match(/^SBUL$/) && modCount > 2) {
+						document.getElementById('ModSlot0' + i).textContent = ''; 
+						document.getElementById('ModSlot0' + i).className = "cModSlot none";
+						modCount--;
+					}
+				}
+			}
+			if (modCount == 3) {
+				for (var i=modList.length-1; i>=0; i--) {
+					if (modList[i].match(/^VRLA$/) && modCount > 2) {
+						document.getElementById('ModSlot0' + i).textContent = ''; 
+						document.getElementById('ModSlot0' + i).className = "cModSlot none";
+						modCount--;
+					}
+				}
+			}
+		} // 1agent Mod slot
+	}	// else if (elem.selectedIndex==8)
+	funcResult();
+}
+
+function allReset(e) {
 	flag_press = 0;
 	for (var i=0; i<8; i++ ) {
 		document.getElementById('Resonator0' + i).textContent = '8'; 
@@ -60,6 +281,7 @@ function allReset() {
 		document.getElementById('ModSlot0' + i).textContent = ''; 
 		document.getElementById('ModSlot0' + i).className = "cModSlot none";
 	}
+	//document.getElementById('preset').getElementsByTagName('option')[0].selected = true;
 	funcResult();
 }
 
@@ -70,15 +292,15 @@ function touchHandler(e) {
 			flag_press = 1;
 			timerID = setTimeout(function(){resonatorPress(e.target.id)}, 500);
 			break;
-		case "touchcancel" :
-			clearTimeout(timerID);
-			timerID = 0;
-			flag_press = 0;
-			break;
 		case "touchend" :
 			clearTimeout(timerID);
 			timerID = 0;
 			if (flag_press == 1) { resonatorClick(e) }
+			flag_press = 0;
+			break;
+		case "touchcancel" :
+			clearTimeout(timerID);
+			timerID = 0;
 			flag_press = 0;
 			break;
 	}
@@ -104,6 +326,37 @@ function mouseHandler(e) {
 	}
 }
 
+function modTouchHandler(e) {
+	e.preventDefault();
+	switch (e.type) {
+		case "touchstart" :
+			flag_press = 1;
+			break;
+		case "touchend" :
+			if (flag_press == 1) modSlotClick(e);
+			flag_press = 0;
+			break;
+		case "touchcancel" :
+			flag_press = 0;
+			break;
+	}
+}
+
+function modMouseHandler(e) {
+	e.preventDefault();
+	switch (e.type) {
+		case "mousedown" :
+			flag_press = 1;
+			break;
+		case "mouseup" :
+			if (flag_press == 1) modSlotClick(e);
+			flag_press = 0;
+			break;
+		case "mouseout" :
+			break;
+	}
+}
+
 function FuncLoad() {
 	getCookie();
 	
@@ -115,9 +368,14 @@ function FuncLoad() {
 			AddEventListener('Resonator0' + i, "touchcancel", touchHandler);
 		}
 		for (var i=0; i<4; i++) {
-			AddEventListener('ModSlot0' + i, "touchend", modSlotClick);
+			AddEventListener('ModSlot0' + i, "touchstart", modTouchHandler);
+			AddEventListener('ModSlot0' + i, "touchend", modTouchHandler);
+			AddEventListener('ModSlot0' + i, "touchcancel", modTouchHandler);
+			//AddEventListener('ModSlot0' + i, "touchend", modSlotClick);
 		}
+		AddEventListener('reset', "touchstart", allReset);
 		AddEventListener('reset', "touchend", allReset);
+		AddEventListener('map-open-button-div', "touchstart", mapOpen);	
 		AddEventListener('map-open-button-div', "touchend", mapOpen);	
 	}else{
 		for (var i=0; i<8; i++) {
@@ -126,11 +384,15 @@ function FuncLoad() {
 			AddEventListener('Resonator0' + i, "mouseout", mouseHandler);
 		}
 		for (var i=0; i<4; i++) {
-			AddEventListener('ModSlot0' + i, "click", modSlotClick);
+			AddEventListener('ModSlot0' + i, "mousedown", modMouseHandler);
+			AddEventListener('ModSlot0' + i, "mouseup", modMouseHandler);
+			AddEventListener('ModSlot0' + i, "mouseout", modMouseHandler);
+			//AddEventListener('ModSlot0' + i, "click", modSlotClick);
 		}
-		AddEventListener('reset', "click", allReset);
-		AddEventListener('map-open-button-div', "mouseup", mapOpen);	
+		AddEventListener('reset', "click", allReset); // OS のボタンクリックインタラクションを利用するにclickイベントを使う
+		AddEventListener('map-open-button-div', "click", mapOpen);	// OS のボタンクリックインタラクションを利用するにclickイベントを使う
 	}
+	AddEventListener('preset', "change", presetChange);
 	AddEventListener('calc', "transitionend", calcTransitionFinish);
 	
 	funcResult();
@@ -154,10 +416,11 @@ function setSlotCookie() {
 	var mList = new Array(4);
 	for (i=0; i<4; i++) {
 		mList[i] = document.getElementById('ModSlot0' + i).textContent;
-	}			
+	}
+	var presetval = document.getElementById('preset').selectedIndex;
 	var exp = new Date();
 	exp.setTime(exp.getTime()+1000*60*60*24*1);
-	var str = rList.join(',') + '+' + mList.join(',');
+	var str = rList.join(',') + '+' + mList.join(',') + '+' + presetval;
 	var escstr = encodeURIComponent(str);
 	document.cookie = "LinkCalc4Ingress=" + escstr + "; expires=" + exp.toGMTString();
 }
@@ -173,7 +436,6 @@ function setLocationCookie(lat, lng) {
 }
 
 function getCookie() {
-    var cookieList = new Array();
     var allcookies = document.cookie;
     if( allcookies != '' ) {
         var cookies = allcookies.split( '; ' );
@@ -204,11 +466,15 @@ function getCookie() {
 				else if (elem.textContent == "VRLA") 	{ elem.className = "cModSlot VRLA"; }
 				else if (elem.textContent == "SBUL") 	{ elem.className = "cModSlot SBUL"; }
 			}
+			if (cookieList['LinkCalc4Ingress'].split('+')[2]) {
+				var presetval = cookieList['LinkCalc4Ingress'].split('+')[2];
+				document.getElementById('preset').getElementsByTagName('option')[presetval].selected = true;
+			}
 		}
 	}
 }
 		
-function mapOpen() {
+function mapOpen(e) {
 	setTimeout(function(){document.getElementById('calc').style.top = "100%"}, 400);
 }
 
@@ -281,6 +547,55 @@ function funcResult() {
 	document.getElementById('discription').innerHTML = rawLinkRange_km.toFixed(3) + ' km' + ' ×' + rate.toFixed(2) + '<br>\n';
 	document.getElementById('discription').innerHTML = document.getElementById('discription').innerHTML + 'Max Outbound Links = ' + outLink;
 	
+	// preset
+	{
+		var agentn = 0;
+		var reso8n = 0;
+		var reso7n = 0;
+		var reso6n = 0;
+		var reso5n = 0;
+		var reso4n = 0;
+		for (var i=0 in resoList) {
+			if (resoList[i]==8) reso8n++;
+			else if (resoList[i]==7) reso7n++;
+			else if (resoList[i]==6) reso6n++;
+			else if (resoList[i]==5) reso5n++;
+			else if (resoList[i]==4) reso4n++;
+		}
+		agentn = reso8n;
+		if (agentn < reso7n) agentn = reso7n;
+		var n = Math.ceil(reso6n / 2);
+		if (agentn < n) agentn = n;
+		n = Math.ceil(reso5n / 2);
+		if (agentn < n) agentn = n;
+		n = Math.ceil(reso4n / 4);
+		if (agentn < n) agentn = n;
+		
+		var modCount = 0;
+		for (var i=0 in modList) {
+			if (modList[i].match(/^(VRLA|SBUL|LA)$/)) modCount++;
+		}
+		if (modCount > 2 && agentn == 1)  agentn = 2;
+		
+		if (agentn==8) {
+			document.getElementById('preset').getElementsByTagName('option')[1].selected = true;
+		} else if (agentn==7) {
+			document.getElementById('preset').getElementsByTagName('option')[2].selected = true;
+		} else if (agentn==6) {
+			document.getElementById('preset').getElementsByTagName('option')[3].selected = true;
+		} else if (agentn==5) {
+			document.getElementById('preset').getElementsByTagName('option')[4].selected = true;
+		} else if (agentn==4) {
+			document.getElementById('preset').getElementsByTagName('option')[5].selected = true;
+		} else if (agentn==3) {
+			document.getElementById('preset').getElementsByTagName('option')[6].selected = true;
+		} else if (agentn==2) {
+			document.getElementById('preset').getElementsByTagName('option')[7].selected = true;
+		} else if (agentn==1) {
+			document.getElementById('preset').getElementsByTagName('option')[8].selected = true;
+		}
+	}
+		
 	// cookie set
 	setSlotCookie();
 	

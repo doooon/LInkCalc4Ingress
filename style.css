@@ -251,7 +251,7 @@ input[type="text"] { background-color: red; }
 .R8 		{ background-color: #5E2ABA; color: #ffffff; }
 
 #reset		{ 
-	margin: 15px 0px 15px 0px; 
+	margin: 15px 0px 15px 5px; 
 	font-size: large; 
 	
 	/*iPhoneでテキストルーペが出てしまうため*/
@@ -260,6 +260,12 @@ input[type="text"] { background-color: red; }
 	-webkit-user-select: none; 	/* Safari、Chrome */
 	-ms-user-select: none; 		/* IE10 */	
 }
+
+#preset		{ 
+	margin: 15px 5px 15px 0px; 
+	font-size: large; 
+}
+
 .hint 		{ font-size: small; margin: 0px 0px 0px 0px; }
 .developer 	{ font-size: x-small; margin: 3px 0px 0px 0px; }
 	
